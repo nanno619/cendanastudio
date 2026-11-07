@@ -1,6 +1,6 @@
 # 🗃️ Data & halaman CRUD
 
-Contoh ini mengubah tampilan demo `examples/records` menjadi entri tersimpan. Sebagai ilustrasi, kita gunakan model `Record` dengan kolom `title`, `category`, `status`, dan `summary`. Sesuaikan skema, kebijakan akses, dan nama route dengan aplikasi Anda. Route demo lama di `routes/web.php` berada di dalam blok `if (config('kenanga.showcase'))`; hapus/ubah blok route `examples.records.*` lama sebelum mendaftarkan route yang sama.
+Contoh ini mengubah tampilan demo `examples/records` menjadi entri tersimpan. Sebagai ilustrasi, kita gunakan model `Record` dengan kolom `title`, `category`, `status`, dan `summary`. Sesuaikan skema, kebijakan akses, dan nama route dengan aplikasi Anda. Route demo lama di `routes/web.php` berada di dalam blok `if (config('cendana.showcase'))`; hapus/ubah blok route `examples.records.*` lama sebelum mendaftarkan route yang sama.
 
 ## 🧱 Siapkan model dan tabel
 
@@ -46,7 +46,7 @@ Route::prefix('examples/records')->name('examples.records.')->group(function () 
 });
 ```
 
-Jika alur entri ini harus tetap tersedia saat showcase dimatikan, letakkan route baru **di luar** blok `if (config('kenanga.showcase'))`, lalu sesuaikan konfigurasi navigasi bila menu tersebut juga perlu tampil.
+Jika alur entri ini harus tetap tersedia saat showcase dimatikan, letakkan route baru **di luar** blok `if (config('cendana.showcase'))`, lalu sesuaikan konfigurasi navigasi bila menu tersebut juga perlu tampil.
 
 ## 📤 Kirim data dari controller
 
@@ -126,7 +126,7 @@ class RecordController extends Controller
 
 ## 🧩 Sesuaikan Blade demo
 
-View bawaan memakai `config('kenanga.demo.records')` dan link detail statis `/detail`. Ganti loop dan tautan dengan `$records` serta ID model:
+View bawaan memakai `config('cendana.demo.records')` dan link detail statis `/detail`. Ganti loop dan tautan dengan `$records` serta ID model:
 
 ```blade
 @forelse ($records as $record)

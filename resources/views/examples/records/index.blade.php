@@ -15,7 +15,7 @@
     <div class="overflow-x-auto border-t">
         <table class="table min-w-[620px]"><thead><tr><th data-sort>Judul</th><th data-sort>Kategori</th><th data-sort>Pemilik</th><th>Status</th><th data-sort>Diperbarui</th><th class="text-right" scope="col" aria-label="Aksi"></th></tr></thead>
             <tbody>
-                @foreach (config('kenanga.demo.records') as $record)
+                @foreach (config('cendana.demo.records') as $record)
                     <tr data-status="{{ $record['statusKey'] }}">
                         <td><a href="{{ route('examples.records.show') }}" class="font-medium text-primary hover:underline">{{ $record['title'] }}</a><p class="mt-0.5 text-xs text-muted-foreground">{{ $record['code'] }}</p></td>
                         <td>{{ $record['category'] }}</td><td>{{ $record['owner'] }}</td>

@@ -1,5 +1,5 @@
 <x-layouts.admin title="Detail entri" group="Contoh halaman">
-@php($record = config('kenanga.demo.records.0'))
+@php($record = config('cendana.demo.records.0'))
 <div class="flex flex-wrap items-start justify-between gap-4">
     <div><a href="{{ route('examples.records.index') }}" class="mb-3 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"><x-ui.icon name="arrow-left" class="h-4 w-4" />Kembali ke daftar</a><h1 class="text-2xl font-semibold tracking-tight">{{ $record['title'] }}</h1><p class="mt-1 text-muted-foreground">Contoh halaman detail dengan informasi utama dan riwayat.</p></div>
     <a href="{{ route('examples.records.edit') }}" class="btn btn-primary"><x-ui.icon name="edit" />Ubah entri</a>

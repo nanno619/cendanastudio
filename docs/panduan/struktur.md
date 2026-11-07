@@ -14,7 +14,7 @@ Proyek ini memakai **anonymous Blade components** di `resources/views/components
 | `resources/views/examples/records/` | Contoh alur entri frontend |
 | `resources/js/admin/` | Interaksi, grafik SVG, input lanjutan |
 | `resources/css/app.css` | Tailwind, token tema, dan kelas UI |
-| `config/kenanga.php` | Nama, branding, sidebar, pilihan aksen, dan data demo |
+| `config/cendana.php` | Nama, branding, sidebar, pilihan aksen, dan data demo |
 
 ## 🧱 Layout dan slot
 
@@ -62,4 +62,4 @@ Gunakan tag `<x-...>` dan slot untuk susunan halaman. Beberapa contoh masih mema
 
 ## 📦 Sumber data sekarang
 
-Halaman admin dan showcase membaca `config('kenanga.demo.*')` atau menulis nilai contoh langsung di view. JavaScript memakai atribut `data-*` untuk interaksi browser. Lihat [peta migrasi ke backend](/integrasi/) untuk mengganti data tersebut dengan nilai dari controller.
+Halaman admin dan showcase membaca `config('cendana.demo.*')` atau menulis nilai contoh langsung di view. JavaScript memakai atribut `data-*` untuk interaksi browser. Lihat [peta migrasi ke backend](/integrasi/) untuk mengganti data tersebut dengan nilai dari controller.

@@ -43,7 +43,7 @@
         </tr>
       </thead>
       <tbody>
-        @foreach (config('kenanga.demo.users') as $item)<tr data-status="{{ $item['statusKey'] }}">
+        @foreach (config('cendana.demo.users') as $item)<tr data-status="{{ $item['statusKey'] }}">
           <td><input type="checkbox" data-check-row aria-label="Pilih {{ $item['name'] }}"></td>
           <td><div class="flex items-center gap-3"><span class="avatar avatar-{{ $item['avTone'] }}">{{ $item['initials'] }}</span><div class="leading-tight"><p class="font-medium">{{ $item['name'] }}</p><p class="text-xs text-muted-foreground">{{ $item['email'] }}</p></div></div></td>
           <td>{{ $item['role'] }}</td>
@@ -82,7 +82,7 @@
       <table class="table table-striped min-w-[480px]">
         <thead><tr><th>Pesanan</th><th>Pelanggan</th><th>Status</th><th class="text-right">Total</th></tr></thead>
         <tbody>
-          @foreach (config('kenanga.demo.orders') as $item)<tr><td class="font-medium">{{ $item['id'] }}</td><td>{{ $item['customer'] }}</td><td><span class="badge badge-{{ $item['tone'] }}">{{ $item['status'] }}</span></td><td class="text-right tabular-nums {{ $item['struck'] }}">{{ $item['total'] }}</td></tr>@endforeach
+          @foreach (config('cendana.demo.orders') as $item)<tr><td class="font-medium">{{ $item['id'] }}</td><td>{{ $item['customer'] }}</td><td><span class="badge badge-{{ $item['tone'] }}">{{ $item['status'] }}</span></td><td class="text-right tabular-nums {{ $item['struck'] }}">{{ $item['total'] }}</td></tr>@endforeach
         </tbody>
       </table>
     </div>
@@ -115,7 +115,7 @@
     <table class="table min-w-[760px]">
       <thead><tr><th>Produk</th><th>Kategori</th><th class="w-48">Stok</th><th>Rating</th><th>Status</th><th class="text-right">Harga</th></tr></thead>
       <tbody>
-        @foreach (config('kenanga.demo.products') as $item)<tr>
+        @foreach (config('cendana.demo.products') as $item)<tr>
           <td><div class="flex items-center gap-3"><span class="avatar avatar-square avatar-neutral"><x-ui.icon name="coffee" /></span><div class="leading-tight"><p class="font-medium">{{ $item['name'] }}</p><p class="text-xs text-muted-foreground">{{ $item['sku'] }}</p></div></div></td>
           <td>{{ $item['category'] }}</td>
           <td><div class="flex items-center gap-3"><div class="progress"><div class="progress-bar {{ $item['bar'] }}" style="width:{{ $item['pct'] }}%"></div></div><span class="w-8 text-right text-xs tabular-nums text-muted-foreground">{{ $item['stock'] }}</span></div></td>

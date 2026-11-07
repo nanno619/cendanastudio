@@ -16,7 +16,7 @@
             <section>
                 <h3 class="label mb-3">Warna aksen</h3>
                 <div class="grid grid-cols-6 gap-3">
-                    @foreach (config('kenanga.accents') as $accent)
+                    @foreach (config('cendana.accents') as $accent)
                         <button type="button" class="swatch" style="background: {{ $accent['hex'] }}" data-pref="accent" data-value="{{ $accent['id'] }}" aria-label="{{ $accent['name'] }}" title="{{ $accent['name'] }}" aria-pressed="false"></button>
                     @endforeach
                 </div>
@@ -24,7 +24,7 @@
             <section>
                 <h3 class="label mb-3">Radius sudut</h3>
                 <div class="grid grid-cols-5 gap-2">
-                    @foreach (config('kenanga.radii') as $radius)
+                    @foreach (config('cendana.radii') as $radius)
                         <button type="button" class="pref-btn px-1 text-xs" data-pref="radius" data-value="{{ $radius['value'] }}" aria-pressed="false">{{ $radius['name'] }}</button>
                     @endforeach
                 </div>

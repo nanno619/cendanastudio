@@ -2,7 +2,7 @@
 
 ## 🏷️ Branding
 
-Nilai berikut dibaca `config/kenanga.php` dari `.env`:
+Nilai berikut dibaca `config/cendana.php` dari `.env`:
 
 ```dotenv
 ADMIN_NAME="Kenanga Admin"
@@ -26,7 +26,7 @@ window.App.setPref('accent', 'blue')
 window.App.setPref('radius', '0.75')
 ```
 
-Nilai aksen yang tersedia tercantum pada `config('kenanga.accents')`; default CSS adalah `indigo`. Bila hendak mengganti pilihan default atau daftar aksen, samakan konfigurasi PHP, token CSS, dan nilai default pada `resources/js/admin/interactions.js`.
+Nilai aksen yang tersedia tercantum pada `config('cendana.accents')`; default CSS adalah `indigo`. Bila hendak mengganti pilihan default atau daftar aksen, samakan konfigurasi PHP, token CSS, dan nilai default pada `resources/js/admin/interactions.js`.
 
 ## 🧿 Ikon & font
 

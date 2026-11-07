@@ -83,7 +83,7 @@
   <div class="card">
     <div class="card-header"><h3 class="card-title">Aktivitas terbaru</h3><p class="card-desc">Linimasa kejadian toko.</p></div>
     <ol class="space-y-5 p-6 pt-0">
-      @foreach (config('kenanga.demo.activity') as $item)<li class="flex items-start gap-3">
+      @foreach (config('cendana.demo.activity') as $item)<li class="flex items-start gap-3">
         <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full {{ $item['tile'] }}"><x-ui.icon :name="$item['icon']" /></span>
         <div class="min-w-0 leading-snug"><p class="font-medium">{{ $item['text'] }}</p><p class="text-xs text-muted-foreground">{{ $item['time'] }}</p></div>
       </li>@endforeach

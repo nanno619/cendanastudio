@@ -3,16 +3,16 @@
         <button type="button" class="flex w-full items-center gap-2.5 rounded-md p-2 text-left hover:bg-accent focus-ring">
             <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground"><x-ui.icon name="layers" /></span>
             <span class="sb-label min-w-0 flex-1 leading-tight">
-                <span class="block truncate text-sm font-medium">{{ config('kenanga.brand.workspace') }}</span>
-                <span class="block truncate text-xs text-muted-foreground">{{ config('kenanga.brand.description') }}</span>
+                <span class="block truncate text-sm font-medium">{{ config('cendana.brand.workspace') }}</span>
+                <span class="block truncate text-xs text-muted-foreground">{{ config('cendana.brand.description') }}</span>
             </span>
             <x-ui.icon name="updown" class="sb-label h-4 w-4 shrink-0 text-muted-foreground" />
         </button>
     </div>
 
     <nav class="flex-1 space-y-5 overflow-y-auto overflow-x-hidden px-3 pb-3 pt-1">
-        @foreach (config('kenanga.navigation') as $group)
-            @continue(($group['showcase'] ?? false) && ! config('kenanga.showcase'))
+        @foreach (config('cendana.navigation') as $group)
+            @continue(($group['showcase'] ?? false) && ! config('cendana.showcase'))
             <div>
                 <p class="sb-label mb-1 px-2 text-xs font-medium text-muted-foreground">{{ $group['label'] }}</p>
                 <ul class="space-y-0.5">

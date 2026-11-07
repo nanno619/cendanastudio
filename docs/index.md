@@ -33,5 +33,5 @@ features:
 Baru membuka proyek? Ikuti [instalasi dan menjalankan aplikasi](/panduan/mulai), kemudian [struktur halaman Blade](/panduan/struktur). Jika sudah membangun halaman sendiri, buka [peta komponen](/komponen/) atau [panduan integrasi backend](/integrasi/).
 
 ::: info Batas starter kit
-Dashboard ini menyediakan frontend Laravel Blade. Data contoh berada di `config/kenanga.php`, route demo memakai `Route::view`, dan tombol simpan contoh hanya menampilkan notifikasi. Dokumentasi integrasi berisi **contoh implementasi yang perlu Anda tambahkan**, bukan fitur backend yang sudah tersedia.
+Dashboard ini menyediakan frontend Laravel Blade. Data contoh berada di `config/cendana.php`, route demo memakai `Route::view`, dan tombol simpan contoh hanya menampilkan notifikasi. Dokumentasi integrasi berisi **contoh implementasi yang perlu Anda tambahkan**, bukan fitur backend yang sudah tersedia.
 :::

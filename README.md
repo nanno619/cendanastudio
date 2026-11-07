@@ -44,7 +44,7 @@ php artisan optimize
 - `resources/views/examples/records` — contoh alur daftar, detail, tambah, dan edit yang sepenuhnya frontend.
 - `resources/js/admin` — grafik SVG dan interaksi dashboard.
 - `resources/css/app.css` — design tokens, tema, dan component styles.
-- `config/kenanga.php` — branding, navigasi, pilihan tema, serta data demo.
+- `config/cendana.php` — branding, navigasi, pilihan tema, serta data demo.
 
 ## Halaman bawaan
 
@@ -79,7 +79,7 @@ ADMIN_WORKSPACE_DESCRIPTION="Toko online"
 ADMIN_SHOWCASE=true
 ```
 
-Menu sidebar didefinisikan di `config/kenanga.php`. Tambahkan route, view, lalu masukkan item baru ke array `navigation`. Untuk menyembunyikan katalog komponen dan halaman contoh pada aplikasi produksi, gunakan `ADMIN_SHOWCASE=false`.
+Menu sidebar didefinisikan di `config/cendana.php`. Tambahkan route, view, lalu masukkan item baru ke array `navigation`. Untuk menyembunyikan katalog komponen dan halaman contoh pada aplikasi produksi, gunakan `ADMIN_SHOWCASE=false`.
 
 Contoh halaman baru:
 

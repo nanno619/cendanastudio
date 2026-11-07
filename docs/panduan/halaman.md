@@ -47,7 +47,7 @@ Jika halaman sepenuhnya statis, Anda bisa mengikuti route saat ini: `Route::view
 
 ## 🗺️ Tambahkan menu sidebar
 
-Di `config/kenanga.php`, `navigation` adalah kumpulan grup dan item. `x-admin.sidebar` membaca konfigurasi ini, sedangkan `x-admin.nav-link` membangun tautan memakai `route(...)` dan penanda aktif memakai `request()->routeIs(...)`.
+Di `config/cendana.php`, `navigation` adalah kumpulan grup dan item. `x-admin.sidebar` membaca konfigurasi ini, sedangkan `x-admin.nav-link` membangun tautan memakai `route(...)` dan penanda aktif memakai `request()->routeIs(...)`.
 
 ```php
 ['label' => 'Katalog', 'items' => [
@@ -64,14 +64,14 @@ Pastikan nama route benar-benar ada; menu yang menunjuk route yang belum terdaft
 
 ### 🧭 Shell admin dan penanda aktif
 
-`x-admin.sidebar` dan `x-admin.header` dirender otomatis oleh `x-layouts.admin`. Sidebar membentuk kelompok dari `config('kenanga.navigation')`. Setiap item membutuhkan `label` dan `route`; `active` opsional dapat berupa pola nama route seperti `admin.categories.*`. `icon` dan `badge` juga opsional. Item bertingkat memakai `children` dan dapat dibuka/tutup lewat `data-collapse`. Breadcrumb di header berasal dari prop `title`/`group` layout, sehingga mengubah nama menu tidak otomatis mengubah breadcrumb.
+`x-admin.sidebar` dan `x-admin.header` dirender otomatis oleh `x-layouts.admin`. Sidebar membentuk kelompok dari `config('cendana.navigation')`. Setiap item membutuhkan `label` dan `route`; `active` opsional dapat berupa pola nama route seperti `admin.categories.*`. `icon` dan `badge` juga opsional. Item bertingkat memakai `children` dan dapat dibuka/tutup lewat `data-collapse`. Breadcrumb di header berasal dari prop `title`/`group` layout, sehingga mengubah nama menu tidak otomatis mengubah breadcrumb.
 
 Branding workspace dari config tampil di bagian atas sidebar, sedangkan nama/email profil di bawah sidebar dan notifikasi header masih hardcoded sebagai data demo. Untuk aplikasi dengan autentikasi, ganti profil dengan `auth()->user()` dan tentukan sumber notifikasi yang sesuai. Komponen customizer sudah termasuk di layout, jadi tidak perlu dipanggil ulang di setiap view.
 
 ## 🧪 Atur halaman demo
 
-Route katalog `/components/*` dan `/examples/records/*` didaftarkan hanya jika `config('kenanga.showcase')` bernilai true. Untuk menyembunyikan showcase dan menu demo, atur `ADMIN_SHOWCASE=false` dalam `.env`. Aplikasi dashboard, analitik, pengaturan, login, dan demo 404 tetap ada sesuai `routes/web.php`.
+Route katalog `/components/*` dan `/examples/records/*` didaftarkan hanya jika `config('cendana.showcase')` bernilai true. Untuk menyembunyikan showcase dan menu demo, atur `ADMIN_SHOWCASE=false` dalam `.env`. Aplikasi dashboard, analitik, pengaturan, login, dan demo 404 tetap ada sesuai `routes/web.php`.
 
 ::: warning Perhatikan tautan ke showcase
-Sebelum menonaktifkan showcase, periksa tautan kustom menuju route `showcase.*`. Dashboard bawaan sudah memeriksa `config('kenanga.showcase')` untuk tautan “Lihat semua”.
+Sebelum menonaktifkan showcase, periksa tautan kustom menuju route `showcase.*`. Dashboard bawaan sudah memeriksa `config('cendana.showcase')` untuk tautan “Lihat semua”.
 :::

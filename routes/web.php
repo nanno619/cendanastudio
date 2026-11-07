@@ -9,7 +9,7 @@ Route::middleware('auth')->group(function (): void {
     Route::view('/analytics', 'admin.analytics')->name('admin.analytics');
     Route::view('/settings', 'admin.settings')->name('admin.settings');
 
-    if (config('kenanga.showcase')) {
+    if (config('cendana.showcase')) {
         Route::prefix('components')->name('showcase.')->group(function (): void {
             Route::view('/cards', 'showcase.cards')->name('cards');
             Route::view('/tables', 'showcase.tables')->name('tables');

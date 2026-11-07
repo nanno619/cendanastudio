@@ -25,7 +25,7 @@ source = source.replace(/\{\{>\s*([\w-]+)((?:\s+[\w-]+="[^"]*")*)\s*\}\}/g, (_, 
 
 const loops = ['users', 'orders', 'products', 'activity', 'sales'];
 for (const loop of loops) {
-  source = source.replaceAll(`{{#each ${loop}}}`, `@foreach (config('kenanga.demo.${loop}') as $item)`);
+  source = source.replaceAll(`{{#each ${loop}}}`, `@foreach (config('cendana.demo.${loop}') as $item)`);
 }
 source = source.replaceAll('{{/each}}', '@endforeach');
 source = source.replace(/\{\{this\.([\w.]+)\}\}/g, (_, key) => `{{ $item['${key}'] }}`);

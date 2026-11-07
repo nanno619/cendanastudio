@@ -35,7 +35,7 @@
       <p class="card-desc">356 pesanan masuk bulan ini.</p>
     </div>
     <ul class="space-y-5 p-6 pt-0">
-      @foreach (config('kenanga.demo.sales') as $item)<li class="flex items-center gap-3">
+      @foreach (config('cendana.demo.sales') as $item)<li class="flex items-center gap-3">
         <span class="avatar avatar-{{ $item['tone'] }}">{{ $item['initials'] }}</span>
         <div class="min-w-0 flex-1 leading-tight"><p class="truncate font-medium">{{ $item['name'] }}</p><p class="truncate text-xs text-muted-foreground">{{ $item['email'] }}</p></div>
         <span class="font-medium tabular-nums">{{ $item['amount'] }}</span>
@@ -52,7 +52,7 @@
         <h2 class="card-title">Pesanan terbaru</h2>
         <p class="card-desc mt-1.5">Enam pesanan terakhir dari bisnis Anda.</p>
       </div>
-      @if (config('kenanga.showcase'))
+      @if (config('cendana.showcase'))
         <a href="{{ route('showcase.tables') }}" class="btn btn-outline btn-sm">Lihat semua</a>
       @endif
     </div>
@@ -60,7 +60,7 @@
       <table class="table min-w-[640px]">
         <thead><tr><th>Pesanan</th><th>Pelanggan</th><th class="hidden lg:table-cell">Produk</th><th>Status</th><th class="hidden md:table-cell">Tanggal</th><th class="text-right">Total</th></tr></thead>
         <tbody>
-          @foreach (config('kenanga.demo.orders') as $item)<tr>
+          @foreach (config('cendana.demo.orders') as $item)<tr>
             <td class="font-medium">{{ $item['id'] }}</td>
             <td>{{ $item['customer'] }}</td>
             <td class="hidden text-muted-foreground lg:table-cell">{{ $item['product'] }}</td>

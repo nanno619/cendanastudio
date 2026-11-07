@@ -6,7 +6,7 @@
     <div class="mx-auto w-full max-w-sm">
       <div class="flex items-center gap-2.5">
         <span class="flex h-9 w-9 items-center justify-center rounded-md bg-primary text-primary-foreground"><x-ui.icon name="layers" class="h-5 w-5" /></span>
-        <span class="text-lg font-semibold">{{ config('kenanga.brand.workspace') }}</span>
+        <span class="text-lg font-semibold">{{ config('cendana.brand.workspace') }}</span>
       </div>
       <h1 class="mt-8 text-2xl font-semibold tracking-tight">{{ $heading }}</h1>
       @if ($description)
@@ -22,7 +22,7 @@
   </div>
 
   <div class="hidden flex-col justify-between bg-primary p-12 text-primary-foreground lg:flex">
-    <div class="flex items-center gap-2 text-sm font-medium opacity-90"><x-ui.icon name="layers" />{{ config('kenanga.brand.name') }}</div>
+    <div class="flex items-center gap-2 text-sm font-medium opacity-90"><x-ui.icon name="layers" />{{ config('cendana.brand.name') }}</div>
   </div>
 </div>
 </x-layouts.guest>
