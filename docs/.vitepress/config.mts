@@ -2,13 +2,13 @@ import { defineConfig } from 'vitepress'
 
 export default defineConfig({
   lang: 'id-ID',
-  title: 'Kenanga Admin',
+  title: 'Cendana Studio',
   description: 'Panduan starter kit dashboard Laravel Blade berbasis komponen.',
   cleanUrls: true,
   appearance: 'dark',
   head: [['meta', { name: 'theme-color', content: '#09090b' }]],
   themeConfig: {
-    siteTitle: 'Kenanga / Docs',
+    siteTitle: 'Cendana Studio / Docs',
     nav: [
       { text: 'Mulai', link: '/panduan/mulai' },
       { text: 'Komponen', link: '/komponen/' },

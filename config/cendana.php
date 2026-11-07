@@ -30,12 +30,12 @@ $users = array_map(function (string $name, int $index) use ($roles, $statuses, $
 }, $names, array_keys($names));
 
 return [
-    'name' => env('ADMIN_NAME', 'Kenanga Admin'),
+    'name' => env('ADMIN_NAME', 'Cendana Studio'),
     'brand' => [
-        'name' => env('ADMIN_BRAND_NAME', 'Kenanga Admin'),
-        'workspace' => env('ADMIN_WORKSPACE', 'Kopi Kenanga'),
-        'description' => env('ADMIN_WORKSPACE_DESCRIPTION', 'Toko online'),
-        'footer' => env('ADMIN_FOOTER', '© Kenanga Admin'),
+        'name' => env('ADMIN_BRAND_NAME', 'Cendana Studio Admin'),
+        'workspace' => env('ADMIN_WORKSPACE', 'Cendana Studio'),
+        'description' => env('ADMIN_WORKSPACE_DESCRIPTION', 'Cendana Studio CRM'),
+        'footer' => env('ADMIN_FOOTER', '© Cendana Studio'),
     ],
     'showcase' => (bool) env('ADMIN_SHOWCASE', true),
     'navigation' => [
