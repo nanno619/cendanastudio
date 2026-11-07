@@ -1,6 +1,6 @@
 # 🔌 Peta integrasi backend
 
-Starter kit ini adalah tampilan Laravel Blade: saat ini `routes/web.php` memakai `Route::view`, data contoh berasal dari `config/cendana.php`, dan beberapa form hanya menampilkan toast. Anda dapat mempertahankan komponen tampilannya saat menambahkan backend sendiri.
+Aplikasi ini adalah tampilan Laravel Blade: saat ini `routes/web.php` memakai `Route::view`, data contoh berasal dari `config/cendana.php`, dan beberapa form hanya menampilkan toast. Anda dapat mempertahankan komponen tampilannya saat menambahkan backend sendiri.
 
 | Yang ada sekarang | Saat memakai data nyata |
 | --- | --- |
@@ -20,4 +20,4 @@ Starter kit ini adalah tampilan Laravel Blade: saat ini `routes/web.php` memakai
 4. Untuk data besar dan visualisasi, gunakan [tabel & grafik server](/integrasi/data).
 5. Terakhir pasang [autentikasi & persiapan produksi](/integrasi/auth).
 
-Contoh di bagian ini adalah **kode contoh untuk ditambahkan**. Nama model, tabel, kolom, dan route yang digunakan tidak tersedia otomatis di starter kit. Cocokkan dengan domain aplikasi Anda.
+Contoh di bagian ini adalah **kode contoh untuk ditambahkan**. Nama model, tabel, kolom, dan route yang digunakan tidak tersedia otomatis di aplikasi ini. Cocokkan dengan domain aplikasi Anda.

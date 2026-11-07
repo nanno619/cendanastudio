@@ -1,6 +1,6 @@
 # 🚀 Instalasi & menjalankan
 
-Kenanga Admin adalah starter kit frontend Laravel 12 (PHP 8.2+), Blade component, Tailwind CSS 4, dan Vite. Anda membutuhkan Composer, Node.js, npm, serta PHP beserta ekstensi yang diperlukan Laravel.
+Cendana Studio adalah dashboard admin berbasis Laravel 13 (PHP 8.3+), Blade component, Tailwind CSS 4, dan Vite. Anda membutuhkan Composer, Node.js, npm, serta PHP beserta ekstensi yang diperlukan Laravel.
 
 Select yang dapat dicari menggunakan Choices.js dan kalender tanggal menggunakan Flatpickr, keduanya terpasang lewat `npm install` tanpa CDN.
 

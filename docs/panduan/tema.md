@@ -5,14 +5,15 @@
 Nilai berikut dibaca `config/cendana.php` dari `.env`:
 
 ```dotenv
-ADMIN_NAME="Kenanga Admin"
-ADMIN_BRAND_NAME="Kenanga Admin"
-ADMIN_WORKSPACE="Kopi Kenanga"
-ADMIN_WORKSPACE_DESCRIPTION="Toko online"
+ADMIN_NAME="Cendana Studio"
+ADMIN_BRAND_NAME="Cendana Studio Admin"
+ADMIN_WORKSPACE="Cendana Studio"
+ADMIN_WORKSPACE_DESCRIPTION="Cendana Studio CRM"
+ADMIN_FOOTER="© Cendana Studio"
 ADMIN_SHOWCASE=true
 ```
 
-`ADMIN_NAME` dipakai untuk judul dokumen, `ADMIN_WORKSPACE` dan deskripsinya tampil di sidebar. Sebagian konten demo (termasuk nama toko di login, profil di sidebar, dan angka dashboard) masih ditulis langsung pada view: ubah bagian tersebut ketika mengganti identitas proyek. Setelah mengubah konfigurasi pada aplikasi yang sudah di-cache, jalankan `php artisan optimize:clear`.
+`ADMIN_NAME` dipakai untuk judul dokumen, `ADMIN_WORKSPACE` dan deskripsinya tampil di sidebar dan halaman login, dan `ADMIN_FOOTER` tampil di footer. Sebagian konten demo (termasuk angka dashboard dan grafik analitik) masih ditulis langsung pada view: ubah bagian tersebut ketika mengganti identitas proyek. Setelah mengubah konfigurasi pada aplikasi yang sudah di-cache, jalankan `php artisan optimize:clear`.
 
 ## 🌈 Token visual
 

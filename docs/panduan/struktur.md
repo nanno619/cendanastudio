@@ -22,7 +22,7 @@ Halaman admin menggunakan layout komponen; `title` juga digunakan untuk judul br
 
 ```blade
 <x-layouts.admin title="Produk" group="Katalog">
-    <x-ui.page-header title="Produk" description="Kelola produk toko." />
+    <x-ui.page-header title="Produk" description="Kelola produk bisnis Anda." />
 
     <x-ui.card title="Produk terbaru">
         <p>Konten halaman.</p>

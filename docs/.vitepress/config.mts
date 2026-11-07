@@ -3,7 +3,7 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   lang: 'id-ID',
   title: 'Cendana Studio',
-  description: 'Panduan starter kit dashboard Laravel Blade berbasis komponen.',
+  description: 'Panduan dashboard admin Cendana Studio berbasis komponen Laravel Blade.',
   cleanUrls: true,
   appearance: 'dark',
   head: [['meta', { name: 'theme-color', content: '#09090b' }]],

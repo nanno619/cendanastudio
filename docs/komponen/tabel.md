@@ -83,7 +83,7 @@ Gunakan untuk keadaan tanpa konten di luar konteks tabel, misalnya halaman pesan
 </x-ui.empty>
 ```
 
-Nama route `products.create` di atas adalah contoh route aplikasi yang perlu Anda buat, bukan route bawaan starter kit.
+Nama route `products.create` di atas adalah contoh route aplikasi yang perlu Anda buat, bukan route bawaan aplikasi ini.
 
 ### 📄 `x-ui.pagination` (belum siap pakai) {#x-ui-pagination-belum-siap-pakai}
 

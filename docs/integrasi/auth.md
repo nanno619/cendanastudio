@@ -1,6 +1,6 @@
 # 🔐 Autentikasi & produksi
 
-Autentikasi memakai [Laravel Fortify](https://laravel.com/docs/fortify) (headless: Fortify menyediakan route dan logika, view Blade disediakan starter kit ini). Fitur yang aktif ada di `config/fortify.php`: login/logout, atur ulang kata sandi, serta pembaruan profil dan kata sandi dari halaman pengaturan. Registrasi, verifikasi email, dua langkah, dan passkey **dinonaktifkan**.
+Autentikasi memakai [Laravel Fortify](https://laravel.com/docs/fortify) (headless: Fortify menyediakan route dan logika, view Blade disediakan aplikasi ini). Fitur yang aktif ada di `config/fortify.php`: login/logout, atur ulang kata sandi, serta pembaruan profil dan kata sandi dari halaman pengaturan. Registrasi, verifikasi email, dua langkah, dan passkey **dinonaktifkan**.
 
 ## 🔑 Login dan view
 

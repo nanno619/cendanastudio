@@ -2,7 +2,7 @@
 layout: home
 
 hero:
-  name: Kenanga Admin
+  name: Cendana Studio
   text: 📚 Dokumentasi Laravel Blade
   tagline: Dari halaman demo ke dashboard yang terhubung dengan data proyek Anda. Pelajari komponen, pola halaman, dan langkah integrasi backend.
   actions:
@@ -32,6 +32,6 @@ features:
 
 Baru membuka proyek? Ikuti [instalasi dan menjalankan aplikasi](/panduan/mulai), kemudian [struktur halaman Blade](/panduan/struktur). Jika sudah membangun halaman sendiri, buka [peta komponen](/komponen/) atau [panduan integrasi backend](/integrasi/).
 
-::: info Batas starter kit
+::: info Batas cakupan
 Dashboard ini menyediakan frontend Laravel Blade. Data contoh berada di `config/cendana.php`, route demo memakai `Route::view`, dan tombol simpan contoh hanya menampilkan notifikasi. Dokumentasi integrasi berisi **contoh implementasi yang perlu Anda tambahkan**, bukan fitur backend yang sudah tersedia.
 :::
