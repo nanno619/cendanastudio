@@ -23,10 +23,6 @@
 
   <div class="hidden flex-col justify-between bg-primary p-12 text-primary-foreground lg:flex">
     <div class="flex items-center gap-2 text-sm font-medium opacity-90"><x-ui.icon name="layers" />{{ config('kenanga.brand.name') }}</div>
-    <figure>
-      <blockquote class="text-2xl font-medium leading-snug">“Semua yang saya butuhkan untuk mengelola toko ada di satu tempat, rapi dan cepat.”</blockquote>
-      <figcaption class="mt-4 text-sm opacity-80">Hendra Wijaya · Pemilik Kopi Kenanga</figcaption>
-    </figure>
   </div>
 </div>
 </x-layouts.guest>

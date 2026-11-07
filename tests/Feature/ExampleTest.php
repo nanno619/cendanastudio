@@ -27,7 +27,7 @@ class ExampleTest extends TestCase
         $this->app['auth']->logout();
 
         foreach (['/login', '/forgot-password'] as $path) {
-            $this->get($path)->assertOk()->assertSee('Kopi Kenanga');
+            $this->get($path)->assertOk()->assertSee(config('kenanga.brand.workspace'));
         }
     }
 
@@ -57,7 +57,7 @@ class ExampleTest extends TestCase
         foreach ($paths as $path) {
             $this->get($path)
                 ->assertOk()
-                ->assertSee('Kenanga', false);
+                ->assertSee(config('kenanga.name'));
         }
     }
 
