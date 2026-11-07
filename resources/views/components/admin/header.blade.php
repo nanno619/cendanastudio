@@ -15,13 +15,12 @@
         </label>
         <div class="relative" data-dropdown>
             <button type="button" data-dropdown-toggle aria-expanded="false" aria-label="Notifikasi" class="btn btn-outline btn-icon relative">
-                <x-ui.icon name="bell" /><span class="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-danger"></span>
+                <x-ui.icon name="bell" />
             </button>
             <div class="menu hidden w-80" role="menu">
                 <div class="menu-label">Notifikasi terbaru</div>
                 <div class="menu-sep"></div>
-                <button type="button" class="menu-item items-start py-2"><span class="avatar avatar-success avatar-sm mt-0.5"><x-ui.icon name="check-circle" /></span><span><span class="block font-medium">Pesanan selesai</span><span class="text-xs text-muted-foreground">#KK-2841 · 10 menit lalu</span></span></button>
-                <button type="button" class="menu-item items-start py-2"><span class="avatar avatar-warning avatar-sm mt-0.5"><x-ui.icon name="alert-triangle" /></span><span><span class="block font-medium">Stok menipis</span><span class="text-xs text-muted-foreground">Toraja Sapan · 2 jam lalu</span></span></button>
+                <p class="px-2 py-6 text-center text-sm text-muted-foreground">Belum ada notifikasi.</p>
             </div>
         </div>
         <button type="button" data-modal-open="#customizer" aria-label="Kustomisasi tampilan" data-tip="Kustomisasi" data-tip-pos="bottom left" class="btn btn-outline btn-icon"><x-ui.icon name="palette" /></button>

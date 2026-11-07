@@ -1,7 +1,7 @@
 <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 flex w-64 flex-col overflow-hidden border-r bg-sidebar" aria-label="Navigasi utama">
     <div class="p-3">
         <button type="button" class="flex w-full items-center gap-2.5 rounded-md p-2 text-left hover:bg-accent focus-ring">
-            <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground"><x-ui.icon name="coffee" /></span>
+            <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground"><x-ui.icon name="layers" /></span>
             <span class="sb-label min-w-0 flex-1 leading-tight">
                 <span class="block truncate text-sm font-medium">{{ config('kenanga.brand.workspace') }}</span>
                 <span class="block truncate text-xs text-muted-foreground">{{ config('kenanga.brand.description') }}</span>

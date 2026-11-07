@@ -35,7 +35,7 @@ return [
         'name' => env('ADMIN_BRAND_NAME', 'Kenanga Admin'),
         'workspace' => env('ADMIN_WORKSPACE', 'Kopi Kenanga'),
         'description' => env('ADMIN_WORKSPACE_DESCRIPTION', 'Toko online'),
-        'footer' => 'Starter kit Laravel Blade',
+        'footer' => env('ADMIN_FOOTER', '© Kenanga Admin'),
     ],
     'showcase' => (bool) env('ADMIN_SHOWCASE', true),
     'navigation' => [

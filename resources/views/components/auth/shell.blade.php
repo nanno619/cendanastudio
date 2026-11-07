@@ -5,7 +5,7 @@
     <button type="button" data-theme-toggle aria-label="Ganti tema" class="btn btn-outline btn-icon absolute right-4 top-4"><svg class="h-4 w-4" aria-hidden="true"><use class="js-theme-icon" href="{{ asset('icons.svg') }}#i-moon"/></svg></button>
     <div class="mx-auto w-full max-w-sm">
       <div class="flex items-center gap-2.5">
-        <span class="flex h-9 w-9 items-center justify-center rounded-md bg-primary text-primary-foreground"><x-ui.icon name="coffee" class="h-5 w-5" /></span>
+        <span class="flex h-9 w-9 items-center justify-center rounded-md bg-primary text-primary-foreground"><x-ui.icon name="layers" class="h-5 w-5" /></span>
         <span class="text-lg font-semibold">{{ config('kenanga.brand.workspace') }}</span>
       </div>
       <h1 class="mt-8 text-2xl font-semibold tracking-tight">{{ $heading }}</h1>
