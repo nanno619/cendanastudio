@@ -26,7 +26,9 @@ npm run docs:build           # fails on dead page links (not on dead #anchors)
 
 README's validation checklist before finishing: `php artisan test`, `php artisan view:cache` (catches Blade compile errors), `npm run build`. Run `npm run docs:build` too when docs change.
 
-Tests: `AuthenticationTest` (Fortify flows), `ExampleTest` (every page renders, asserting configured brand names), `LocaleTest` (EN default, MS switch, Malay validation), `DatabaseSeederTest`, `RolesAndPermissionsTest` (role-granted permissions, `role:`/`permission:` middleware). phpunit.xml doesn't override `ADMIN_*`, so tests read `.env` branding; assert `config('cendana.*')` values, never literal brand text.
+Tests: `AuthenticationTest` (Fortify flows), `ExampleTest` (every page renders, asserting configured brand names), `LocaleTest` (EN default, MS switch, Malay validation), `DatabaseSeederTest`, `RolesAndPermissionsTest` (role-granted permissions, `role:`/`permission:` middleware), plus one wiring test per package: `ActivityLogTest`, `MediaLibraryTest`, `SpreadsheetExportTest`, `PdfTest`. phpunit.xml doesn't override `ADMIN_*`, so tests read `.env` branding; assert `config('cendana.*')` values, never literal brand text.
+
+Deploying to production (in order): `composer install --no-dev --optimize-autoloader` (keeps Debugbar out), `php artisan migrate --force`, `php artisan storage:link` (media files), `npm run build`, `php artisan optimize`. Seed only once, after setting `ADMIN_SEED_*` and `APP_ENV=production`, `APP_DEBUG=false` in the server's `.env`.
 
 ## Skills
 
