@@ -12,6 +12,21 @@ This app is a Laravel Blade frontend: `routes/web.php` currently uses `Route::vi
 | Login via Laravel Fortify | Already wired up: see [authentication](/integration/auth) |
 | Local upload preview | Input names, file validation, storage on a disk |
 
+## 📦 Available packages
+
+These are installed but not yet wired into app models, so each feature decides how to use them:
+
+| Need | Package | Starting point |
+| --- | --- | --- |
+| Roles & permissions | `spatie/laravel-permission` | [Authentication & production](/integration/auth#roles-permissions) |
+| Audit trail | `spatie/laravel-activitylog` | `activity()->causedBy($user)->performedOn($record)->log('updated')`, or the `LogsActivity` trait |
+| Files on records | `spatie/laravel-medialibrary` | Add `HasMedia` + `InteractsWithMedia` to the model, then `$record->addMediaFromRequest('file')->toMediaCollection('documents')` |
+| CSV / Excel | `maatwebsite/excel` | An export class in `app/Exports`, then `Excel::download(new RecordsExport, 'records.xlsx')` |
+| PDF | `barryvdh/laravel-dompdf` | `Pdf::loadView('pdf.quote', $data)->download('quote.pdf')`, with inline CSS in the PDF view |
+| Debugging (dev only) | `barryvdh/laravel-debugbar` | Appears automatically when `APP_DEBUG=true`; never deploy dev dependencies |
+
+Media uploads still need server-side validation (see [forms & uploads](/integration/forms#file-uploads)), and every export or PDF route needs the same authorization as the page it comes from.
+
 ## 🗺️ Suggested order of work
 
 1. Read [structure & Blade](/guide/structure) to understand layouts and props.

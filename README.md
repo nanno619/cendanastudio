@@ -69,6 +69,17 @@ php artisan optimize
 
 Authentication (login, logout, password reset, profile and password updates) is wired up through Laravel Fortify, and every admin page is protected by the `auth` middleware; see `docs/integration/auth.md`. Roles and permissions use `spatie/laravel-permission` (`HasRoles` on `User`, `role`/`permission` route middleware); none are defined yet. All sample data and sample forms are still presentational UI: the sample forms only show a toast and don't save data. Connect server validation and persistence to fit your real project.
 
+## Packages
+
+Beyond Laravel and Fortify, these are installed and ready to use:
+
+- `spatie/laravel-permission` — roles and permissions
+- `spatie/laravel-activitylog` — audit trail of who changed what
+- `spatie/laravel-medialibrary` — files and images attached to models (public disk; run `php artisan storage:link`)
+- `maatwebsite/excel` — CSV/XLSX exports and imports
+- `barryvdh/laravel-dompdf` — PDF generation from Blade views
+- `barryvdh/laravel-debugbar` — development-only debug toolbar (shown when `APP_DEBUG=true`)
+
 ## Customization
 
 Basic identity is set in `.env`:

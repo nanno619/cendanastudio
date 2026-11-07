@@ -50,6 +50,13 @@ Remote `origin` is `git@github.com:nanno619/cendanastudio.git`. Always create co
 
 **Authorization** uses `spatie/laravel-permission` (v8): `User` has the `HasRoles` trait, permissions register on Laravel's gate (`$user->can('edit records')`, `@can`), and the `role`, `permission` and `role_or_permission` middleware aliases are registered in `bootstrap/app.php`. No roles or permissions are defined yet. Clear `PermissionRegistrar::forgetCachedPermissions()` in tests that create them.
 
+**Packages installed but not yet used by app models** (wire them in when a feature needs them; check the installed major version with `search-docs` before writing code):
+- `spatie/laravel-activitylog` v5: audit trail via `activity()->causedBy($user)->performedOn($model)->log('...')` or the `LogsActivity` trait on a model. Table `activity_log`.
+- `spatie/laravel-medialibrary` v11: attach files with `HasMedia` + `InteractsWithMedia` on a model; stored on the `public` disk (`MEDIA_DISK`). GD and Imagick are available for conversions.
+- `maatwebsite/excel` v4 (PhpSpreadsheet): put export/import classes in `app/Exports` / `app/Imports`; use `Excel::download()` for CSV/XLSX.
+- `barryvdh/laravel-dompdf` v3: `Pdf::loadView('pdf.quote', $data)->download()`; keep PDF Blade views under `resources/views/pdf/` with inline CSS (no Vite/Tailwind in PDFs).
+- `barryvdh/laravel-debugbar` v4 (dev only): on when `APP_DEBUG=true`, forced off in tests via `DEBUGBAR_ENABLED=false` in `phpunit.xml`. Deploy with `composer install --no-dev` so it never reaches production.
+
 **`config/cendana.php` drives the shell**: branding (from `ADMIN_*` env vars: `ADMIN_NAME` = browser title suffix, `ADMIN_BRAND_NAME`, `ADMIN_WORKSPACE` + `_DESCRIPTION` = sidebar/login, `ADMIN_FOOTER` = footer text), `seed_admin`, `locales`, sidebar `navigation` (groups → items with `route`, `active` route pattern, `icon`, optional `children`), theme accent list and radius options. Adding a page = route + view + navigation entry. `ADMIN_SHOWCASE=false` removes the `/components/*` and `/examples/records/*` routes entirely (they are registered inside `if (config('cendana.showcase'))`).
 
 **Blade components** (`resources/views/components/`):
