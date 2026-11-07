@@ -30,7 +30,7 @@
             ['label' => 'Manual', 'value' => 520, 'color' => 1],
             ['label' => 'Impor', 'value' => 280, 'color' => 2],
             ['label' => 'Otomatis', 'value' => 200, 'color' => 3],
-        ]" total-label="Entri" summary="Dari 1.000 entri, 52% dibuat manual, 28% dari impor, dan 20% otomatis." />
+        ]" total-label="Entri" summary="Dari 1,000 entri, 52% dibuat manual, 28% dari impor, dan 20% otomatis." />
     </x-ui.card>
 
     <x-ui.card title="Tanpa data" description="Jangan tampilkan grafik kosong atau sumbu tanpa nilai.">

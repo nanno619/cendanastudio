@@ -45,7 +45,7 @@ Tabel demo hanya memproses **baris yang sudah dirender di browser**. Jangan menc
 
 ### ↕️ Pencarian, filter, dan urutan
 
-Pencarian membandingkan teks semua sel kecuali sel terakhir (biasanya kolom aksi) dan tidak mengirim request. Filter membaca `data-status` pada `<tr>` dan mencocokkannya secara persis dengan nilai `<select>`; pastikan status dalam opsi dan baris menggunakan slug yang sama, contohnya `aktif`. Untuk angka, beri `data-sort="num"` pada `<th>` dan bila isi sel berupa format tampilan (misalnya `Rp 1.000`), pasang `data-value="1000"` pada `<td>` agar hasil urutan berdasarkan angka mentah. Teks sel lain diurutkan memakai locale `id`.
+Pencarian membandingkan teks semua sel kecuali sel terakhir (biasanya kolom aksi) dan tidak mengirim request. Filter membaca `data-status` pada `<tr>` dan mencocokkannya secara persis dengan nilai `<select>`; pastikan status dalam opsi dan baris menggunakan slug yang sama, contohnya `aktif`. Untuk angka, beri `data-sort="num"` pada `<th>` dan bila isi sel berupa format tampilan (misalnya `RM 1,000.00`), pasang `data-value="1000"` pada `<td>` agar hasil urutan berdasarkan angka mentah. Teks sel lain diurutkan memakai locale `id`.
 
 ### ☑️ Seleksi baris dan paginasi
 

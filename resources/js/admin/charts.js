@@ -32,7 +32,7 @@
     return 'hsl(var(--' + c + '))';
   }
   function fmt(v, c) {
-    return (c.prefix || '') + Number(v).toLocaleString('id-ID', { maximumFractionDigits: 1 }) + (c.suffix || '');
+    return (c.prefix || '') + Number(v).toLocaleString('ms-MY', { maximumFractionDigits: 1 }) + (c.suffix || '');
   }
   function ticks(max, n) {
     var raw = max / n, mag = Math.pow(10, Math.floor(Math.log10(raw))), norm = raw / mag;
@@ -98,7 +98,7 @@
       var y = Y(t);
       svg('line', { x1: m.l, x2: W - m.r, y1: y, y2: y, style: 'stroke:hsl(var(--border));' + (t ? 'stroke-dasharray:3 4' : '') }, sv);
       var tx = svg('text', { x: m.l - 8, y: y + 4, 'text-anchor': 'end', style: 'fill:hsl(var(--muted-foreground));font-size:11px' }, sv);
-      tx.textContent = t.toLocaleString('id-ID');
+      tx.textContent = t.toLocaleString('ms-MY');
     });
     var every = Math.ceil(n / Math.max(1, Math.floor(iw / 46)));
     L.forEach(function (l, k) {
@@ -203,14 +203,14 @@
     var ctr = html('div', 'pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center', wrap);
     var big = html('p', 'text-2xl font-semibold tabular-nums', ctr);
     var small = html('p', 'text-xs text-muted-foreground', ctr);
-    function reset() { big.textContent = total.toLocaleString('id-ID'); small.textContent = c.total || 'Total'; segs.forEach(function (s) { s.style.opacity = 1; }); }
-    function focus(i) { big.textContent = Number(I[i].value).toLocaleString('id-ID'); small.textContent = I[i].label; segs.forEach(function (s, j) { s.style.opacity = j === i ? 1 : 0.3; }); }
+    function reset() { big.textContent = total.toLocaleString('ms-MY'); small.textContent = c.total || 'Total'; segs.forEach(function (s) { s.style.opacity = 1; }); }
+    function focus(i) { big.textContent = Number(I[i].value).toLocaleString('ms-MY'); small.textContent = I[i].label; segs.forEach(function (s, j) { s.style.opacity = j === i ? 1 : 0.3; }); }
     var ul = html('ul', 'min-w-[14rem] max-w-full flex-1 space-y-2.5 text-sm', box);
     I.forEach(function (it, i) {
       var li = html('li', 'flex items-center gap-2', ul);
       var d = html('span', 'h-2.5 w-2.5 shrink-0 rounded-full', li); d.style.background = colorOf(it.color || i + 1);
       html('span', 'min-w-0 flex-1 truncate', li, it.label);
-      html('span', 'font-medium tabular-nums', li, Number(it.value).toLocaleString('id-ID'));
+      html('span', 'font-medium tabular-nums', li, Number(it.value).toLocaleString('ms-MY'));
       html('span', 'w-10 text-right text-xs tabular-nums text-muted-foreground', li, Math.round(it.value / total * 100) + '%');
       li.addEventListener('mouseenter', function () { focus(i); });
       li.addEventListener('mouseleave', reset);

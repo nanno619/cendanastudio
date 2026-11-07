@@ -9,10 +9,10 @@
 
 <!-- Statistik -->
 <section aria-label="Statistik utama" class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-  <x-ui.stat-card title="Total pendapatan" value="Rp 58,4 jt" icon="dollar" tile="bg-soft text-soft-foreground" tone="success" direction="up" delta="+13,2%" spark="[41,45,44,48,47,52,58]" />
-  <x-ui.stat-card title="Pelanggan baru" value="1.284" icon="userplus" tile="bg-success-soft text-success" tone="success" direction="up" delta="+8,1%" spark="[30,34,33,38,36,41,44]" />
-  <x-ui.stat-card title="Pesanan aktif" value="356" icon="cart" tile="bg-warning-soft text-warning" tone="danger" direction="down" delta="−2,4%" spark="[60,58,61,57,59,55,54]" />
-  <x-ui.stat-card title="Tingkat konversi" value="3,42%" icon="activity" tile="bg-info-soft text-info" tone="success" direction="up" delta="+0,3 poin" spark="[2.8,3,2.9,3.1,3.2,3.3,3.4]" />
+  <x-ui.stat-card title="Total pendapatan" value="RM 16.7k" icon="dollar" tile="bg-soft text-soft-foreground" tone="success" direction="up" delta="+13.2%" spark="[41,45,44,48,47,52,58]" />
+  <x-ui.stat-card title="Pelanggan baru" value="1,284" icon="userplus" tile="bg-success-soft text-success" tone="success" direction="up" delta="+8.1%" spark="[30,34,33,38,36,41,44]" />
+  <x-ui.stat-card title="Pesanan aktif" value="356" icon="cart" tile="bg-warning-soft text-warning" tone="danger" direction="down" delta="−2.4%" spark="[60,58,61,57,59,55,54]" />
+  <x-ui.stat-card title="Tingkat konversi" value="3.42%" icon="activity" tile="bg-info-soft text-info" tone="success" direction="up" delta="+0.3 poin" spark="[2.8,3,2.9,3.1,3.2,3.3,3.4]" />
 </section>
 
 <!-- Grafik + penjualan -->
@@ -20,12 +20,12 @@
   <div class="card min-w-0 lg:col-span-4">
     <div class="card-header">
       <h2 class="card-title">Pendapatan</h2>
-      <p class="card-desc">12 bulan terakhir. Total Rp 521 juta.</p>
+      <p class="card-desc">12 bulan terakhir. Total RM 148.8k.</p>
     </div>
     <div class="card-content">
-      <div data-chart="bar" data-height="280" data-prefix="Rp " data-suffix=" jt"
+      <div data-chart="bar" data-height="280" data-prefix="RM " data-suffix="k"
         data-labels='["Okt","Nov","Des","Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep"]'
-        data-series='[{"name":"Pendapatan","data":[31.2,38.5,52.1,36.4,34.8,41,39.6,44.3,47.9,45.2,51.6,58.4]}]'></div>
+        data-series='[{"name":"Pendapatan","data":[8.9,11,14.9,10.4,9.9,11.7,11.3,12.7,13.7,12.9,14.7,16.7]}]'></div>
     </div>
   </div>
 

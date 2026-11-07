@@ -21,10 +21,10 @@
       data-series='[{"name":"Organik","data":[3.1,3.4,3.2,3.8,3.6,4.1,4.4]},{"name":"Sosial media","data":[2.2,2.6,2.4,2.9,3.1,3.5,3.3],"color":"2"},{"name":"Iklan","data":[1.6,1.9,2.1,1.8,2.3,2.2,2.6],"color":"3"}]'></div>
   </x-ui.card>
 
-  <x-ui.card title="Pendapatan vs target" description="Batang berkelompok (juta rupiah)." class="min-w-0">
-    <div data-chart="bar" data-height="260" data-prefix="Rp " data-suffix=" jt"
+  <x-ui.card title="Pendapatan vs target" description="Batang berkelompok (ribu ringgit)." class="min-w-0">
+    <div data-chart="bar" data-height="260" data-prefix="RM " data-suffix="k"
       data-labels='["Apr","Mei","Jun","Jul","Agu","Sep"]'
-      data-series='[{"name":"Aktual","data":[39.6,44.3,47.9,45.2,51.6,58.4]},{"name":"Target","data":[40,42,45,48,50,55],"color":"5"}]'></div>
+      data-series='[{"name":"Aktual","data":[11.3,12.7,13.7,12.9,14.7,16.7]},{"name":"Target","data":[11.4,12,12.9,13.7,14.3,15.7],"color":"5"}]'></div>
   </x-ui.card>
 </section>
 
@@ -47,7 +47,7 @@
     <p class="card-desc mt-1.5">Bulan September</p>
     <div class="mt-5 flex items-center gap-5">
       <div data-chart="radial" data-value="78" data-label="Tercapai" data-color="1"></div>
-      <dl class="space-y-2 text-sm"><div><dt class="text-muted-foreground">Aktual</dt><dd class="font-medium">Rp 58,4 jt</dd></div><div><dt class="text-muted-foreground">Target</dt><dd class="font-medium">Rp 75 jt</dd></div></dl>
+      <dl class="space-y-2 text-sm"><div><dt class="text-muted-foreground">Aktual</dt><dd class="font-medium">RM 16.7k</dd></div><div><dt class="text-muted-foreground">Target</dt><dd class="font-medium">RM 21.4k</dd></div></dl>
     </div>
   </div>
   <div class="card p-6">
@@ -55,7 +55,7 @@
     <p class="card-desc mt-1.5">Rata-rata ulasan 30 hari</p>
     <div class="mt-5 flex items-center gap-5">
       <div data-chart="radial" data-value="92" data-label="Puas" data-color="2"></div>
-      <dl class="space-y-2 text-sm"><div><dt class="text-muted-foreground">Rating</dt><dd class="font-medium">4,8 / 5</dd></div><div><dt class="text-muted-foreground">Ulasan</dt><dd class="font-medium">1.126</dd></div></dl>
+      <dl class="space-y-2 text-sm"><div><dt class="text-muted-foreground">Rating</dt><dd class="font-medium">4.8 / 5</dd></div><div><dt class="text-muted-foreground">Ulasan</dt><dd class="font-medium">1,126</dd></div></dl>
     </div>
   </div>
   <div class="card p-6">
@@ -63,7 +63,7 @@
     <p class="card-desc mt-1.5">Terisi saat ini</p>
     <div class="mt-5 flex items-center gap-5">
       <div data-chart="radial" data-value="64" data-label="Terisi" data-color="3"></div>
-      <dl class="space-y-2 text-sm"><div><dt class="text-muted-foreground">Terpakai</dt><dd class="font-medium">640 rak</dd></div><div><dt class="text-muted-foreground">Total</dt><dd class="font-medium">1.000 rak</dd></div></dl>
+      <dl class="space-y-2 text-sm"><div><dt class="text-muted-foreground">Terpakai</dt><dd class="font-medium">640 rak</dd></div><div><dt class="text-muted-foreground">Total</dt><dd class="font-medium">1,000 rak</dd></div></dl>
     </div>
   </div>
 </section>
@@ -87,10 +87,10 @@
     <table class="table min-w-[600px]">
       <thead><tr><th>Kanal</th><th class="text-right">Kunjungan</th><th class="text-right">Konversi</th><th class="w-44">Tren 7 hari</th></tr></thead>
       <tbody>
-        <tr><td class="font-medium">Pencarian organik</td><td class="text-right tabular-nums">4.200</td><td class="text-right tabular-nums">4,4%</td><td><div data-chart="spark" data-kind="area" data-color="success" data-values="[12,14,13,17,16,19,22]" data-height="32"></div></td></tr>
-        <tr><td class="font-medium">Media sosial</td><td class="text-right tabular-nums">2.900</td><td class="text-right tabular-nums">3,3%</td><td><div data-chart="spark" data-kind="bar" data-color="chart-1" data-values="[8,11,9,13,12,15,14]" data-height="32"></div></td></tr>
-        <tr><td class="font-medium">Langsung</td><td class="text-right tabular-nums">1.800</td><td class="text-right tabular-nums">2,9%</td><td><div data-chart="spark" data-kind="line" data-color="info" data-values="[9,8,9,10,9,11,10]" data-height="32"></div></td></tr>
-        <tr><td class="font-medium">Iklan berbayar</td><td class="text-right tabular-nums">1.100</td><td class="text-right tabular-nums">2,6%</td><td><div data-chart="spark" data-kind="area" data-color="danger" data-values="[14,13,12,12,10,9,8]" data-height="32"></div></td></tr>
+        <tr><td class="font-medium">Pencarian organik</td><td class="text-right tabular-nums">4,200</td><td class="text-right tabular-nums">4.4%</td><td><div data-chart="spark" data-kind="area" data-color="success" data-values="[12,14,13,17,16,19,22]" data-height="32"></div></td></tr>
+        <tr><td class="font-medium">Media sosial</td><td class="text-right tabular-nums">2,900</td><td class="text-right tabular-nums">3.3%</td><td><div data-chart="spark" data-kind="bar" data-color="chart-1" data-values="[8,11,9,13,12,15,14]" data-height="32"></div></td></tr>
+        <tr><td class="font-medium">Langsung</td><td class="text-right tabular-nums">1,800</td><td class="text-right tabular-nums">2.9%</td><td><div data-chart="spark" data-kind="line" data-color="info" data-values="[9,8,9,10,9,11,10]" data-height="32"></div></td></tr>
+        <tr><td class="font-medium">Iklan berbayar</td><td class="text-right tabular-nums">1,100</td><td class="text-right tabular-nums">2.6%</td><td><div data-chart="spark" data-kind="area" data-color="danger" data-values="[14,13,12,12,10,9,8]" data-height="32"></div></td></tr>
       </tbody>
     </table>
   </div>

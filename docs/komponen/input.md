@@ -32,7 +32,7 @@ Atribut `placeholder`, `autocomplete`, `min`, `max`, `step`, `required`, `readon
 
 ```blade
 <x-ui.field name="price" label="Harga">
-    <x-ui.input name="price" type="number" addon="Rp" min="0" step="1" :value="$product?->price" />
+    <x-ui.input name="price" type="number" addon="RM" min="0" step="0.01" :value="$product?->price" />
 </x-ui.field>
 <x-ui.input name="sku" value="KP-001" readonly />
 <x-ui.input name="serial" value="ABC-001" disabled />

@@ -67,7 +67,7 @@
     <div class="space-y-4">
       <div class="space-y-2"><label class="label" for="mf-name">Nama produk</label><input id="mf-name" class="input" placeholder="Contoh: Arabika Gayo 1 kg"></div>
       <div class="grid grid-cols-2 gap-3">
-        <div class="space-y-2"><label class="label" for="mf-price">Harga</label><div class="input-group"><span class="input-addon">Rp</span><input id="mf-price" class="input" placeholder="170000"></div></div>
+        <div class="space-y-2"><label class="label" for="mf-price">Harga</label><div class="input-group"><span class="input-addon">RM</span><input id="mf-price" class="input" placeholder="48.00"></div></div>
         <div class="space-y-2"><label class="label" for="mf-stock">Stok</label><input id="mf-stock" type="number" class="input" placeholder="0"></div>
       </div>
     </div>

@@ -7,7 +7,7 @@
       <div class="space-y-2"><label class="label" for="f-name">Nama lengkap</label><input id="f-name" class="input" placeholder="Ayu Rahmawati"><p class="field-help">Nama yang tampil di profil publik.</p></div>
       <div class="space-y-2"><label class="label" for="f-email">Email</label>
         <div class="relative"><x-ui.icon name="mail" class="pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" /><input id="f-email" type="email" class="input pl-8" placeholder="ayu@kopikenanga.id"></div></div>
-      <div class="space-y-2"><label class="label" for="f-price">Harga</label><div class="input-group"><span class="input-addon">Rp</span><input id="f-price" class="input" placeholder="170000"><span class="input-addon">/ kg</span></div></div>
+      <div class="space-y-2"><label class="label" for="f-price">Harga</label><div class="input-group"><span class="input-addon">RM</span><input id="f-price" class="input" placeholder="48.00"><span class="input-addon">/ kg</span></div></div>
       <div class="space-y-2"><label class="label" for="f-site">Situs web</label><div class="input-group"><span class="input-addon">https://</span><input id="f-site" class="input" placeholder="kopikenanga.id"></div></div>
       <div class="space-y-2"><label class="label" for="f-msg">Catatan</label><textarea id="f-msg" class="textarea" placeholder="Tulis catatan untuk pelanggan"></textarea></div>
     </div>
@@ -60,8 +60,8 @@
 <section class="grid gap-4 lg:grid-cols-2">
   <x-ui.card title="Kartu pilihan" description="Radio berbentuk kartu untuk pilihan penting." class="min-w-0">
     <div class="grid gap-3 sm:grid-cols-2">
-      <label class="cursor-pointer"><input type="radio" name="plan" class="peer sr-only" checked><span class="block rounded-lg border p-4 peer-checked:border-primary peer-checked:bg-soft peer-focus-visible:ring-2 peer-focus-visible:ring-ring/50"><span class="flex items-center gap-2 font-medium"><x-ui.icon name="package" />Reguler</span><span class="mt-1 block text-sm text-muted-foreground">2–3 hari · Rp 22.000</span></span></label>
-      <label class="cursor-pointer"><input type="radio" name="plan" class="peer sr-only"><span class="block rounded-lg border p-4 peer-checked:border-primary peer-checked:bg-soft peer-focus-visible:ring-2 peer-focus-visible:ring-ring/50"><span class="flex items-center gap-2 font-medium"><x-ui.icon name="zap" />Ekspres</span><span class="mt-1 block text-sm text-muted-foreground">Besok tiba · Rp 45.000</span></span></label>
+      <label class="cursor-pointer"><input type="radio" name="plan" class="peer sr-only" checked><span class="block rounded-lg border p-4 peer-checked:border-primary peer-checked:bg-soft peer-focus-visible:ring-2 peer-focus-visible:ring-ring/50"><span class="flex items-center gap-2 font-medium"><x-ui.icon name="package" />Reguler</span><span class="mt-1 block text-sm text-muted-foreground">2–3 hari · RM 6.00</span></span></label>
+      <label class="cursor-pointer"><input type="radio" name="plan" class="peer sr-only"><span class="block rounded-lg border p-4 peer-checked:border-primary peer-checked:bg-soft peer-focus-visible:ring-2 peer-focus-visible:ring-ring/50"><span class="flex items-center gap-2 font-medium"><x-ui.icon name="zap" />Ekspres</span><span class="mt-1 block text-sm text-muted-foreground">Besok tiba · RM 13.00</span></span></label>
     </div>
   </x-ui.card>
 
@@ -82,7 +82,7 @@
       <div class="space-y-2"><label class="label" for="p-name">Nama produk</label><input id="p-name" class="input" placeholder="Arabika Gayo 1 kg"></div>
       <div class="space-y-2"><label class="label" for="p-sku">SKU</label><input id="p-sku" class="input" placeholder="KP-001"></div>
       <div class="space-y-2"><label class="label" for="p-cat">Kategori</label><select id="p-cat" class="select"><option>Biji kopi</option><option>Peralatan</option><option>Paket</option></select></div>
-      <div class="space-y-2"><label class="label" for="p-price">Harga</label><div class="input-group"><span class="input-addon">Rp</span><input id="p-price" class="input" placeholder="170000"></div></div>
+      <div class="space-y-2"><label class="label" for="p-price">Harga</label><div class="input-group"><span class="input-addon">RM</span><input id="p-price" class="input" placeholder="48.00"></div></div>
       <div class="space-y-2 md:col-span-2"><label class="label" for="p-desc">Deskripsi</label><textarea id="p-desc" class="textarea" placeholder="Deskripsi singkat produk"></textarea></div>
     </div>
   </div>

@@ -142,7 +142,7 @@
         error.hidden = false; input.value = ''; return;
       }
       root.querySelector('[data-file-name]').textContent = file.name;
-      root.querySelector('[data-file-size]').textContent = (file.size / 1024 / 1024).toLocaleString('id-ID', { maximumFractionDigits: 2 }) + ' MB · pratinjau lokal';
+      root.querySelector('[data-file-size]').textContent = (file.size / 1024 / 1024).toLocaleString('ms-MY', { maximumFractionDigits: 2 }) + ' MB · pratinjau lokal';
       image.hidden = !file.type.startsWith('image/');
       icon.hidden = !image.hidden;
       if (!image.hidden) { objectUrl = URL.createObjectURL(file); image.src = objectUrl; }

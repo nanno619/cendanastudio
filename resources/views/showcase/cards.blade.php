@@ -4,17 +4,17 @@
 <div class="space-y-4">
   <h2 class="text-lg font-semibold tracking-tight">Kartu statistik</h2>
 <section class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Ikon berwarna">
-  <x-ui.stat-card title="Pendapatan" value="Rp 58,4 jt" icon="dollar" tile="bg-soft text-soft-foreground" tone="success" direction="up" delta="+13,2%" />
-  <x-ui.stat-card title="Pelanggan baru" value="1.284" icon="userplus" tile="bg-success-soft text-success" tone="success" direction="up" delta="+8,1%" />
-  <x-ui.stat-card title="Pesanan aktif" value="356" icon="cart" tile="bg-warning-soft text-warning" tone="danger" direction="down" delta="−2,4%" />
-  <x-ui.stat-card title="Konversi" value="3,42%" icon="activity" tile="bg-info-soft text-info" tone="success" direction="up" delta="+0,3 poin" />
+  <x-ui.stat-card title="Pendapatan" value="RM 16.7k" icon="dollar" tile="bg-soft text-soft-foreground" tone="success" direction="up" delta="+13.2%" />
+  <x-ui.stat-card title="Pelanggan baru" value="1,284" icon="userplus" tile="bg-success-soft text-success" tone="success" direction="up" delta="+8.1%" />
+  <x-ui.stat-card title="Pesanan aktif" value="356" icon="cart" tile="bg-warning-soft text-warning" tone="danger" direction="down" delta="−2.4%" />
+  <x-ui.stat-card title="Konversi" value="3.42%" icon="activity" tile="bg-info-soft text-info" tone="success" direction="up" delta="+0.3 poin" />
 </section>
 
 <section class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Dengan sparkline">
-  <x-ui.stat-card title="Kunjungan" value="10.100" icon="globe" tile="bg-soft text-soft-foreground" tone="success" direction="up" delta="+5,4%" note="7 hari" spark="[12,14,13,16,15,18,19]" />
-  <x-ui.stat-card title="Keranjang ditinggal" value="212" icon="cart" tile="bg-danger-soft text-danger" tone="danger" direction="up" delta="+3,1%" note="7 hari" spark="[9,10,9,11,12,12,14]" />
-  <x-ui.stat-card title="Rata-rata pesanan" value="Rp 164 rb" icon="tag" tile="bg-info-soft text-info" tone="success" direction="up" delta="+2,0%" note="7 hari" spark="[150,152,151,158,160,162,164]" />
-  <x-ui.stat-card title="Pengembalian" value="1,2%" icon="refresh" tile="bg-success-soft text-success" tone="success" direction="down" delta="−0,4 poin" note="7 hari" spark="[2,1.9,1.7,1.6,1.5,1.3,1.2]" />
+  <x-ui.stat-card title="Kunjungan" value="10,100" icon="globe" tile="bg-soft text-soft-foreground" tone="success" direction="up" delta="+5.4%" note="7 hari" spark="[12,14,13,16,15,18,19]" />
+  <x-ui.stat-card title="Keranjang ditinggal" value="212" icon="cart" tile="bg-danger-soft text-danger" tone="danger" direction="up" delta="+3.1%" note="7 hari" spark="[9,10,9,11,12,12,14]" />
+  <x-ui.stat-card title="Rata-rata pesanan" value="RM 47.00" icon="tag" tile="bg-info-soft text-info" tone="success" direction="up" delta="+2.0%" note="7 hari" spark="[150,152,151,158,160,162,164]" />
+  <x-ui.stat-card title="Pengembalian" value="1.2%" icon="refresh" tile="bg-success-soft text-success" tone="success" direction="down" delta="−0.4 poin" note="7 hari" spark="[2,1.9,1.7,1.6,1.5,1.3,1.2]" />
 </section>
 
 <section class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Variasi gaya">
@@ -22,21 +22,21 @@
     <p class="text-sm font-medium text-muted-foreground">Target bulan ini</p>
     <p class="mt-2 text-2xl font-semibold tabular-nums">78%</p>
     <div class="progress mt-4"><div class="progress-bar" style="width:78%"></div></div>
-    <p class="mt-2 text-xs text-muted-foreground">Rp 58,4 jt dari Rp 75 jt</p>
+    <p class="mt-2 text-xs text-muted-foreground">RM 16.7k dari RM 21.4k</p>
   </div>
   <div class="rounded-xl bg-primary p-6 text-primary-foreground shadow-sm">
     <p class="text-sm font-medium opacity-80">Saldo tersedia</p>
-    <p class="mt-2 text-2xl font-semibold tabular-nums">Rp 12,8 jt</p>
+    <p class="mt-2 text-2xl font-semibold tabular-nums">RM 3.7k</p>
     <button type="button" class="mt-4 inline-flex h-8 items-center gap-1.5 rounded-md bg-primary-foreground/15 px-3 text-xs font-medium hover:bg-primary-foreground/25">Tarik dana <x-ui.icon name="arrow-right" class="h-3.5 w-3.5" /></button>
   </div>
   <div class="rounded-xl border border-dashed p-6">
     <p class="text-sm font-medium text-muted-foreground">Outline putus-putus</p>
-    <p class="mt-2 text-2xl font-semibold tabular-nums">2.481</p>
+    <p class="mt-2 text-2xl font-semibold tabular-nums">2,481</p>
     <p class="mt-1 text-xs text-muted-foreground">Gaya minimal tanpa bayangan</p>
   </div>
   <div class="rounded-xl bg-success-soft p-6">
     <p class="text-sm font-medium text-success">Kartu soft berwarna</p>
-    <p class="mt-2 text-2xl font-semibold tabular-nums text-success">+24,8%</p>
+    <p class="mt-2 text-2xl font-semibold tabular-nums text-success">+24.8%</p>
     <p class="mt-1 text-xs text-success/80">Pertumbuhan tahunan</p>
   </div>
 </section>
@@ -71,9 +71,9 @@
       <h3 class="mt-3 font-semibold leading-none">Ayu Rahmawati</h3>
       <p class="mt-1 text-sm text-muted-foreground">Manajer toko · Yogyakarta</p>
       <dl class="mt-4 grid grid-cols-3 divide-x rounded-lg border text-center">
-        <div class="py-2"><dt class="text-xs text-muted-foreground">Pesanan</dt><dd class="font-semibold tabular-nums">1.204</dd></div>
+        <div class="py-2"><dt class="text-xs text-muted-foreground">Pesanan</dt><dd class="font-semibold tabular-nums">1,204</dd></div>
         <div class="py-2"><dt class="text-xs text-muted-foreground">Ulasan</dt><dd class="font-semibold tabular-nums">318</dd></div>
-        <div class="py-2"><dt class="text-xs text-muted-foreground">Rating</dt><dd class="font-semibold tabular-nums">4,9</dd></div>
+        <div class="py-2"><dt class="text-xs text-muted-foreground">Rating</dt><dd class="font-semibold tabular-nums">4.9</dd></div>
       </dl>
       <div class="mt-4 flex gap-2"><button type="button" class="btn btn-primary flex-1"><x-ui.icon name="mail" />Pesan</button><button type="button" class="btn btn-outline flex-1">Ikuti</button></div>
     </div>
@@ -96,7 +96,7 @@
   <div class="card p-6">
     <h3 class="font-semibold">Starter</h3>
     <p class="mt-1 text-sm text-muted-foreground">Untuk toko yang baru mulai.</p>
-    <p class="mt-4"><span class="text-3xl font-semibold tabular-nums">Rp 0</span><span class="text-muted-foreground"> / bulan</span></p>
+    <p class="mt-4"><span class="text-3xl font-semibold tabular-nums">RM 0</span><span class="text-muted-foreground"> / bulan</span></p>
     <ul class="mt-5 space-y-2.5 text-sm">
       <li class="flex items-center gap-2"><x-ui.icon name="check" class="h-4 w-4 text-success" />50 produk</li>
       <li class="flex items-center gap-2"><x-ui.icon name="check" class="h-4 w-4 text-success" />1 pengguna</li>
@@ -108,7 +108,7 @@
     <span class="badge badge-primary absolute -top-3 left-6">Paling populer</span>
     <h3 class="font-semibold">Pro</h3>
     <p class="mt-1 text-sm text-muted-foreground">Untuk toko yang sedang tumbuh.</p>
-    <p class="mt-4"><span class="text-3xl font-semibold tabular-nums">Rp 149 rb</span><span class="text-muted-foreground"> / bulan</span></p>
+    <p class="mt-4"><span class="text-3xl font-semibold tabular-nums">RM 49</span><span class="text-muted-foreground"> / bulan</span></p>
     <ul class="mt-5 space-y-2.5 text-sm">
       <li class="flex items-center gap-2"><x-ui.icon name="check" class="h-4 w-4 text-success" />Produk tak terbatas</li>
       <li class="flex items-center gap-2"><x-ui.icon name="check" class="h-4 w-4 text-success" />5 pengguna</li>
@@ -120,7 +120,7 @@
   <div class="card p-6">
     <h3 class="font-semibold">Bisnis</h3>
     <p class="mt-1 text-sm text-muted-foreground">Untuk tim dan banyak cabang.</p>
-    <p class="mt-4"><span class="text-3xl font-semibold tabular-nums">Rp 499 rb</span><span class="text-muted-foreground"> / bulan</span></p>
+    <p class="mt-4"><span class="text-3xl font-semibold tabular-nums">RM 149</span><span class="text-muted-foreground"> / bulan</span></p>
     <ul class="mt-5 space-y-2.5 text-sm">
       <li class="flex items-center gap-2"><x-ui.icon name="check" class="h-4 w-4 text-success" />Semua fitur Pro</li>
       <li class="flex items-center gap-2"><x-ui.icon name="check" class="h-4 w-4 text-success" />Pengguna tak terbatas</li>
@@ -135,25 +135,25 @@
   <div class="card overflow-hidden">
     <div class="relative flex h-36 items-center justify-center bg-soft text-soft-foreground"><x-ui.icon name="coffee" class="h-10 w-10" /><span class="badge badge-primary absolute left-3 top-3">Baru</span></div>
     <div class="p-4"><p class="text-xs text-muted-foreground">Biji kopi</p><h3 class="font-semibold">Arabika Gayo 1 kg</h3>
-      <div class="mt-3 flex items-center justify-between"><span class="font-semibold tabular-nums">Rp 170.000</span><span class="inline-flex items-center gap-1 text-xs text-muted-foreground"><x-ui.icon name="star" class="h-3.5 w-3.5 text-caution" />4,9</span></div>
+      <div class="mt-3 flex items-center justify-between"><span class="font-semibold tabular-nums">RM 48.00</span><span class="inline-flex items-center gap-1 text-xs text-muted-foreground"><x-ui.icon name="star" class="h-3.5 w-3.5 text-caution" />4.9</span></div>
       <button type="button" class="btn btn-outline btn-sm mt-3 w-full"><x-ui.icon name="cart" />Tambah ke keranjang</button></div>
   </div>
   <div class="card overflow-hidden">
     <div class="flex h-36 items-center justify-center bg-info-soft text-info"><x-ui.icon name="package" class="h-10 w-10" /></div>
     <div class="p-4"><p class="text-xs text-muted-foreground">Paket</p><h3 class="font-semibold">Paket coba 5 varian</h3>
-      <div class="mt-3 flex items-center justify-between"><span class="font-semibold tabular-nums">Rp 215.000</span><span class="inline-flex items-center gap-1 text-xs text-muted-foreground"><x-ui.icon name="star" class="h-3.5 w-3.5 text-caution" />4,9</span></div>
+      <div class="mt-3 flex items-center justify-between"><span class="font-semibold tabular-nums">RM 61.00</span><span class="inline-flex items-center gap-1 text-xs text-muted-foreground"><x-ui.icon name="star" class="h-3.5 w-3.5 text-caution" />4.9</span></div>
       <button type="button" class="btn btn-outline btn-sm mt-3 w-full"><x-ui.icon name="cart" />Tambah ke keranjang</button></div>
   </div>
   <div class="card overflow-hidden">
     <div class="relative flex h-36 items-center justify-center bg-warning-soft text-warning"><x-ui.icon name="zap" class="h-10 w-10" /><span class="badge badge-solid-warning absolute left-3 top-3">Diskon 20%</span></div>
     <div class="p-4"><p class="text-xs text-muted-foreground">Peralatan</p><h3 class="font-semibold">French press 600 ml</h3>
-      <div class="mt-3 flex items-center justify-between"><span class="font-semibold tabular-nums">Rp 265.000</span><span class="inline-flex items-center gap-1 text-xs text-muted-foreground"><x-ui.icon name="star" class="h-3.5 w-3.5 text-caution" />4,6</span></div>
+      <div class="mt-3 flex items-center justify-between"><span class="font-semibold tabular-nums">RM 76.00</span><span class="inline-flex items-center gap-1 text-xs text-muted-foreground"><x-ui.icon name="star" class="h-3.5 w-3.5 text-caution" />4.6</span></div>
       <button type="button" class="btn btn-outline btn-sm mt-3 w-full"><x-ui.icon name="cart" />Tambah ke keranjang</button></div>
   </div>
   <div class="card overflow-hidden opacity-90">
     <div class="flex h-36 items-center justify-center bg-muted text-muted-foreground"><x-ui.icon name="image" class="h-10 w-10" /></div>
     <div class="p-4"><p class="text-xs text-muted-foreground">Peralatan</p><h3 class="font-semibold">Grinder manual</h3>
-      <div class="mt-3 flex items-center justify-between"><span class="font-semibold tabular-nums">Rp 475.000</span><span class="badge badge-danger">Habis</span></div>
+      <div class="mt-3 flex items-center justify-between"><span class="font-semibold tabular-nums">RM 135.00</span><span class="badge badge-danger">Habis</span></div>
       <button type="button" class="btn btn-secondary btn-sm mt-3 w-full" disabled>Stok habis</button></div>
   </div>
 </section>
@@ -190,7 +190,7 @@
 <section class="grid gap-4 lg:grid-cols-2">
   <div class="card flex flex-col overflow-hidden sm:flex-row">
     <div class="flex h-32 items-center justify-center bg-soft text-soft-foreground sm:h-auto sm:w-40 sm:shrink-0"><x-ui.icon name="truck" class="h-10 w-10" /></div>
-    <div class="p-6"><span class="badge badge-info">Pengiriman</span><h3 class="mt-2 font-semibold">Gratis ongkir se-Jawa</h3><p class="mt-1 text-muted-foreground">Berlaku untuk pembelian di atas Rp 250.000 sampai akhir bulan.</p><a href="#" class="btn btn-link mt-3">Selengkapnya <x-ui.icon name="arrow-right" /></a></div>
+    <div class="p-6"><span class="badge badge-info">Pengiriman</span><h3 class="mt-2 font-semibold">Gratis ongkir se-Jawa</h3><p class="mt-1 text-muted-foreground">Berlaku untuk pembelian di atas RM 70 sampai akhir bulan.</p><a href="#" class="btn btn-link mt-3">Selengkapnya <x-ui.icon name="arrow-right" /></a></div>
   </div>
   <div class="card flex flex-col items-center justify-center gap-3 p-8 text-center">
     <span class="flex h-12 w-12 items-center justify-center rounded-full bg-muted text-muted-foreground"><x-ui.icon name="file-text" class="h-6 w-6" /></span>

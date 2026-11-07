@@ -39,10 +39,10 @@ Jika Anda menambahkan `id` khusus, berikan nilai yang sama pada `x-ui.field` dan
 
 ### 📥 `x-ui.input` {#x-ui-input}
 
-Prop: `name`, `value`, `type` (default `text`), `invalid`, `addon`, `icon`. `icon="search"` menaruh ikon di sisi kiri dan menambah jarak teks; `addon="Rp"` menaruh label di awal grup input. Atribut seperti `placeholder`, `min`, `max`, `autocomplete`, `readonly` dan `required` diteruskan ke `<input>`. Untuk input `type="file"`, komponen tidak mengisi `value` meskipun ada nilai lama.
+Prop: `name`, `value`, `type` (default `text`), `invalid`, `addon`, `icon`. `icon="search"` menaruh ikon di sisi kiri dan menambah jarak teks; `addon="RM"` menaruh label di awal grup input. Atribut seperti `placeholder`, `min`, `max`, `autocomplete`, `readonly` dan `required` diteruskan ke `<input>`. Untuk input `type="file"`, komponen tidak mengisi `value` meskipun ada nilai lama.
 
 ```blade
-<x-ui.input name="price" type="number" addon="Rp" min="0" step="1" :value="$product?->price" />
+<x-ui.input name="price" type="number" addon="RM" min="0" step="0.01" :value="$product?->price" />
 ```
 
 ### 🔽 `x-ui.select` {#x-ui-select}

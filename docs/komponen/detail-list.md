@@ -30,7 +30,7 @@ Nilai dirender sebagai teks Blade dan di-escape. Jika `value` null/tidak tersedi
     ['label' => 'Metode', 'value' => 'Transfer bank'],
     ['label' => 'Nomor referensi', 'value' => $payment->reference],
 ]">
-    <div><dt class="text-xs text-muted-foreground">Total</dt><dd class="mt-1 font-semibold">Rp {{ number_format($payment->amount, 0, ',', '.') }}</dd></div>
+    <div><dt class="text-xs text-muted-foreground">Total</dt><dd class="mt-1 font-semibold">RM {{ number_format($payment->amount, 2) }}</dd></div>
 </x-ui.detail-list>
 ```
 

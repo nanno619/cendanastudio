@@ -94,12 +94,12 @@
       <table class="table table-compact table-bordered min-w-[440px]">
         <thead><tr><th>Item</th><th class="text-right">Jumlah</th><th class="text-right">Harga</th><th class="text-right">Subtotal</th></tr></thead>
         <tbody>
-          <tr><td>Arabika Gayo 1 kg</td><td class="text-right tabular-nums">2</td><td class="text-right tabular-nums">170.000</td><td class="text-right tabular-nums">340.000</td></tr>
-          <tr><td>Toraja Sapan 500 g</td><td class="text-right tabular-nums">1</td><td class="text-right tabular-nums">128.000</td><td class="text-right tabular-nums">128.000</td></tr>
-          <tr><td>French press 600 ml</td><td class="text-right tabular-nums">1</td><td class="text-right tabular-nums">265.000</td><td class="text-right tabular-nums">265.000</td></tr>
-          <tr><td>Ongkos kirim</td><td class="text-right tabular-nums">1</td><td class="text-right tabular-nums">22.000</td><td class="text-right tabular-nums">22.000</td></tr>
+          <tr><td>Arabika Gayo 1 kg</td><td class="text-right tabular-nums">2</td><td class="text-right tabular-nums">48.00</td><td class="text-right tabular-nums">96.00</td></tr>
+          <tr><td>Toraja Sapan 500 g</td><td class="text-right tabular-nums">1</td><td class="text-right tabular-nums">36.00</td><td class="text-right tabular-nums">36.00</td></tr>
+          <tr><td>French press 600 ml</td><td class="text-right tabular-nums">1</td><td class="text-right tabular-nums">76.00</td><td class="text-right tabular-nums">76.00</td></tr>
+          <tr><td>Ongkos kirim</td><td class="text-right tabular-nums">1</td><td class="text-right tabular-nums">6.00</td><td class="text-right tabular-nums">6.00</td></tr>
         </tbody>
-        <tfoot><tr><td colspan="3" class="text-right">Total</td><td class="text-right tabular-nums">Rp 755.000</td></tr></tfoot>
+        <tfoot><tr><td colspan="3" class="text-right">Total</td><td class="text-right tabular-nums">RM 214.00</td></tr></tfoot>
       </table>
     </div>
   </div>
