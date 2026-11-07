@@ -1,48 +1,48 @@
 # 📋 Table state
 
-`<x-ui.table-state>` menampilkan feedback untuk tabel dan area data: skeleton, tidak ada data, tidak ada hasil filter, atau gagal memuat. Sumber: `resources/views/components/ui/table-state.blade.php`.
+`<x-ui.table-state>` shows feedback for tables and data areas: a skeleton, no data, no filter results, or a failed load. Source: `resources/views/components/ui/table-state.blade.php`.
 
-## 🧩 Prop dan state
+## 🧩 Props and states
 
-| Prop | Default | Fungsi |
+| Prop | Default | Purpose |
 | --- | --- | --- |
 | `state` | `empty` | `loading`, `empty`, `filtered`, `error` |
-| `title` | `null` | Mengganti judul bawaan, kecuali `loading` |
-| `description` | `null` | Mengganti penjelasan bawaan, kecuali `loading` |
-| Slot utama | kosong | Tombol pemulihan untuk state selain `loading` |
+| `title` | `null` | Replaces the built-in heading, except for `loading` |
+| `description` | `null` | Replaces the built-in explanation, except for `loading` |
+| Main slot | empty | Recovery buttons for states other than `loading` |
 
-State `loading` memakai `role="status"` dan skeleton empat baris. `error` memakai `role="alert"`; `empty`/`filtered` memakai `role="status"`. Jika state tidak dikenali, teks default `empty` digunakan, tetapi nilai `state` masih menentukan role/kelas: gunakan hanya empat nilai yang didukung.
+The `loading` state uses `role="status"` and a four-row skeleton. `error` uses `role="alert"`; `empty`/`filtered` use `role="status"`. An unrecognised state falls back to the `empty` text, but the `state` value still sets the role/classes: only use the four supported values. The built-in texts are translated.
 
-## ⏳ Loading, kosong, hasil filter
+## ⏳ Loading, empty and filter results
 
 ```blade
 <x-ui.table-state state="loading" />
-<x-ui.table-state state="empty" title="Belum ada pelanggan"
-    description="Pelanggan baru akan muncul setelah transaksi pertama." />
-<x-ui.table-state state="filtered" title="Pelanggan tidak ditemukan">
-    <a href="{{ route('examples.records.index') }}" class="btn btn-outline">Hapus filter</a>
+<x-ui.table-state state="empty" title="{{ __('No customers yet') }}"
+    description="{{ __('New customers will appear after the first transaction.') }}" />
+<x-ui.table-state state="filtered" title="{{ __('No customers found') }}">
+    <a href="{{ route('examples.records.index') }}" class="btn btn-outline">{{ __('Clear filters') }}</a>
 </x-ui.table-state>
 ```
 
-Slot pada `loading` tidak dirender; tampilkan tindakan setelah data selesai diproses.
+The slot isn't rendered for `loading`; show actions once the data has finished processing.
 
-## ❌ Error dengan tindakan pemulihan
+## ❌ Errors with a recovery action
 
 ```blade
-<x-ui.table-state state="error" title="Data gagal dimuat"
-    description="Periksa koneksi lalu coba lagi.">
-    <a href="{{ request()->fullUrl() }}" class="btn btn-outline">Muat ulang</a>
+<x-ui.table-state state="error" title="{{ __('Data failed to load') }}"
+    description="{{ __('Check your connection and try again.') }}">
+    <a href="{{ request()->fullUrl() }}" class="btn btn-outline">{{ __('Reload') }}</a>
 </x-ui.table-state>
 ```
 
-## 🗃️ Menentukan state dari query Laravel
+## 🗃️ Choosing the state from a Laravel query
 
 ```blade
 @if ($records->isEmpty())
     <x-ui.table-state :state="request()->filled('q') ? 'filtered' : 'empty'" />
 @else
-    <table class="table">{{-- baris $records --}}</table>
+    <table class="table">{{-- $records rows --}}</table>
 @endif
 ```
 
-Saat dipakai di dalam `<table>`, masukkan komponen ke dalam satu `<td colspan="...">` agar markup tabel valid; alternatifnya taruh di luar tabel dalam pembungkus `.card`. Jangan menganggap state `loading` bawaan berjalan otomatis saat query server sinkron; tampilkan hanya ketika benar-benar ada proses asinkron.
+Inside a `<table>`, put the component in a single `<td colspan="...">` so the table markup stays valid, or place it outside the table in a `.card` wrapper. Don't assume the built-in `loading` state runs automatically for a synchronous server query; only show it when there's genuinely an asynchronous process.

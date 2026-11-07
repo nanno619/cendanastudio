@@ -1,37 +1,37 @@
 # 📑 Detail list
 
-`<x-ui.detail-list>` menampilkan pasangan label/nilai dalam `<dl>` semantik. Cocok untuk detail entri, profil, atau metadata pesanan. Sumber: `resources/views/components/ui/detail-list.blade.php`.
+`<x-ui.detail-list>` shows label/value pairs in a semantic `<dl>`. It suits entry details, profiles or order metadata. Source: `resources/views/components/ui/detail-list.blade.php`.
 
 ## 🧩 API
 
-| Prop/slot | Default | Kegunaan |
+| Prop/slot | Default | Purpose |
 | --- | --- | --- |
-| `title` | `null` | Judul bagian |
-| `items` | `[]` | Array `['label' => ..., 'value' => ...]` |
-| `columns` | `2` | `2` menghasilkan dua kolom pada layar `sm`; `1` satu kolom |
-| Slot utama | — | Baris `<div><dt>…</dt><dd>…</dd></div>` tambahan |
+| `title` | `null` | Section heading |
+| `items` | `[]` | Array of `['label' => ..., 'value' => ...]` |
+| `columns` | `2` | `2` gives two columns from the `sm` breakpoint; `1` gives one |
+| Main slot | — | Extra `<div><dt>…</dt><dd>…</dd></div>` rows |
 
-Nilai dirender sebagai teks Blade dan di-escape. Jika `value` null/tidak tersedia, komponen menampilkan `—`.
+Values are rendered as escaped Blade text. If a `value` is null or missing, the component shows `—`.
 
-## 📝 Detail dari controller
+## 📝 Details from a controller
 
 ```blade
-<x-ui.detail-list title="Informasi entri" :items="[
-    ['label' => 'Kode', 'value' => $record->code],
-    ['label' => 'Judul', 'value' => $record->title],
-    ['label' => 'Status', 'value' => ucfirst($record->status)],
+<x-ui.detail-list title="{{ __('Entry information') }}" :items="[
+    ['label' => __('Code'), 'value' => $record->code],
+    ['label' => __('Title'), 'value' => $record->title],
+    ['label' => __('Status'), 'value' => __(ucfirst($record->status))],
 ]" />
 ```
 
-## 📐 Satu kolom dan nilai kustom
+## 📐 One column and custom values
 
 ```blade
-<x-ui.detail-list title="Informasi pembayaran" :columns="1" :items="[
-    ['label' => 'Metode', 'value' => 'Transfer bank'],
-    ['label' => 'Nomor referensi', 'value' => $payment->reference],
+<x-ui.detail-list title="{{ __('Payment information') }}" :columns="1" :items="[
+    ['label' => __('Method'), 'value' => __('Bank transfer')],
+    ['label' => __('Reference number'), 'value' => $payment->reference],
 ]">
-    <div><dt class="text-xs text-muted-foreground">Total</dt><dd class="mt-1 font-semibold">RM {{ number_format($payment->amount, 2) }}</dd></div>
+    <div><dt class="text-xs text-muted-foreground">{{ __('Total') }}</dt><dd class="mt-1 font-semibold">RM {{ number_format($payment->amount, 2) }}</dd></div>
 </x-ui.detail-list>
 ```
 
-Format uang/tanggal di controller atau saat membangun array; komponen tidak melakukan format domain. Slot membolehkan badge/tautan di dalam `<dd>` bila nilai perlu markup.
+Format money and dates in the controller or while building the array; the component doesn't do domain formatting. The slot lets you put badges or links inside a `<dd>` when a value needs markup.

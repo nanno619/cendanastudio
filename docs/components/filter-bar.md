@@ -1,44 +1,44 @@
 # 🔎 Filter bar
 
-`<x-ui.filter-bar>` adalah form GET reusable untuk pencarian dan filter halaman daftar. Sumber: `resources/views/components/ui/filter-bar.blade.php`.
+`<x-ui.filter-bar>` is a reusable GET form for searching and filtering list pages. Source: `resources/views/components/ui/filter-bar.blade.php`.
 
-## 🧩 Prop & slot
+## 🧩 Props & slots
 
-| Input | Default | Kegunaan |
+| Input | Default | Purpose |
 | --- | --- | --- |
-| `action` | wajib | URL form GET |
-| `searchName` | `q` | Nama parameter pencarian |
-| `search` | `null` | Nilai awal (fallback `request(searchName)`) |
-| `placeholder` | `Cari data…` | Petunjuk input |
-| `resetUrl` | `null` | URL tombol Atur ulang; tidak ditampilkan bila kosong |
-| Slot utama | — | Filter lain di dalam form |
-| `active` | opsional | Ringkasan filter aktif setelah form |
+| `action` | required | GET form URL |
+| `searchName` | `q` | Search parameter name |
+| `search` | `null` | Initial value (falls back to `request(searchName)`) |
+| `placeholder` | “Search data…” (translated) | Input hint |
+| `resetUrl` | `null` | URL for the Reset button; hidden when empty |
+| Main slot | — | Other filters inside the form |
+| `active` | optional | Active-filter summary after the form |
 
-Komponen memakai `x-ui.input` untuk pencarian dan `x-ui.button type="submit"`. Isi slot berada di dalam form; gunakan nama field yang cocok dengan query controller.
+The component uses `x-ui.input` for search and `x-ui.button type="submit"`. Slot content sits inside the form; use field names that match your controller's query.
 
-## 📝 Pencarian sederhana
+## 📝 A simple search
 
 ```blade
 <x-ui.filter-bar :action="route('examples.records.index')"
-    :reset-url="route('examples.records.index')" placeholder="Cari judul entri…" />
+    :reset-url="route('examples.records.index')" placeholder="{{ __('Search entry titles…') }}" />
 ```
 
-## 🔽 Dengan status dan chip aktif
+## 🔽 With a status and active chips
 
 ```blade
 <x-ui.filter-bar :action="route('examples.records.index')" :reset-url="route('examples.records.index')">
     <div class="min-w-40 space-y-1.5">
-        <label class="label" for="status-filter">Status</label>
-        <x-ui.select id="status-filter" name="status" placeholder="Semua status"
-            :value="request('status')" :options="['aktif' => 'Aktif', 'draf' => 'Draf']" :searchable="true" />
+        <label class="label" for="status-filter">{{ __('Status') }}</label>
+        <x-ui.select id="status-filter" name="status" placeholder="{{ __('All statuses') }}"
+            :value="request('status')" :options="['active' => __('Active'), 'draft' => __('Draft')]" :searchable="true" />
     </div>
     <x-slot:active>
-        @if(request()->filled('status'))<x-ui.badge variant="info">Status: {{ request('status') }}</x-ui.badge>@endif
+        @if(request()->filled('status'))<x-ui.badge variant="info">{{ __('Status:') }} {{ request('status') }}</x-ui.badge>@endif
     </x-slot:active>
 </x-ui.filter-bar>
 ```
 
-## 🗃️ Query pada controller
+## 🗃️ The controller query
 
 ```php
 $records = Record::query()
@@ -47,4 +47,4 @@ $records = Record::query()
     ->paginate(15)->withQueryString();
 ```
 
-Validasi status sebelum query jika pilihan berasal dari request. Filter bar tidak melakukan filtering JavaScript otomatis; form GET-lah yang mengirim parameter.
+Validate the status before querying if the choices come from the request. The filter bar doesn't filter with JavaScript; the GET form sends the parameters.

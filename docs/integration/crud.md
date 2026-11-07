@@ -1,36 +1,36 @@
-# 🗃️ Data & halaman CRUD
+# 🗃️ Data & CRUD pages
 
-Contoh ini mengubah tampilan demo `examples/records` menjadi entri tersimpan. Sebagai ilustrasi, kita gunakan model `Record` dengan kolom `title`, `category`, `status`, dan `summary`. Sesuaikan skema, kebijakan akses, dan nama route dengan aplikasi Anda. Route demo lama di `routes/web.php` berada di dalam blok `if (config('cendana.showcase'))`; hapus/ubah blok route `examples.records.*` lama sebelum mendaftarkan route yang sama.
+This example turns the `examples/records` demo pages into saved entries. As an illustration, we use a `Record` model with `title`, `category`, `status` and `summary` columns. Adapt the schema, access policies and route names to your app. The old demo routes in `routes/web.php` sit inside an `if (config('cendana.showcase'))` block; remove or change the old `examples.records.*` route block before registering the same routes.
 
-## 🧱 Siapkan model dan tabel
+## 🧱 Set up the model and table
 
 ```bash
 php artisan make:model Record -m
 php artisan make:controller RecordController
 ```
 
-Di migrasi baru (`database/migrations/...create_records_table.php`), isi definisi tabel:
+In the new migration (`database/migrations/...create_records_table.php`), define the table:
 
 ```php
 Schema::create('records', function (Blueprint $table) {
     $table->id();
     $table->string('title');
     $table->string('category');
-    $table->string('status')->default('draf');
+    $table->string('status')->default('draft');
     $table->text('summary')->nullable();
     $table->timestamps();
 });
 ```
 
-Lalu jalankan `php artisan migrate`. Bila memakai `Record::create()` dan `$record->update()`, tentukan field yang dapat diisi di `app/Models/Record.php`:
+Then run `php artisan migrate`. If you use `Record::create()` and `$record->update()`, declare the fillable fields in `app/Models/Record.php`:
 
 ```php
 protected $fillable = ['title', 'category', 'status', 'summary'];
 ```
 
-## 🛣️ Daftarkan route
+## 🛣️ Register the routes
 
-Gunakan nama route yang telah dipakai navigasi contoh agar tautan sidebar berfungsi. Route statis `/new` didefinisikan sebelum parameter `{record}` agar tidak tertangkap sebagai ID; model binding menghasilkan 404 untuk entri yang tidak ditemukan.
+Use the route names the sample navigation already uses so the sidebar links keep working. The static `/new` route is defined before the `{record}` parameter so it isn't captured as an ID; model binding returns a 404 for missing entries.
 
 ```php
 use App\Http\Controllers\RecordController;
@@ -46,9 +46,9 @@ Route::prefix('examples/records')->name('examples.records.')->group(function () 
 });
 ```
 
-Jika alur entri ini harus tetap tersedia saat showcase dimatikan, letakkan route baru **di luar** blok `if (config('cendana.showcase'))`, lalu sesuaikan konfigurasi navigasi bila menu tersebut juga perlu tampil.
+If this entry flow must stay available when the showcase is off, put the new routes **outside** the `if (config('cendana.showcase'))` block, and adjust the navigation config if the menu should show too.
 
-## 📤 Kirim data dari controller
+## 📤 Pass data from the controller
 
 ```php
 namespace App\Http\Controllers;
@@ -80,15 +80,15 @@ class RecordController extends Controller
     {
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
-            'category' => ['required', 'string', 'in:panduan,laporan,catatan,arsip'],
-            'status' => ['required', 'string', 'in:draf,ditinjau,aktif,arsip'],
+            'category' => ['required', 'string', 'in:guides,reports,notes,archive'],
+            'status' => ['required', 'string', 'in:draft,in-review,active,archived'],
             'summary' => ['nullable', 'string'],
         ]);
 
         $record = Record::create($data);
 
         return redirect()->route('examples.records.show', $record)
-            ->with('status', 'Entri berhasil dibuat.');
+            ->with('status', __('Entry created.'));
     }
 
     public function show(Record $record): View
@@ -105,13 +105,13 @@ class RecordController extends Controller
     {
         $record->update($request->validate([
             'title' => ['required', 'string', 'max:255'],
-            'category' => ['required', 'string', 'in:panduan,laporan,catatan,arsip'],
-            'status' => ['required', 'string', 'in:draf,ditinjau,aktif,arsip'],
+            'category' => ['required', 'string', 'in:guides,reports,notes,archive'],
+            'status' => ['required', 'string', 'in:draft,in-review,active,archived'],
             'summary' => ['nullable', 'string'],
         ]));
 
         return redirect()->route('examples.records.show', $record)
-            ->with('status', 'Entri berhasil diperbarui.');
+            ->with('status', __('Entry updated.'));
     }
 
     public function destroy(Record $record): RedirectResponse
@@ -119,14 +119,16 @@ class RecordController extends Controller
         $record->delete();
 
         return redirect()->route('examples.records.index')
-            ->with('status', 'Entri berhasil dihapus.');
+            ->with('status', __('Entry deleted.'));
     }
 }
 ```
 
-## 🧩 Sesuaikan Blade demo
+The category and status values (`guides`, `draft`, `in-review`…) match the option keys the demo form already uses. Store these stable keys in the database and translate the label when you display it.
 
-View bawaan memakai `config('cendana.demo.records')` dan link detail statis `/detail`. Ganti loop dan tautan dengan `$records` serta ID model:
+## 🧩 Adapt the demo Blade views
+
+The built-in view uses `config('cendana.demo.records')` and a static `/detail` link. Replace the loop and links with `$records` and the model ID:
 
 ```blade
 @forelse ($records as $record)
@@ -136,12 +138,12 @@ View bawaan memakai `config('cendana.demo.records')` dan link detail statis `/de
                 {{ $record->title }}
             </a>
         </td>
-        <td>{{ $record->category }}</td>
-        <td>{{ $record->status }}</td>
+        <td>{{ __(ucfirst($record->category)) }}</td>
+        <td>{{ __(ucfirst(str_replace('-', ' ', $record->status))) }}</td>
     </tr>
 @empty
     <tr><td colspan="3"><x-ui.table-state state="empty" /></td></tr>
 @endforelse
 ```
 
-Setelah tabel, tampilkan hasil `$records->links()` dan lepaskan `data-table` untuk paginasi server. Di view detail/edit, ganti konten statis dan link `/detail`/`/edit` dengan `$record` dan `route('examples.records.edit', $record)`. Contoh form tersambung ada di [form & validasi](/integrasi/form).
+After the table, output `$records->links()` and remove `data-table` to use server pagination. In the detail/edit views, replace the static content and the `/detail`/`/edit` links with `$record` and `route('examples.records.edit', $record)`. A connected form example is in [forms & validation](/integration/forms).

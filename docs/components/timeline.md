@@ -1,22 +1,22 @@
 # 🕒 Timeline
 
-`<x-ui.timeline>` menampilkan urutan aktivitas dalam `<ol>` semantik. Sumber: `resources/views/components/ui/timeline.blade.php`.
+`<x-ui.timeline>` shows a sequence of activity in a semantic `<ol>`. Source: `resources/views/components/ui/timeline.blade.php`.
 
-## 🧩 Bentuk data
+## 🧩 Data shape
 
-`items` adalah array; tiap elemen perlu `title`. `description`, `time`, `datetime` (ISO untuk atribut `<time>`), dan `tone` opsional. `tone="success"` memakai titik hijau, `danger` merah, selain itu warna utama.
+`items` is an array; each element needs a `title`. `description`, `time`, `datetime` (ISO, for the `<time>` attribute) and `tone` are optional. `tone="success"` uses a green dot, `danger` red, and anything else the primary colour.
 
-## 📝 Contoh riwayat
+## 📝 History example
 
 ```blade
 <x-ui.timeline :items="[
-    ['title' => 'Pesanan selesai', 'time' => 'Hari ini, 10.30', 'datetime' => '2026-10-03T10:30:00', 'tone' => 'success'],
-    ['title' => 'Paket dikirim', 'time' => 'Kemarin', 'description' => 'Kurir menerima paket.'],
-    ['title' => 'Pembayaran gagal', 'time' => '1 Okt 2026', 'tone' => 'danger'],
+    ['title' => __('Order completed'), 'time' => __('Today, :time', ['time' => '10:30']), 'datetime' => '2026-10-03T10:30:00', 'tone' => 'success'],
+    ['title' => __('Parcel shipped'), 'time' => __('Yesterday'), 'description' => __('The courier collected the parcel.')],
+    ['title' => __('Payment failed'), 'time' => '1 Oct 2026', 'tone' => 'danger'],
 ]" />
 ```
 
-## 🔌 Dari relasi Eloquent
+## 🔌 From an Eloquent relationship
 
 ```php
 $events = $order->events()->latest()->get()->map(fn ($event) => [
@@ -28,4 +28,4 @@ $events = $order->events()->latest()->get()->map(fn ($event) => [
 ])->all();
 ```
 
-Urutan mengikuti array yang diberikan; pilih `latest()` untuk kronologi terbaru lebih dulu. Untuk daftar kosong, tampilkan `<x-ui.empty>` di luar timeline.
+The order follows the array you pass; use `latest()` for newest-first chronology. `diffForHumans()` follows the app locale, so it reads “2 jam yang lepas” in the Malay interface. For an empty list, show `<x-ui.empty>` outside the timeline.

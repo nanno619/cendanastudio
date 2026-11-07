@@ -1,16 +1,16 @@
 # 📄 Pagination
 
-`<x-ui.pagination>` adalah rancangan tampilan paginator pada `resources/views/components/ui/pagination.blade.php`. **Saat ini belum siap dipakai langsung**: file menerima `paginator`, tetapi loop nomor halaman merujuk `$elements` tanpa mengisinya. Komponen juga mengharapkan `total()` sehingga lebih dekat ke `paginate()` daripada `simplePaginate()`/`cursorPaginate()`.
+`<x-ui.pagination>` is a draft paginator view in `resources/views/components/ui/pagination.blade.php`. **It isn't ready to use directly yet**: the file takes a `paginator`, but its page-number loop refers to `$elements` without filling it. The component also expects `total()`, so it's closer to `paginate()` than to `simplePaginate()`/`cursorPaginate()`.
 
-## 🧩 API yang dirancang
+## 🧩 Intended API
 
-| Prop | Fungsi |
+| Prop | Purpose |
 | --- | --- |
-| `paginator` | Objek `LengthAwarePaginator` untuk `hasPages`, item pertama/terakhir, total, URL halaman |
+| `paginator` | A `LengthAwarePaginator` for `hasPages`, first/last item, total and page URLs |
 
-Struktur UI saat pagination muncul: teks “Menampilkan X–Y dari Z”, tombol sebelumnya/berikutnya, angka halaman, elipsis, dan penanda halaman aktif. Ketika `$paginator->hasPages()` false, markup tidak muncul.
+The UI structure when pagination shows: “Showing X–Y of Z” text, previous/next buttons, page numbers, ellipses and the active page marker (all translated). When `$paginator->hasPages()` is false, no markup is output.
 
-## ✅ Pilihan siap pakai: Laravel paginator
+## ✅ The ready-to-use option: Laravel's paginator
 
 ```php
 $records = Record::query()->latest()->paginate(15)->withQueryString();
@@ -25,14 +25,14 @@ return view('examples.records.index', compact('records'));
 {{ $records->links() }}
 ```
 
-Ini menggunakan view pagination Laravel, **bukan** `x-ui.pagination`. `withQueryString()` mempertahankan pencarian/filter URL. Model `Record` pada contoh perlu dibuat melalui [panduan CRUD](/integrasi/crud).
+This uses Laravel's pagination view, **not** `x-ui.pagination`. `withQueryString()` keeps the search/filter URL parameters. The example `Record` model is created in the [CRUD guide](/integration/crud).
 
-## 🛠️ Jika ingin memakai komponen kustom
+## 🛠️ If you want the custom component
 
-Setelah Anda menambahkan pembentukan daftar elemen halaman yang benar di komponen tersebut, panggil:
+Once you've added proper page-element building to that component, call:
 
 ```blade
 <x-ui.pagination :paginator="$records" />
 ```
 
-Contoh di atas **baru berlaku setelah perbaikan** `$elements`; tanpa perbaikan, angka halaman tidak punya data. Alternatifnya terapkan desain ke pagination view Laravel resmi lalu panggil `$records->links('nama-view')`. Jangan aktifkan `data-table` client-side bersamaan dengan paginasi server untuk dataset yang sama; pencarian JS hanya melihat baris yang sedang dirender.
+The example above **only works after fixing** `$elements`; without that fix, the page numbers have no data. Alternatively, apply the design to an official Laravel pagination view and call `$records->links('view-name')`. Don't turn on client-side `data-table` alongside server pagination for the same dataset; the JS search only sees the rows currently rendered.

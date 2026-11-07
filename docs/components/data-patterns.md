@@ -1,15 +1,15 @@
-# 🧰 Pola data baru
+# 🧰 Data patterns
 
-Lima komponen baru untuk alur aplikasi admin: [filter bar](/komponen/filter-bar), [detail list](/komponen/detail-list), [timeline](/komponen/timeline), [tabs](/komponen/tabs), dan [confirm action](/komponen/confirm-action). Semua adalah anonymous Blade components (`resources/views/components/ui/`).
+Five components for admin app flows: [filter bar](/components/filter-bar), [detail list](/components/detail-list), [timeline](/components/timeline), [tabs](/components/tabs) and [confirm action](/components/confirm-action). All are anonymous Blade components (`resources/views/components/ui/`).
 
-## 🖥️ Lihat contoh gabungan
+## 🖥️ See the combined example
 
-Dengan `ADMIN_SHOWCASE=true`, buka `/components/data-patterns`. Halaman ini menampilkan kelima komponen dan select yang dapat dicari; route pratinjau konfirmasi hanya melakukan redirect dengan flash message dan tidak menghapus data.
+With `ADMIN_SHOWCASE=true`, open `/components/data-patterns`. The page shows all five components plus a searchable select; the confirmation preview route only redirects with a flash message and doesn't delete any data.
 
-## 🔌 Jalur penggunaan nyata
+## 🔌 Using them for real
 
-- Di halaman index, gunakan filter bar `method="GET"` agar URL bisa dibagikan dan parameter tersedia lewat `request()`.
-- Di halaman show, isi detail list/timeline dengan data controller yang telah diformat untuk ditampilkan.
-- Gunakan tabs untuk konten server-rendered, bukan untuk mengasumsikan lazy loading.
-- Taruh confirm action dekat entri terkait, lalu arahkan ke route yang memvalidasi izin dan mengeksekusi tindakan.
-- Pilih [select searchable](/komponen/select#select-yang-dapat-dicari-choices-js) dan [date range Flatpickr](/komponen/date-range) hanya saat membantu pencarian/penjadwalan.
+- On index pages, use the filter bar with `method="GET"` so the URL is shareable and the parameters are available through `request()`.
+- On show pages, fill the detail list/timeline with controller data already formatted for display.
+- Use tabs for server-rendered content; don't assume lazy loading.
+- Put the confirm action next to the entry it affects, and point it at a route that checks permissions and performs the action.
+- Reach for the [searchable select](/components/select#searchable-select-choices-js) and the [Flatpickr date range](/components/date-range) only when they help searching or scheduling.

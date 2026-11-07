@@ -1,20 +1,22 @@
-# 🚀 Instalasi & menjalankan
+# 🚀 Install & run
 
-Cendana Studio adalah dashboard admin berbasis Laravel 13 (PHP 8.3+), Blade component, Tailwind CSS 4, dan Vite. Anda membutuhkan Composer, Node.js, npm, serta PHP beserta ekstensi yang diperlukan Laravel.
+Cendana Studio is an admin dashboard built on Laravel 13 (PHP 8.3+), Blade components, Tailwind CSS 4 and Vite. You need Composer, Node.js, npm, and PHP with the extensions Laravel requires.
 
-Select yang dapat dicari menggunakan Choices.js dan kalender tanggal menggunakan Flatpickr, keduanya terpasang lewat `npm install` tanpa CDN.
+Searchable selects use Choices.js and the date picker uses Flatpickr; both are installed through `npm install`, with no CDN.
 
-## 🖥️ Jalankan dashboard
+## 🖥️ Run the dashboard
 
 ```bash
 composer install
 npm install
 cp .env.example .env
 php artisan key:generate
-php artisan migrate
+php artisan migrate --seed
 ```
 
-Di Windows, gunakan `copy .env.example .env` sebagai pengganti `cp`. Jalankan server Laravel dan server aset di terminal terpisah:
+On Windows, use `copy .env.example .env` instead of `cp`. `.env.example` uses MySQL: create an empty database matching `DB_DATABASE` first, or switch `DB_CONNECTION` to `sqlite`. The migrations create Laravel's default tables, **not** dashboard data; the seeder adds a login user, `test@example.com` / `password`.
+
+Run the Laravel server and the asset server in separate terminals:
 
 ```bash
 php artisan serve
@@ -24,37 +26,41 @@ php artisan serve
 npm run dev
 ```
 
-Lalu buka `/dashboard` pada alamat Laravel yang ditampilkan di terminal. Konfigurasi bawaan `.env.example` menggunakan SQLite; migrasi menyiapkan tabel bawaan Laravel, **bukan** data dashboard. Jika ingin menjalankan server, Vite, worker, dan pemantau log sekaligus, tersedia `composer dev`.
+Then open `/login` at the address Laravel prints and sign in. With Laravel Herd or Valet, skip `php artisan serve` and use your site's `.test` address. To run the server, Vite, a queue worker and the log viewer together, use `composer dev`.
 
-## 📚 Jalankan dokumentasi
+## 🌐 Interface language
 
-Dokumentasi VitePress berjalan terpisah dari aplikasi Laravel:
+The interface is in English by default, with a Bahasa Melayu translation. Visitors switch language from the **Customize** drawer (or the EN/MS buttons on the login page); the choice is stored in the session. See [theming, branding & language](/guide/theming#language) for how translations are organised.
+
+## 📚 Run the documentation
+
+The VitePress docs run separately from the Laravel app:
 
 ```bash
 npm run docs:dev
 ```
 
-Buka URL lokal yang dicetak VitePress. Untuk membuat dan melihat hasil statis:
+Open the local URL VitePress prints. To build and preview the static site:
 
 ```bash
 npm run docs:build
 npm run docs:preview
 ```
 
-Build aplikasi dan dokumentasi adalah dua perintah terpisah: `npm run build` membangun aset Laravel, sedangkan `npm run docs:build` membangun situs dokumentasi. Hasil dokumentasi berada di `docs/.vitepress/dist`.
+Building the app and building the docs are separate commands: `npm run build` builds the Laravel assets, while `npm run docs:build` builds the documentation site. The docs output goes to `docs/.vitepress/dist`.
 
-## 🗺️ Halaman yang tersedia
+## 🗺️ Available pages
 
-| URL | Kegunaan |
+| URL | Purpose |
 | --- | --- |
-| `/dashboard`, `/analytics`, `/settings` | Halaman utama admin |
-| `/components/*` | Showcase komponen Blade dan pola HTML/CSS |
-| `/components/data-patterns` | Filter bar, detail list, timeline, tabs, konfirmasi aksi |
-| `/examples/records/*` | Contoh daftar, detail, tambah, dan edit entri |
-| `/login`, `/demo/404` | Tampilan tamu dan halaman kesalahan |
+| `/dashboard`, `/analytics`, `/settings` | Main admin pages |
+| `/components/*` | Showcase of Blade components and HTML/CSS patterns |
+| `/components/data-patterns` | Filter bar, detail list, timeline, tabs, action confirmation |
+| `/examples/records/*` | Sample list, detail, create and edit pages |
+| `/login`, `/demo/404` | Guest views and the error page |
 
-Showcase dan contoh entri hanya tersedia saat `ADMIN_SHOWCASE=true`. Detail route ada di `routes/web.php` dan dijelaskan dalam [halaman & navigasi](/panduan/halaman).
+The showcase and sample entries are only available when `ADMIN_SHOWCASE=true`. Routes are defined in `routes/web.php` and explained in [pages & navigation](/guide/pages).
 
-## 🛠️ Saat siap membangun aplikasi
+## 🛠️ When you're ready to build
 
-Mulai dari [membuat halaman Blade](/panduan/halaman), [memilih komponen](/komponen/), lalu [menghubungkan data ke Laravel](/integrasi/). Jangan mengandalkan data demo untuk persistensi.
+Start with [creating Blade pages](/guide/pages), [choosing components](/components/), then [connecting data to Laravel](/integration/). Don't rely on the demo data for persistence.

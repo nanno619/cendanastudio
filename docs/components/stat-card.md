@@ -1,35 +1,35 @@
 # 📊 Stat card
 
-`<x-ui.stat-card>` menampilkan angka KPI, ikon, delta, perbandingan, dan sparkline opsional. Sumber: `resources/views/components/ui/stat-card.blade.php`; contoh pada `/dashboard` dan `/components/cards`.
+`<x-ui.stat-card>` shows a KPI number, an icon, a delta, a comparison note and an optional sparkline. Source: `resources/views/components/ui/stat-card.blade.php`; examples at `/dashboard` and `/components/cards`.
 
-## 🧩 Prop
+## 🧩 Props
 
-| Prop | Default | Fungsi |
+| Prop | Default | Purpose |
 | --- | --- | --- |
-| `title`, `value`, `icon`, `delta` | wajib | Label, angka, nama ikon, teks perubahan |
-| `tile` | `bg-soft text-soft-foreground` | Kelas warna bidang ikon |
-| `tone` | `success` | Warna badge/sparkline (`success`, `danger` pada contoh) |
-| `direction` | `up` | Ikon `trend-up` atau `trend-down` |
-| `note` | `dari bulan lalu` | Penjelasan periode/perbandingan |
-| `spark` | `null` | String JSON angka untuk tren (jalur array perlu penyesuaian) |
+| `title`, `value`, `icon`, `delta` | required | Label, number, icon name, change text |
+| `tile` | `bg-soft text-soft-foreground` | Icon area colour classes |
+| `tone` | `success` | Badge/sparkline colour (`success`, `danger` in the examples) |
+| `direction` | `up` | `trend-up` or `trend-down` icon |
+| `note` | “vs last month” (translated) | Period/comparison note |
+| `spark` | `null` | JSON string of numbers for the trend (the array path needs adjusting) |
 
-Atribut tambahan pada tag diteruskan ke pembungkus kartu. `delta` selalu ditampilkan meskipun bernilai kosong; atur isinya sesuai perbandingan yang sebenarnya.
+Extra attributes on the tag pass through to the card wrapper. `delta` is always shown, even when empty; set it to match the real comparison.
 
-## 📈 Pertumbuhan dan penurunan
+## 📈 Growth and decline
 
 ```blade
 <div class="grid gap-4 sm:grid-cols-2">
-    <x-ui.stat-card title="Pelanggan baru" value="1.284" icon="userplus"
-        delta="+8,1%" tone="success" direction="up" note="dari bulan lalu" />
-    <x-ui.stat-card title="Pesanan aktif" value="356" icon="cart"
-        delta="−2,4%" tone="danger" direction="down"
-        tile="bg-warning-soft text-warning" note="dari minggu lalu" />
+    <x-ui.stat-card title="{{ __('New customers') }}" value="1,284" icon="userplus"
+        delta="+8.1%" tone="success" direction="up" />
+    <x-ui.stat-card title="{{ __('Active orders') }}" value="356" icon="cart"
+        delta="−2.4%" tone="danger" direction="down"
+        tile="bg-warning-soft text-warning" note="{{ __('vs last week') }}" />
 </div>
 ```
 
-`tone` adalah **warna penyajian**, bukan rumus sentimen bisnis: penurunan pengembalian dapat berarti kabar baik, jadi pilih warna berdasarkan makna metrik, bukan hanya arah panah.
+`tone` is a **display colour**, not a business-sentiment formula: falling returns can be good news, so pick the colour from what the metric means, not just the arrow direction.
 
-## 📉 Sparkline dan nilai controller
+## 📉 Sparklines and controller values
 
 ```php
 return view('admin.dashboard', [
@@ -39,12 +39,12 @@ return view('admin.dashboard', [
 ```
 
 ```blade
-<x-ui.stat-card title="Pesanan aktif" :value="number_format($activeOrders, 0, ',', '.')"
-    icon="cart" delta="+8%" note="7 hari terakhir" :spark="json_encode($weeklyOrders)" />
+<x-ui.stat-card title="{{ __('Active orders') }}" :value="number_format($activeOrders)"
+    icon="cart" delta="+8%" note="{{ __('Last 7 days') }}" :spark="json_encode($weeklyOrders)" />
 ```
 
-Berikan `spark` sebagai **string JSON angka** agar `charts.js` dapat membaca `data-values`. Jalur array di komponen memakai `Js::from()`, yang menghasilkan ekspresi JavaScript alih-alih string JSON biasa; karena `charts.js` memakai `JSON.parse`, gunakan `json_encode` seperti contoh untuk data dari controller. Berikan urutan kronologis angka; hindari array kosong atau nilai tidak numerik.
+Pass `spark` as a **JSON string of numbers** so `charts.js` can read `data-values`. The array path in the component uses `Js::from()`, which outputs a JavaScript expression instead of a plain JSON string; because `charts.js` uses `JSON.parse`, use `json_encode` as shown for controller data. Give the numbers in chronological order; avoid empty arrays or non-numeric values.
 
-::: info Komponen statistik lain
-`x-admin.stat-card` juga ada tetapi **API-nya berbeda** (`label`, `trend`, `href`, array `spark` menggambar SVG langsung). Halaman dashboard aktif memakai `x-ui.stat-card`; panduan ini mengikuti versi UI tersebut.
+::: info Another stats component
+`x-admin.stat-card` also exists but has a **different API** (`label`, `trend`, `href`, and a `spark` array that draws an SVG directly). The active dashboard uses `x-ui.stat-card`; this guide follows that UI version.
 :::

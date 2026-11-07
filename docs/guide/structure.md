@@ -1,65 +1,71 @@
-# 🧩 Struktur & pola Blade
+# 🧩 Structure & Blade patterns
 
-Proyek ini memakai **anonymous Blade components** di `resources/views/components`. Nama file menentukan tag: `components/ui/card.blade.php` menjadi `<x-ui.card>`, dan `components/layouts/admin.blade.php` menjadi `<x-layouts.admin>`.
+This project uses **anonymous Blade components** in `resources/views/components`. The file name sets the tag: `components/ui/card.blade.php` becomes `<x-ui.card>`, and `components/layouts/admin.blade.php` becomes `<x-layouts.admin>`.
 
-## 🗂️ Direktori utama
+## 🗂️ Main directories
 
-| Lokasi | Isi |
+| Location | Contents |
 | --- | --- |
-| `resources/views/components/layouts/` | Layout `admin`, `guest`, `head`; `blank` adalah berkas alternatif yang tidak dipakai route utama |
-| `resources/views/components/admin/` | Sidebar, header, footer, customizer, navigasi |
-| `resources/views/components/ui/` | Komponen UI yang dapat dirakit di halaman |
-| `resources/views/admin/` | Dashboard, analitik, pengaturan |
-| `resources/views/showcase/` | Contoh penggunaan komponen |
-| `resources/views/examples/records/` | Contoh alur entri frontend |
-| `resources/js/admin/` | Interaksi, grafik SVG, input lanjutan |
-| `resources/css/app.css` | Tailwind, token tema, dan kelas UI |
-| `config/cendana.php` | Nama, branding, sidebar, pilihan aksen, dan data demo |
+| `resources/views/components/layouts/` | `admin`, `guest` and `head` layouts; `blank` is an alternative file not used by the main routes |
+| `resources/views/components/admin/` | Sidebar, header, footer, customizer, navigation |
+| `resources/views/components/ui/` | UI components you assemble into pages |
+| `resources/views/components/locale/` | The interface language switcher |
+| `resources/views/admin/` | Dashboard, analytics, settings |
+| `resources/views/showcase/` | Component usage examples |
+| `resources/views/examples/records/` | Sample frontend entry flows |
+| `resources/js/admin/` | Interactions, SVG charts, advanced inputs |
+| `resources/css/app.css` | Tailwind, theme tokens and UI classes |
+| `config/cendana.php` | Name, branding, sidebar, languages, accent options and demo data |
+| `lang/` | Malay translations (`ms.json`, `ms/*.php`) and JavaScript strings (`*/js.php`) |
 
-## 🧱 Layout dan slot
+## 🧱 Layouts and slots
 
-Halaman admin menggunakan layout komponen; `title` juga digunakan untuk judul browser dan breadcrumb, sedangkan `group` untuk breadcrumb. Konten di antara tag ditempatkan ke `$slot` dalam `<main id="page-root">`.
+Admin pages use a layout component; `title` also feeds the browser title and breadcrumb, while `group` feeds the breadcrumb. Content between the tags goes into `$slot` inside `<main id="page-root">`.
 
 ```blade
-<x-layouts.admin title="Produk" group="Katalog">
-    <x-ui.page-header title="Produk" description="Kelola produk bisnis Anda." />
+<x-layouts.admin title="{{ __('Products') }}" group="{{ __('Catalogue') }}">
+    <x-ui.page-header title="{{ __('Products') }}" description="{{ __('Manage your business products.') }}" />
 
-    <x-ui.card title="Produk terbaru">
-        <p>Konten halaman.</p>
+    <x-ui.card title="{{ __('Latest products') }}">
+        <p>{{ __('Page content.') }}</p>
     </x-ui.card>
 </x-layouts.admin>
 ```
 
-Untuk halaman tanpa sidebar gunakan `<x-layouts.guest title="Masuk">…</x-layouts.guest>` seperti `resources/views/auth/login.blade.php`. Komponen `<x-layouts.head>` memuat meta CSRF, preferensi tema sebelum halaman tampil, dan aset `@vite(['resources/css/app.css', 'resources/js/app.js'])`.
+For pages without a sidebar, use <span v-pre>`<x-layouts.guest title="{{ __('Sign in') }}">…</x-layouts.guest>`</span> as in `resources/views/auth/login.blade.php`. The `<x-layouts.head>` component outputs the CSRF meta tag, applies theme preferences before the page paints, exposes JavaScript translations, and loads `@vite(['resources/css/app.css', 'resources/js/app.js'])`.
 
-## 🏷️ Prop, atribut, dan named slot
+::: tip Translatable text
+Write user-facing text in English and wrap it in `__()`, then add the Malay version to `lang/ms.json`. See [language](/guide/theming#language).
+:::
 
-Komponen mendeklarasikan prop melalui `@props`. Atribut HTML lain (misalnya `class`, `id`, `disabled`, atau `aria-label`) umumnya diteruskan melalui `$attributes`. Ekspresi PHP diawali `:`; string biasa tidak.
+## 🏷️ Props, attributes and named slots
+
+Components declare props with `@props`. Other HTML attributes (such as `class`, `id`, `disabled` or `aria-label`) are usually passed through via `$attributes`. PHP expressions are prefixed with `:`; plain strings are not.
 
 ```blade
-<x-ui.card title="Ringkasan" class="min-w-0">
+<x-ui.card title="{{ __('Overview') }}" class="min-w-0">
     <x-slot:header>
-        <h2 class="card-title">Ringkasan hari ini</h2>
+        <h2 class="card-title">{{ __("Today's overview") }}</h2>
     </x-slot:header>
 
-    Konten utama
+    {{ __('Main content') }}
 
     <x-slot:footer>
-        <a href="{{ route('admin.dashboard') }}" class="btn btn-outline">Dashboard</a>
+        <a href="{{ route('admin.dashboard') }}" class="btn btn-outline">{{ __('Dashboard') }}</a>
     </x-slot:footer>
 </x-ui.card>
 ```
 
-Pada `x-ui.card`, slot `header` menggantikan header bawaan dari `title`/`description`; slot `footer` muncul di bagian bawah. Contoh prop dinamis: `:options="$categories"`, `:checked="(bool) $user->active"`.
+On `x-ui.card`, the `header` slot replaces the default header built from `title`/`description`; the `footer` slot appears at the bottom. Examples of dynamic props: `:options="$categories"`, `:checked="(bool) $user->active"`.
 
-### 🧪 Membaca prop dari file komponen
+### 🧪 Reading props from a component file
 
-Saat suatu komponen terasa kurang jelas, buka file Blade-nya dan mulai dari deklarasi `@props([...])`: itulah daftar opsi dan default yang berlaku saat ini. Berikutnya periksa elemen root untuk `$attributes->class(...)` atau `$attributes->merge(...)` agar tahu atribut HTML apa yang diteruskan, lalu periksa `{{ $slot }}`/`@isset($footer)` untuk posisi slot. Contoh: `x-ui.button` selalu merender `<button>`, sedangkan `x-ui.modal` merender `<dialog>`. Perbedaan elemen ini menentukan apakah Anda harus memakai `type="submit"`, `aria-label`, atau `data-modal-open`.
+When a component feels unclear, open its Blade file and start with the `@props([...])` declaration: that's the current list of options and defaults. Next, check the root element for `$attributes->class(...)` or `$attributes->merge(...)` to see which HTML attributes pass through, then look for <span v-pre>`{{ $slot }}`</span>/`@isset($footer)` to find slot positions. For example, `x-ui.button` always renders a `<button>`, while `x-ui.modal` renders a `<dialog>`. That difference decides whether you need `type="submit"`, `aria-label` or `data-modal-open`.
 
-::: tip Pola yang dipakai
-Gunakan tag `<x-...>` dan slot untuk susunan halaman. Beberapa contoh masih memakai direktif Blade seperti `@foreach` dan `@if` untuk data dan kondisi; itu tetap bagian dari Blade modern.
+::: tip Patterns used
+Use `<x-...>` tags and slots to compose pages. Some examples still use Blade directives such as `@foreach` and `@if` for data and conditions; that's still modern Blade.
 :::
 
-## 📦 Sumber data sekarang
+## 📦 Where data comes from today
 
-Halaman admin dan showcase membaca `config('cendana.demo.*')` atau menulis nilai contoh langsung di view. JavaScript memakai atribut `data-*` untuk interaksi browser. Lihat [peta migrasi ke backend](/integrasi/) untuk mengganti data tersebut dengan nilai dari controller.
+The admin and showcase pages read `config('cendana.demo.*')` or write sample values directly in the view. JavaScript uses `data-*` attributes for browser interactions. See the [backend migration map](/integration/) to replace that data with values from a controller.

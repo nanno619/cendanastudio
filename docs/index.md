@@ -3,35 +3,35 @@ layout: home
 
 hero:
   name: Cendana Studio
-  text: 📚 Dokumentasi Laravel Blade
-  tagline: Dari halaman demo ke dashboard yang terhubung dengan data proyek Anda. Pelajari komponen, pola halaman, dan langkah integrasi backend.
+  text: 📚 Laravel Blade documentation
+  tagline: From demo pages to a dashboard connected to your project's data. Learn the components, page patterns and backend integration steps.
   actions:
     - theme: brand
-      text: Mulai dari instalasi
-      link: /panduan/mulai
+      text: Start with installation
+      link: /guide/getting-started
     - theme: alt
-      text: Jelajahi komponen
-      link: /komponen/
+      text: Explore components
+      link: /components/
 
 features:
-  - title: 🧩 Blade sebagai fondasi
-    details: Susun halaman dengan <x-layouts.admin>, komponen <x-ui.*>, prop, dan slot Blade.
-    link: /panduan/struktur
-    linkText: Pahami strukturnya
-  - title: 🧰 Komponen yang bisa dirujuk
-    details: Contoh penggunaan dan batasan komponen diambil dari implementasi dan halaman showcase proyek ini.
-    link: /komponen/
-    linkText: Buka referensi
-  - title: 🔌 Jalur ke data nyata
-    details: Ubah Route::view, data config, form demo, tabel client-side, dan login menjadi alur Laravel.
-    link: /integrasi/
-    linkText: Lihat panduan integrasi
+  - title: 🧩 Blade as the foundation
+    details: Build pages with <x-layouts.admin>, <x-ui.*> components, props and Blade slots.
+    link: /guide/structure
+    linkText: Understand the structure
+  - title: 🧰 Components you can reference
+    details: Usage examples and limits for each component, taken from the implementation and this project's showcase pages.
+    link: /components/
+    linkText: Open the reference
+  - title: 🔌 A path to real data
+    details: Turn Route::view, config data, demo forms, client-side tables and login into proper Laravel flows.
+    link: /integration/
+    linkText: Read the integration guide
 ---
 
-## 🧭 Mulai dari mana?
+## 🧭 Where to start?
 
-Baru membuka proyek? Ikuti [instalasi dan menjalankan aplikasi](/panduan/mulai), kemudian [struktur halaman Blade](/panduan/struktur). Jika sudah membangun halaman sendiri, buka [peta komponen](/komponen/) atau [panduan integrasi backend](/integrasi/).
+New to the project? Follow [installing and running the app](/guide/getting-started), then [Blade page structure](/guide/structure). If you're already building your own pages, open the [component map](/components/) or the [backend integration guide](/integration/).
 
-::: info Batas cakupan
-Dashboard ini menyediakan frontend Laravel Blade. Data contoh berada di `config/cendana.php`, route demo memakai `Route::view`, dan tombol simpan contoh hanya menampilkan notifikasi. Dokumentasi integrasi berisi **contoh implementasi yang perlu Anda tambahkan**, bukan fitur backend yang sudah tersedia.
+::: info Scope
+This dashboard provides a Laravel Blade frontend. Sample data lives in `config/cendana.php`, demo routes use `Route::view`, and the sample save buttons only show a notification. The integration docs contain **example implementations for you to add**, not backend features that already exist.
 :::

@@ -1,23 +1,23 @@
-# 🧭 Halaman & navigasi
+# 🧭 Pages & navigation
 
-## 📝 Buat halaman admin
+## 📝 Create an admin page
 
-Misalnya menambahkan daftar kategori. Buat `resources/views/admin/categories.blade.php`:
+Say you're adding a category list. Create `resources/views/admin/categories.blade.php`:
 
 ```blade
-<x-layouts.admin title="Kategori" group="Katalog">
-    <x-ui.page-header title="Kategori" description="Kelola kategori produk." />
-    <x-ui.card title="Daftar kategori">
+<x-layouts.admin title="{{ __('Categories') }}" group="{{ __('Catalogue') }}">
+    <x-ui.page-header title="{{ __('Categories') }}" description="{{ __('Manage product categories.') }}" />
+    <x-ui.card title="{{ __('Category list') }}">
         @forelse ($categories as $category)
             <p>{{ $category->name }}</p>
         @empty
-            <x-ui.table-state state="empty" title="Belum ada kategori" />
+            <x-ui.table-state state="empty" title="{{ __('No categories yet') }}" />
         @endforelse
     </x-ui.card>
 </x-layouts.admin>
 ```
 
-Jika data berasal dari database, buat controller dan daftarkan route di `routes/web.php` (contoh ini membutuhkan model `Category` yang Anda buat sendiri):
+If the data comes from the database, create a controller and register the route in `routes/web.php` (this example needs a `Category` model that you create yourself):
 
 ```php
 use App\Http\Controllers\CategoryController;
@@ -43,16 +43,16 @@ class CategoryController extends Controller
 }
 ```
 
-Jika halaman sepenuhnya statis, Anda bisa mengikuti route saat ini: `Route::view('/categories', 'admin.categories')->name('admin.categories.index')`; jangan gunakan `Route::view` untuk contoh yang memerlukan `$categories` dari database.
+If a page is fully static, you can follow the current routes: `Route::view('/categories', 'admin.categories')->name('admin.categories.index')`. Don't use `Route::view` for an example that needs `$categories` from the database.
 
-## 🗺️ Tambahkan menu sidebar
+## 🗺️ Add a sidebar menu item
 
-Di `config/cendana.php`, `navigation` adalah kumpulan grup dan item. `x-admin.sidebar` membaca konfigurasi ini, sedangkan `x-admin.nav-link` membangun tautan memakai `route(...)` dan penanda aktif memakai `request()->routeIs(...)`.
+In `config/cendana.php`, `navigation` is a list of groups and items. `x-admin.sidebar` reads this config, and `x-admin.nav-link` builds links with `route(...)` and marks the active one with `request()->routeIs(...)`.
 
 ```php
-['label' => 'Katalog', 'items' => [
+['label' => 'Catalogue', 'items' => [
     [
-        'label' => 'Kategori',
+        'label' => 'Categories',
         'route' => 'admin.categories.index',
         'active' => 'admin.categories.*',
         'icon' => 'grid',
@@ -60,18 +60,18 @@ Di `config/cendana.php`, `navigation` adalah kumpulan grup dan item. `x-admin.si
 ]],
 ```
 
-Pastikan nama route benar-benar ada; menu yang menunjuk route yang belum terdaftar akan gagal dirender. Untuk submenu, lihat item `Otentikasi` di konfigurasi: item induk memiliki `id`, `icon`, dan `children` berisi item route. Ikon harus memiliki simbol yang tersedia dalam `public/icons.svg`.
+Labels are written in English and translated when rendered, so add `"Catalogue"` and `"Categories"` to `lang/ms.json` for the Malay interface. Make sure the route name actually exists; a menu item pointing at an unregistered route fails to render. For submenus, see the `Authentication` item in the config: the parent item has an `id`, an `icon` and `children` holding route items. Icons must have a matching symbol in `public/icons.svg`.
 
-### 🧭 Shell admin dan penanda aktif
+### 🧭 Admin shell and active state
 
-`x-admin.sidebar` dan `x-admin.header` dirender otomatis oleh `x-layouts.admin`. Sidebar membentuk kelompok dari `config('cendana.navigation')`. Setiap item membutuhkan `label` dan `route`; `active` opsional dapat berupa pola nama route seperti `admin.categories.*`. `icon` dan `badge` juga opsional. Item bertingkat memakai `children` dan dapat dibuka/tutup lewat `data-collapse`. Breadcrumb di header berasal dari prop `title`/`group` layout, sehingga mengubah nama menu tidak otomatis mengubah breadcrumb.
+`x-admin.sidebar` and `x-admin.header` are rendered automatically by `x-layouts.admin`. The sidebar builds its groups from `config('cendana.navigation')`. Each item needs a `label` and a `route`; the optional `active` can be a route-name pattern such as `admin.categories.*`. `icon` and `badge` are optional too. Nested items use `children` and open/close through `data-collapse`. The header breadcrumb comes from the layout's `title`/`group` props, so renaming a menu item doesn't change the breadcrumb.
 
-Branding workspace dari config tampil di bagian atas sidebar, sedangkan nama/email profil di bawah sidebar dan notifikasi header masih hardcoded sebagai data demo. Untuk aplikasi dengan autentikasi, ganti profil dengan `auth()->user()` dan tentukan sumber notifikasi yang sesuai. Komponen customizer sudah termasuk di layout, jadi tidak perlu dipanggil ulang di setiap view.
+The workspace branding from config appears at the top of the sidebar, and the profile at the bottom shows the signed-in user's name and email from `auth()->user()`. The header notification menu shows an empty state; connect it to your own notification source when you need one. The customizer is already part of the layout, so you don't need to include it in each view.
 
-## 🧪 Atur halaman demo
+## 🧪 Manage the demo pages
 
-Route katalog `/components/*` dan `/examples/records/*` didaftarkan hanya jika `config('cendana.showcase')` bernilai true. Untuk menyembunyikan showcase dan menu demo, atur `ADMIN_SHOWCASE=false` dalam `.env`. Aplikasi dashboard, analitik, pengaturan, login, dan demo 404 tetap ada sesuai `routes/web.php`.
+The `/components/*` and `/examples/records/*` routes are only registered when `config('cendana.showcase')` is true. To hide the showcase and demo menus, set `ADMIN_SHOWCASE=false` in `.env`. The dashboard, analytics, settings, login and demo 404 pages stay, as defined in `routes/web.php`.
 
-::: warning Perhatikan tautan ke showcase
-Sebelum menonaktifkan showcase, periksa tautan kustom menuju route `showcase.*`. Dashboard bawaan sudah memeriksa `config('cendana.showcase')` untuk tautan “Lihat semua”.
+::: warning Watch for links to the showcase
+Before turning the showcase off, check any custom links to `showcase.*` routes. The built-in dashboard already checks `config('cendana.showcase')` for its “View all” link.
 :::

@@ -1,40 +1,40 @@
 # 🗂️ Tabs
 
-`<x-ui.tabs>` menyediakan tab Blade dengan panel yang semuanya dirender server, lalu perpindahannya ditangani `resources/js/admin/interactions.js`. Sumber: `resources/views/components/ui/tabs.blade.php`.
+`<x-ui.tabs>` provides Blade tabs whose panels are all server-rendered; switching is handled by `resources/js/admin/interactions.js`. Source: `resources/views/components/ui/tabs.blade.php`.
 
-## 🧩 Prop & slot bernama
+## 🧩 Props & named slots
 
-| Prop | Default | Kegunaan |
+| Prop | Default | Purpose |
 | --- | --- | --- |
-| `id` | wajib | Prefix ID tab dan panel; harus unik |
-| `tabs` | wajib | Array `key => label`, misalnya `['summary' => 'Ringkasan']` |
+| `id` | required | Prefix for tab and panel IDs; must be unique |
+| `tabs` | required | `key => label` array, e.g. `['summary' => __('Overview')]` |
 | `variant` | `underline` | `underline`, `pill`, `soft` |
-| `active` | key pertama | Key panel yang terlihat saat pertama dirender |
-| `aria-label` | `Navigasi tab` | Nama tablist |
+| `active` | first key | Panel key visible on first render |
+| `aria-label` | “Tab navigation” (translated) | Tablist name |
 
-Setiap key pada `tabs` membutuhkan slot `tab_{key}`. Gunakan key alfanumerik/underscore yang valid untuk nama slot dan ID HTML.
+Each key in `tabs` needs a `tab_{key}` slot. Use alphanumeric/underscore keys that are valid slot names and HTML IDs.
 
-## 📖 Underline dan pill
+## 📖 Underline and pill
 
 ```blade
-<x-ui.tabs id="detail" aria-label="Detail entri" :tabs="['summary' => 'Ringkasan', 'history' => 'Riwayat']">
-    <x-slot:tab_summary><p>Ringkasan data entri.</p></x-slot:tab_summary>
-    <x-slot:tab_history><p>Riwayat pembaruan entri.</p></x-slot:tab_history>
+<x-ui.tabs id="detail" aria-label="{{ __('Entry details') }}" :tabs="['summary' => __('Overview'), 'history' => __('History')]">
+    <x-slot:tab_summary><p>{{ __('Entry data overview.') }}</p></x-slot:tab_summary>
+    <x-slot:tab_history><p>{{ __('Entry update history.') }}</p></x-slot:tab_history>
 </x-ui.tabs>
 
-<x-ui.tabs id="laporan" variant="pill" active="table" :tabs="['chart' => 'Grafik', 'table' => 'Tabel']">
-    <x-slot:tab_chart><p>Grafik.</p></x-slot:tab_chart>
-    <x-slot:tab_table><p>Tabel.</p></x-slot:tab_table>
+<x-ui.tabs id="report" variant="pill" active="table" :tabs="['chart' => __('Charts'), 'table' => __('Tables')]">
+    <x-slot:tab_chart><p>{{ __('Chart panel.') }}</p></x-slot:tab_chart>
+    <x-slot:tab_table><p>{{ __('Table panel.') }}</p></x-slot:tab_table>
 </x-ui.tabs>
 ```
 
-## 🎨 Varian soft dan interaksi
+## 🎨 The soft variant and interaction
 
 ```blade
-<x-ui.tabs id="pengaturan" variant="soft" :tabs="['profile' => 'Profil', 'access' => 'Akses']">
-    <x-slot:tab_profile><p>Pengaturan profil.</p></x-slot:tab_profile>
-    <x-slot:tab_access><p>Pengaturan akses.</p></x-slot:tab_access>
+<x-ui.tabs id="settings" variant="soft" :tabs="['profile' => __('Profile'), 'access' => __('Access')]">
+    <x-slot:tab_profile><p>{{ __('Profile settings.') }}</p></x-slot:tab_profile>
+    <x-slot:tab_access><p>{{ __('Access settings.') }}</p></x-slot:tab_access>
 </x-ui.tabs>
 ```
 
-Klik dan tombol panah kiri/kanan berpindah panel; grafik pada panel diinisialisasi setelah tab dipilih. Seluruh konten panel tetap tersedia di HTML sejak awal; tidak ada lazy load/AJAX bawaan. Untuk data sensitif, pastikan akses diperiksa di server sebelum view dirender.
+Clicking and the left/right arrow keys switch panels; charts in a panel initialise once the tab is selected. All panel content is in the HTML from the start; there's no built-in lazy loading or AJAX. For sensitive data, make sure access is checked on the server before the view renders.

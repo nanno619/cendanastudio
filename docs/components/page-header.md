@@ -1,40 +1,40 @@
 # 📰 Page header
 
-`<x-ui.page-header>` merender pembungkus berisi `<h1>` dan deskripsi opsional. Sumber: `resources/views/components/ui/page-header.blade.php`.
+`<x-ui.page-header>` renders a wrapper with an `<h1>` and an optional description. Source: `resources/views/components/ui/page-header.blade.php`.
 
 ## 🧩 API
 
-| Prop | Kewajiban | Fungsi |
+| Prop | Required | Purpose |
 | --- | --- | --- |
-| `title` | wajib | Judul `<h1>` |
-| `description` | opsional | Paragraf penjelas |
-| Atribut HTML | opsional | Diteruskan ke `<div>` pembungkus |
+| `title` | required | `<h1>` heading |
+| `description` | optional | Supporting paragraph |
+| HTML attributes | optional | Passed to the wrapper `<div>` |
 
-Komponen ini tidak memiliki slot aksi dan tidak menyediakan varian visual. Untuk toolbar/aksi, letakkan komponen dalam flex layout bersama tautan/tombol.
+This component has no actions slot and no visual variants. For a toolbar or actions, put it in a flex layout alongside links/buttons.
 
-## 📝 Penggunaan sederhana
+## 📝 Simple use
 
 ```blade
-<x-layouts.admin title="Produk" group="Katalog">
-    <x-ui.page-header title="Produk" description="Kelola harga dan stok." />
+<x-layouts.admin title="{{ __('Products') }}" group="{{ __('Catalogue') }}">
+    <x-ui.page-header title="{{ __('Products') }}" description="{{ __('Manage prices and stock.') }}" />
 </x-layouts.admin>
 ```
 
-## 🖱️ Dengan aksi dan kelas tambahan
+## 🖱️ With actions and extra classes
 
 ```blade
 <div class="flex flex-wrap items-start justify-between gap-4">
-    <x-ui.page-header title="Daftar entri" description="Cari dan kelola catatan tim." class="min-w-0" />
-    <a href="{{ route('examples.records.create') }}" class="btn btn-primary">Tambah entri</a>
+    <x-ui.page-header title="{{ __('Entry list') }}" description="{{ __('Search and manage team notes.') }}" class="min-w-0" />
+    <a href="{{ route('examples.records.create') }}" class="btn btn-primary">{{ __('Add entry') }}</a>
 </div>
 ```
 
-## 🗃️ Judul dari data server
+## 🗃️ A title from server data
 
 ```blade
-<x-layouts.admin :title="$record->title" group="Entri">
-    <x-ui.page-header :title="$record->title" :description="'Kategori: '.$record->category" />
+<x-layouts.admin :title="$record->title" group="{{ __('Entries') }}">
+    <x-ui.page-header :title="$record->title" :description="__('Category: :name', ['name' => __($record->category)])" />
 </x-layouts.admin>
 ```
 
-`title` layout dipakai untuk tab browser dan breadcrumb, sedangkan `title` page header untuk isi halaman. Teks dari model di-escape Blade. Pastikan hanya satu `<h1>` untuk isi setiap halaman.
+The layout's `title` is used for the browser tab and breadcrumb, while the page header's `title` is for the page content. Text from the model is escaped by Blade. Make sure each page has only one `<h1>` in its content.

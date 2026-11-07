@@ -1,36 +1,36 @@
 # 📝 Textarea
 
-`<x-ui.textarea>` menampilkan input multi-baris dengan nilai lama `old()` dan status invalid otomatis. Sumber: `resources/views/components/ui/textarea.blade.php`.
+`<x-ui.textarea>` shows a multi-line input with `old()` values and an automatic invalid state. Source: `resources/views/components/ui/textarea.blade.php`.
 
 ## 🧩 API
 
-| Prop | Default | Fungsi |
+| Prop | Default | Purpose |
 | --- | --- | --- |
-| `name` | `null` | Nama request dan ID otomatis |
-| `value` | `null` | Isi awal, dikalahkan `old(name)` |
-| `rows` | `4` | Jumlah baris awal |
-| `invalid` | `null` | Paksa status invalid |
+| `name` | `null` | Request name and automatic ID |
+| `value` | `null` | Initial content, overridden by `old(name)` |
+| `rows` | `4` | Initial number of rows |
+| `invalid` | `null` | Force the invalid state |
 
-Tambahkan atribut HTML seperti `placeholder`, `maxlength`, `required`, `readonly` atau `class` langsung pada tag komponen. Isi elemen dihasilkan dari prop `value`, **bukan** isi slot.
+Add HTML attributes such as `placeholder`, `maxlength`, `required`, `readonly` or `class` directly on the component tag. The element content comes from the `value` prop, **not** the slot.
 
-## 📝 Form buat dan edit
+## 📝 Create and edit forms
 
 ```blade
-<x-ui.field name="summary" label="Ringkasan" help="Satu atau dua kalimat.">
+<x-ui.field name="summary" label="{{ __('Summary') }}" help="{{ __('One or two sentences.') }}">
     <x-ui.textarea name="summary" rows="4" :value="$record?->summary"
-        placeholder="Tulis ringkasan entri…" />
+        placeholder="{{ __('Write an entry summary…') }}" />
 </x-ui.field>
 ```
 
-Ketika validasi controller gagal dan redirect, `old('summary')` menggantikan `$record?->summary` sehingga ketikan pengguna tidak hilang.
+When controller validation fails and redirects, `old('summary')` replaces `$record?->summary`, so the user's typing isn't lost.
 
-## 📏 Teks panjang dan read-only
+## 📏 Long text and read-only
 
 ```blade
-<x-ui.field name="notes" label="Catatan internal">
+<x-ui.field name="notes" label="{{ __('Internal notes') }}">
     <x-ui.textarea name="notes" rows="8" maxlength="2000" :value="$record?->notes" />
 </x-ui.field>
-<x-ui.textarea name="preview" :value="$previewText" rows="5" readonly aria-label="Pratinjau" />
+<x-ui.textarea name="preview" :value="$previewText" rows="5" readonly aria-label="{{ __('Preview') }}" />
 ```
 
-`maxlength` di browser adalah bantuan, bukan pengganti validasi server seperti `'notes' => ['nullable', 'string', 'max:2000']`. Jika error tersedia pada `$errors`, textarea mendapat `aria-invalid="true"`; teks error ditampilkan oleh [field](/komponen/field).
+`maxlength` in the browser is a convenience, not a replacement for server validation such as `'notes' => ['nullable', 'string', 'max:2000']`. When `$errors` has an error, the textarea gets `aria-invalid="true"`; the error text is shown by [field](/components/field).

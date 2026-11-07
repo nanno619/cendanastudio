@@ -1,39 +1,39 @@
 # 🔎 Combobox
 
-`<x-ui.combobox>` menyediakan pencarian opsi lokal dengan input teks dan input tersembunyi untuk nilai form. Sumber Blade: `resources/views/components/ui/combobox.blade.php`; perilaku: `resources/js/admin/advanced-inputs.js`.
+`<x-ui.combobox>` provides a local option search with a text input, plus a hidden input for the form value. Blade source: `resources/views/components/ui/combobox.blade.php`; behaviour: `resources/js/admin/advanced-inputs.js`.
 
-## 🧩 Prop dan bentuk opsi
+## 🧩 Props and option shape
 
-| Prop | Default | Fungsi |
+| Prop | Default | Purpose |
 | --- | --- | --- |
-| `id` | wajib | ID unik untuk input, list, dan opsi |
-| `label` | wajib | Label input dan listbox |
-| `options` | `[]` | Array string atau array berisi `value`/`label` |
-| `name` | `null` | Nama input tersembunyi yang dikirim ke server |
-| `placeholder` | `Cari dan pilih…` | Teks input pencarian |
+| `id` | required | Unique ID for the input, list and options |
+| `label` | required | Label for the input and listbox |
+| `options` | `[]` | Array of strings, or arrays with `value`/`label` |
+| `name` | `null` | Name of the hidden input sent to the server |
+| `placeholder` | “Search and choose…” (translated) | Search input text |
 
-`class` dan atribut root lain diteruskan ke pembungkus `data-combobox`. Atribut `required` pada root **tidak** otomatis memberi validasi pada hidden input; validasi server tetap wajib.
+`class` and other root attributes pass through to the `data-combobox` wrapper. A `required` attribute on the root does **not** validate the hidden input; server validation is still required.
 
-## 📝 Opsi string atau value/label
+## 📝 String options or value/label
 
 ```blade
-<x-ui.combobox id="kota" label="Kota" name="city"
-    :options="['Bandung', 'Yogyakarta', 'Surabaya']" />
+<x-ui.combobox id="city" label="{{ __('City') }}" name="city"
+    :options="['Kuala Lumpur', 'Penang', 'Johor Bahru']" />
 
-<x-ui.combobox id="kategori" label="Kategori" name="category_id"
-    placeholder="Cari kategori…" :options="[
-        ['value' => '1', 'label' => 'Panduan'],
-        ['value' => '2', 'label' => 'Laporan'],
+<x-ui.combobox id="category" label="{{ __('Category') }}" name="category_id"
+    placeholder="{{ __('Search categories…') }}" :options="[
+        ['value' => '1', 'label' => __('Guides')],
+        ['value' => '2', 'label' => __('Reports')],
     ]" />
 ```
 
-Pada array string, teks dipakai sebagai nilai sekaligus label. Pada array objek PHP, `value` disimpan ke input tersembunyi dan `label` tampil di input teks. Jangan gunakan ID `id` yang sama untuk dua combobox pada satu halaman.
+With an array of strings, the text is both the value and the label. With PHP arrays, `value` goes into the hidden input and `label` shows in the text input. Don't reuse the same `id` for two comboboxes on one page.
 
-## ⌨️ Navigasi keyboard dan form
+## ⌨️ Keyboard navigation and forms
 
-Fokus/ketikan membuka daftar. Ketik untuk menyaring, gunakan Arrow Up/Down untuk opsi, Enter untuk memilih, Esc/Tab untuk menutup. Memilih opsi memicu `change` pada hidden input; mengetik ulang mengosongkan nilai sebelumnya. Di server, contoh validasi kategori: `['category_id' => ['required', 'exists:categories,id']]`.
+Focusing or typing opens the list. Type to filter, use Arrow Up/Down to move through options, Enter to choose, and Esc/Tab to close. Choosing an option fires `change` on the hidden input; typing again clears the previous value. On the server, a category validation example: `['category_id' => ['required', 'exists:categories,id']]`.
 
-## 🛠️ Opsi database dan keterbatasan edit
+## 🛠️ Database options and editing limits
 
 ```php
 $options = Category::query()->orderBy('name')->get(['id', 'name'])
@@ -42,7 +42,7 @@ $options = Category::query()->orderBy('name')->get(['id', 'name'])
 ```
 
 ```blade
-<x-ui.combobox id="kategori-produk" label="Kategori" name="category_id" :options="$options" />
+<x-ui.combobox id="product-category" label="{{ __('Category') }}" name="category_id" :options="$options" />
 ```
 
-Model `Category` contoh perlu Anda buat. Komponen belum menerima `value` awal/`old()`; untuk halaman edit, perluas Blade dan skrip agar label serta hidden value awal sinkron. Semua opsi dirender di HTML lalu disaring di browser, bukan dicari dari API; untuk ribuan pilihan pertimbangkan pencarian server tersendiri.
+You need to create the example `Category` model. The component doesn't accept an initial `value`/`old()` yet; for edit pages, extend the Blade and script so the initial label and hidden value stay in sync. All options are rendered in the HTML and filtered in the browser, not fetched from an API; for thousands of options, consider a dedicated server-side search.

@@ -1,54 +1,55 @@
-# 🧭 Peta komponen
+# 🧭 Component map
 
-Komponen di bawah berada di `resources/views/components/ui/`; tag `<x-ui.nama>` menunjuk file `nama.blade.php`. Beberapa pola showcase berupa HTML + kelas CSS dan atribut `data-*`, bukan komponen Blade tersendiri.
+The components below live in `resources/views/components/ui/`; the `<x-ui.name>` tag points to `name.blade.php`. Some showcase patterns are plain HTML + CSS classes and `data-*` attributes rather than their own Blade components.
 
-| Kebutuhan | Komponen | Referensi |
+| Need | Components | Reference |
 | --- | --- | --- |
-| Kerangka halaman | `x-layouts.admin`, `x-layouts.guest`, `x-ui.page-header` | [Tampilan](/komponen/tampilan) |
-| Konten & aksi | `x-ui.card`, `x-ui.stat-card`, `x-ui.button`, `x-ui.badge`, `x-ui.icon` | [Tampilan](/komponen/tampilan) |
-| Form | `x-ui.field`, `x-ui.input`, `x-ui.select`, `x-ui.textarea`, `x-ui.switch` | [Form](/komponen/form) |
-| Input lanjutan | `x-ui.combobox`, `x-ui.date-range`, `x-ui.file-preview` | [Form](/komponen/form) |
-| Data & status | `x-ui.table-state`, `x-ui.empty`, `x-ui.pagination` | [Tabel](/komponen/tabel) |
-| Visualisasi | `x-ui.chart`, `x-ui.stat-card` | [Grafik](/komponen/grafik) |
-| Notifikasi & lapisan | `x-ui.alert`, `x-ui.modal`, `x-ui.drawer` | [Umpan balik](/komponen/umpan-balik) |
+| Page frame | `x-layouts.admin`, `x-layouts.guest`, `x-ui.page-header` | [Layout](/components/layout) |
+| Content & actions | `x-ui.card`, `x-ui.stat-card`, `x-ui.button`, `x-ui.badge`, `x-ui.icon` | [Layout](/components/layout) |
+| Forms | `x-ui.field`, `x-ui.input`, `x-ui.select`, `x-ui.textarea`, `x-ui.switch` | [Forms](/components/forms) |
+| Advanced inputs | `x-ui.combobox`, `x-ui.date-range`, `x-ui.file-preview` | [Forms](/components/forms) |
+| Data & states | `x-ui.table-state`, `x-ui.empty`, `x-ui.pagination` | [Tables](/components/tables) |
+| Visualisation | `x-ui.chart`, `x-ui.stat-card` | [Charts](/components/charts) |
+| Notifications & overlays | `x-ui.alert`, `x-ui.modal`, `x-ui.drawer` | [Feedback](/components/feedback) |
+| Language | `x-locale.switcher` | [Language](/guide/theming#language) |
 
-Sebagian markup halaman, misalnya tabel `.table`, menu dropdown `.menu`, tab, spinner, dan chip filter, diatur melalui CSS dan JavaScript tanpa wrapper `<x-ui.*>`. Lihat [interaksi JavaScript](/komponen/interaksi) untuk kontrak atributnya.
+Some page markup, such as `.table` tables, `.menu` dropdowns, tabs, spinners and filter chips, is driven by CSS and JavaScript with no `<x-ui.*>` wrapper. See [JavaScript interactions](/components/interactions) for the attribute contract.
 
-## 🧰 Indeks komponen UI
+## 🧰 UI component index
 
-| Komponen | Untuk apa | Detail penggunaan |
+| Component | What it's for | Usage details |
 | --- | --- | --- |
-| `alert` | Pesan inline sukses/peringatan/kesalahan | [Alert](/komponen/alert) |
-| `badge` | Label status tidak interaktif | [Badge](/komponen/badge) |
-| `button` | Tombol aksi HTML | [Button](/komponen/button) |
-| `card` | Kontainer dengan header/isi/footer | [Card](/komponen/card) |
-| `chart` | Grafik SVG dari data PHP | [Chart](/komponen/chart) |
-| `combobox` | Cari dan pilih opsi lokal | [Combobox](/komponen/combobox) |
-| `date-range` | Preset dan input rentang tanggal | [Date range](/komponen/date-range) |
-| `drawer` | Panel dialog samping | [Drawer](/komponen/drawer) |
-| `filter-bar` | Form GET pencarian dan filter aktif | [Filter bar](/komponen/filter-bar) |
-| `detail-list` | Pasangan label/nilai untuk halaman detail | [Detail list](/komponen/detail-list) |
-| `timeline` | Riwayat peristiwa kronologis | [Timeline](/komponen/timeline) |
-| `tabs` | Tab underline, pill, dan soft | [Tabs](/komponen/tabs) |
-| `confirm-action` | Dialog konfirmasi dengan form POST/DELETE | [Confirm action](/komponen/confirm-action) |
-| `empty` | Keadaan kosong umum | [Empty](/komponen/empty) |
-| `field` | Label, petunjuk, dan error kontrol | [Field](/komponen/field) |
-| `file-preview` | Area pilih/seret file & pratinjau lokal | [File preview](/komponen/file-preview) |
-| `icon` | Ikon dari sprite publik | [Icon](/komponen/icon) |
-| `input` | Input HTML termasuk ikon/addon | [Input](/komponen/input) |
-| `modal` | Dialog tengah untuk tugas terfokus | [Modal](/komponen/modal) |
-| `page-header` | Judul utama dan keterangan halaman | [Page header](/komponen/page-header) |
-| `pagination` | Rancangan navigasi halaman (belum siap pakai) | [Pagination](/komponen/pagination) |
-| `select` | Select dengan opsi dari array | [Select](/komponen/select) |
-| `stat-card` | Angka, delta, ikon & sparkline | [Stat card](/komponen/stat-card) |
-| `switch` | Checkbox berpenampilan toggle | [Switch](/komponen/switch) |
-| `table-state` | Loading, empty, filtered, error | [Table state](/komponen/table-state) |
-| `textarea` | Teks multi-baris dengan old/error | [Textarea](/komponen/textarea) |
+| `alert` | Inline success/warning/error messages | [Alert](/components/alert) |
+| `badge` | Non-interactive status labels | [Badge](/components/badge) |
+| `button` | HTML action buttons | [Button](/components/button) |
+| `card` | Container with header/body/footer | [Card](/components/card) |
+| `chart` | SVG charts from PHP data | [Chart](/components/chart) |
+| `combobox` | Search and pick a local option | [Combobox](/components/combobox) |
+| `date-range` | Presets and date range inputs | [Date range](/components/date-range) |
+| `drawer` | Side dialog panel | [Drawer](/components/drawer) |
+| `filter-bar` | GET search form with active filters | [Filter bar](/components/filter-bar) |
+| `detail-list` | Label/value pairs for detail pages | [Detail list](/components/detail-list) |
+| `timeline` | Chronological event history | [Timeline](/components/timeline) |
+| `tabs` | Underline, pill and soft tabs | [Tabs](/components/tabs) |
+| `confirm-action` | Confirmation dialog with a POST/DELETE form | [Confirm action](/components/confirm-action) |
+| `empty` | Generic empty state | [Empty](/components/empty) |
+| `field` | Label, hint and error for a control | [Field](/components/field) |
+| `file-preview` | Choose/drag a file with a local preview | [File preview](/components/file-preview) |
+| `icon` | Icons from the public sprite | [Icon](/components/icon) |
+| `input` | HTML input with optional icon/addon | [Input](/components/input) |
+| `modal` | Centred dialog for focused tasks | [Modal](/components/modal) |
+| `page-header` | Main page heading and description | [Page header](/components/page-header) |
+| `pagination` | Page navigation draft (not production-ready) | [Pagination](/components/pagination) |
+| `select` | Select with options from an array | [Select](/components/select) |
+| `stat-card` | Number, delta, icon & sparkline | [Stat card](/components/stat-card) |
+| `switch` | Checkbox styled as a toggle | [Switch](/components/switch) |
+| `table-state` | Loading, empty, filtered, error | [Table state](/components/table-state) |
+| `textarea` | Multi-line text with old input/errors | [Textarea](/components/textarea) |
 
-::: info Katalog langsung
-Dengan `ADMIN_SHOWCASE=true`, halaman `/components/cards`, `/components/forms`, `/components/tables`, `/components/charts`, dan halaman komponen lainnya menunjukkan hasil render di aplikasi Laravel.
+::: info Live catalogue
+With `ADMIN_SHOWCASE=true`, `/components/cards`, `/components/forms`, `/components/tables`, `/components/charts` and the other component pages show the rendered output in the Laravel app.
 :::
 
-Komponen tambahan di `resources/views/components/admin/` khusus untuk shell admin (sidebar, header, customizer). Umumnya gunakan `<x-layouts.admin>` ketimbang memanggilnya satu per satu.
+The extra components in `resources/views/components/admin/` are specific to the admin shell (sidebar, header, customizer). Use `<x-layouts.admin>` rather than calling them one by one.
 
-Contoh gabungan lima komponen baru tersedia pada `/components/data-patterns`; penjelasan alurnya ada di [pola data baru](/komponen/pola-data).
+A combined example of the five data-pattern components is at `/components/data-patterns`; the flow is explained in [data patterns](/components/data-patterns).

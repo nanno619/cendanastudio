@@ -1,31 +1,31 @@
-# 🔐 Autentikasi & produksi
+# 🔐 Authentication & production
 
-Autentikasi memakai [Laravel Fortify](https://laravel.com/docs/fortify) (headless: Fortify menyediakan route dan logika, view Blade disediakan aplikasi ini). Fitur yang aktif ada di `config/fortify.php`: login/logout, atur ulang kata sandi, serta pembaruan profil dan kata sandi dari halaman pengaturan. Registrasi, verifikasi email, dua langkah, dan passkey **dinonaktifkan**.
+Authentication uses [Laravel Fortify](https://laravel.com/docs/fortify) (headless: Fortify provides the routes and logic; this app provides the Blade views). Enabled features are set in `config/fortify.php`: login/logout, password reset, and profile and password updates from the settings page. Registration, email verification, two-factor authentication and passkeys are **disabled**.
 
-## 🔑 Login dan view
+## 🔑 Login and views
 
-View didaftarkan di `app/Providers/FortifyServiceProvider.php`:
+Views are registered in `app/Providers/FortifyServiceProvider.php`:
 
-| View | Route | Berkas |
+| View | Route | File |
 | --- | --- | --- |
-| Masuk | `login` / `login.store` | `resources/views/auth/login.blade.php` |
-| Lupa kata sandi | `password.request` / `password.email` | `resources/views/auth/forgot-password.blade.php` |
-| Atur ulang kata sandi | `password.reset` / `password.update` | `resources/views/auth/reset-password.blade.php` |
+| Sign in | `login` / `login.store` | `resources/views/auth/login.blade.php` |
+| Forgot password | `password.request` / `password.email` | `resources/views/auth/forgot-password.blade.php` |
+| Reset password | `password.reset` / `password.update` | `resources/views/auth/reset-password.blade.php` |
 
-Ketiganya memakai `<x-auth.shell>` (`resources/views/components/auth/shell.blade.php`). Login dibatasi 5 percobaan per menit per email+IP. Setelah login, pengguna diarahkan ke `/dashboard` (`home` di `config/fortify.php`). Tombol **Keluar** ada di sidebar dan mengirim `POST /logout`.
+All three use `<x-auth.shell>` (`resources/views/components/auth/shell.blade.php`), which also shows the compact EN/MS language switcher. Login is limited to 5 attempts per minute per email+IP. After signing in, users go to `/dashboard` (`home` in `config/fortify.php`). The **Sign out** button is in the sidebar and sends `POST /logout`.
 
-Pengaturan akun (`/settings`) mengirim `PUT user/profile-information` dan `PUT user/password`. Pesan galat tampil per bag (`updateProfileInformation`, `updatePassword`).
+Account settings (`/settings`) send `PUT user/profile-information` and `PUT user/password`. Errors are shown per error bag (`updateProfileInformation`, `updatePassword`). Validation, login and password-reset messages follow the visitor's language; the Malay versions are in `lang/ms/*.php`.
 
-Untuk membuat pengguna pertama: `php artisan db:seed` (membuat `test@example.com`, kata sandi `password`) atau `php artisan tinker`. Ganti sebelum produksi.
+To create the first user: `php artisan db:seed` (creates `test@example.com` with password `password`) or `php artisan tinker`. Change it before production.
 
-Email atur ulang kata sandi memakai driver `MAIL_MAILER` di `.env` (default `log`, lihat `storage/logs`).
+Password-reset emails use the `MAIL_MAILER` driver in `.env` (default `log`; see `storage/logs`).
 
-## 🛡️ Route admin
+## 🛡️ Admin routes
 
-Dashboard, analitik, pengaturan, katalog komponen, dan contoh entri berada di dalam `Route::middleware('auth')` pada `routes/web.php`. Route CRUD baru yang privat juga harus masuk ke grup ini. `/demo/404` dan `/testing` tetap publik; hapus atau lindungi `/testing` sebelum produksi.
+The dashboard, analytics, settings, component catalogue and sample entries sit inside `Route::middleware('auth')` in `routes/web.php`. New private CRUD routes belong in that group too. `/demo/404`, `/testing` and the `locale.update` route stay public (the login page needs the language switch); remove or protect `/testing` before production.
 
-Lindungi juga setiap operasi tulis dengan pemeriksaan izin (Policy/Gate) sesuai aturan proyek.
+Also protect every write operation with authorization checks (Policy/Gate) that fit your project's rules.
 
-## 🚢 Saat deploy
+## 🚢 Deploying
 
-Siapkan `.env` produksi dan database aplikasi, jalankan migrasi sesuai skema baru, lalu bangun aset Laravel dengan `npm run build`. Dokumentasi dibangun terpisah lewat `npm run docs:build` menjadi berkas statis di `docs/.vitepress/dist`; Anda bisa menerbitkannya sebagai situs dokumentasi statis tanpa mengarahkan request docs ke Laravel. Gunakan `ADMIN_SHOWCASE=false` jika katalog contoh tidak ingin ditampilkan pada aplikasi produksi, dan periksa tautan menuju showcase sebelum menonaktifkannya.
+Prepare the production `.env` and database, run migrations for your schema, then build the Laravel assets with `npm run build`. The docs are built separately with `npm run docs:build` into static files in `docs/.vitepress/dist`; you can publish them as a static docs site without routing docs requests through Laravel. Use `ADMIN_SHOWCASE=false` if you don't want the sample catalogue in production, and check links to the showcase before turning it off.

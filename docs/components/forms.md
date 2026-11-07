@@ -1,45 +1,45 @@
-# 📝 Form & input
+# 📝 Forms & inputs
 
-Gunakan komponen form untuk presentasi dan hubungan dengan error Laravel; proses penyimpanan tetap dilakukan oleh route/controller. `x-ui.field` menampilkan label, bantuan, dan error dari `$errors` berdasarkan `name`. Pastikan `name` pada field dan kontrol sama.
+Use the form components for presentation and to connect Laravel's errors; saving is still handled by your route/controller. `x-ui.field` shows the label, help text and the error from `$errors` for its `name`. Make sure the field and the control use the same `name`.
 
-## 🧷 Field dan validasi bersama {#field-dan-validasi-bersama}
+## 🧷 Fields and shared validation {#fields-and-shared-validation}
 
-`x-ui.field` menerima `label`, `name`, `help`, `required`, `class`, serta atribut `id`. `name` digunakan untuk mencari pesan error pada `$errors`; jika error ada, pesan bantuan `help` digantikan oleh pesan error pertama. Prop `required` menambahkan tanda bintang pada label **saja**: tetap setel atribut `required` pada kontrol dan validasi `required` di controller. ID otomatis berbentuk `f-{name}` pada field dan input yang cocok.
+`x-ui.field` takes `label`, `name`, `help`, `required`, `class` and an `id` attribute. `name` is used to look up the error message in `$errors`; when there's an error, the `help` text is replaced by the first error message. The `required` prop **only** adds an asterisk to the label: still set the `required` attribute on the control and the `required` rule in the controller. The automatic ID is `f-{name}` on both the field and the matching input.
 
 ```blade
-<x-ui.field label="Email" name="email" help="Gunakan alamat email kerja." :required="true">
+<x-ui.field label="{{ __('Email') }}" name="email" help="{{ __('Use your work email address.') }}" :required="true">
     <x-ui.input name="email" type="email" autocomplete="email" required />
 </x-ui.field>
 ```
 
-Jika Anda menambahkan `id` khusus, berikan nilai yang sama pada `x-ui.field` dan kontrolnya. `class` untuk pembungkus field diterima sebagai prop maupun atribut HTML.
+If you add a custom `id`, give the same value to `x-ui.field` and its control. `class` for the field wrapper is accepted both as a prop and as an HTML attribute.
 
 ## ⌨️ Input, select, textarea
 
 ```blade
 <form method="POST" action="{{ route('examples.records.store') }}">
     @csrf
-    <x-ui.field name="title" label="Judul" :required="true" help="Judul singkat entri.">
+    <x-ui.field name="title" label="{{ __('Title') }}" :required="true" help="{{ __('A short entry title.') }}">
         <x-ui.input name="title" :value="$record?->title" required />
     </x-ui.field>
 
-    <x-ui.field name="category" label="Kategori">
-        <x-ui.select name="category" placeholder="Pilih kategori"
+    <x-ui.field name="category" label="{{ __('Category') }}">
+        <x-ui.select name="category" placeholder="{{ __('Choose a category') }}"
             :value="$record?->category"
-            :options="['panduan' => 'Panduan', 'laporan' => 'Laporan']" />
+            :options="['guides' => __('Guides'), 'reports' => __('Reports')]" />
     </x-ui.field>
 
-    <x-ui.field name="summary" label="Ringkasan">
+    <x-ui.field name="summary" label="{{ __('Summary') }}">
         <x-ui.textarea name="summary" :value="$record?->summary" rows="4" />
     </x-ui.field>
 
-    <x-ui.button type="submit">Simpan</x-ui.button>
+    <x-ui.button type="submit">{{ __('Save') }}</x-ui.button>
 </form>
 ```
 
 ### 📥 `x-ui.input` {#x-ui-input}
 
-Prop: `name`, `value`, `type` (default `text`), `invalid`, `addon`, `icon`. `icon="search"` menaruh ikon di sisi kiri dan menambah jarak teks; `addon="RM"` menaruh label di awal grup input. Atribut seperti `placeholder`, `min`, `max`, `autocomplete`, `readonly` dan `required` diteruskan ke `<input>`. Untuk input `type="file"`, komponen tidak mengisi `value` meskipun ada nilai lama.
+Props: `name`, `value`, `type` (default `text`), `invalid`, `addon`, `icon`. `icon="search"` puts an icon on the left and pads the text; `addon="RM"` puts a label at the start of the input group. Attributes such as `placeholder`, `min`, `max`, `autocomplete`, `readonly` and `required` pass through to the `<input>`. For `type="file"` inputs, the component never fills `value`, even when there's an old value.
 
 ```blade
 <x-ui.input name="price" type="number" addon="RM" min="0" step="0.01" :value="$product?->price" />
@@ -47,67 +47,67 @@ Prop: `name`, `value`, `type` (default `text`), `invalid`, `addon`, `icon`. `ico
 
 ### 🔽 `x-ui.select` {#x-ui-select}
 
-Prop: `name`, `value`, `options` berupa array `value => label`, `placeholder`, `includeBlank`, `invalid`, serta `searchable` (default `false`). `placeholder` atau `includeBlank` menyisipkan `<option value="">`; bila keduanya tidak ada, pilihan pertama dapat terkirim walaupun pengguna belum memilih secara sadar. Slot bisa berisi `<option>` tambahan. Aktifkan `:searchable="true"` untuk Choices.js; [referensi select](/komponen/select) menjelaskan detailnya.
+Props: `name`, `value`, `options` as a `value => label` array, `placeholder`, `includeBlank`, `invalid`, and `searchable` (default `false`). `placeholder` or `includeBlank` inserts an `<option value="">`; without either, the first option can be submitted even if the user never consciously chose it. The slot can hold extra `<option>` elements. Turn on `:searchable="true"` for Choices.js; the [select reference](/components/select) has the details.
 
 ```blade
-<x-ui.select name="status" :value="$record?->status" placeholder="Pilih status"
-    :options="['draf' => 'Draf', 'aktif' => 'Aktif']" required />
+<x-ui.select name="status" :value="$record?->status" placeholder="{{ __('Choose a status') }}"
+    :options="['draft' => __('Draft'), 'active' => __('Active')]" required />
 ```
 
 ### 📄 `x-ui.textarea` {#x-ui-textarea}
 
-Prop: `name`, `value`, `rows` (default 4), `invalid`. Isi `<textarea>` berasal dari `old(name, value)`; **bukan** dari slot. Atribut `maxlength`, `placeholder`, `required` dan lainnya diteruskan ke elemen HTML.
+Props: `name`, `value`, `rows` (default 4), `invalid`. The `<textarea>` content comes from `old(name, value)`, **not** from the slot. Attributes such as `maxlength`, `placeholder` and `required` pass through to the HTML element.
 
 ```blade
 <x-ui.textarea name="notes" :value="$record?->notes" rows="6" maxlength="1000"
-    placeholder="Catatan untuk tim…" />
+    placeholder="{{ __('Notes for the team…') }}" />
 ```
 
-Ketiganya memprioritaskan `old(name, value)` setelah redirect validasi. Error akan menambah `aria-invalid`/kelas invalid; `x-ui.field` menampilkan pesan pertama. Prop `invalid` dapat dipakai untuk memaksa status invalid ketika validasi berasal dari sumber di luar `$errors`.
+All three prefer `old(name, value)` after a validation redirect. An error adds `aria-invalid` and the invalid class; `x-ui.field` shows the first message. Use the `invalid` prop to force the invalid state when validation comes from somewhere other than `$errors`.
 
-Contoh ini memakai nama route dari [panduan CRUD](/integrasi/crud) yang perlu Anda tambahkan; `$record` dapat bernilai `null` pada halaman create.
+This example uses route names from the [CRUD guide](/integration/crud) that you need to add; `$record` may be `null` on the create page.
 
-::: tip ID untuk label
-Tanpa `id` eksplisit, field dan input dengan `name="title"` sama-sama memakai `f-title`. Untuk nama array (`items[0][title]`), berikan `id` identik secara eksplisit pada kedua komponen agar label menunjuk kontrol yang benar dan ID tetap unik.
+::: tip IDs for labels
+Without an explicit `id`, a field and an input with `name="title"` both use `f-title`. For array names (`items[0][title]`), give both components the same explicit `id` so the label points at the right control and the ID stays unique.
 :::
 
 ## 🔀 Switch {#switch}
 
-`x-ui.switch` membutuhkan `name`; opsional `label`, `hint`, `checked` (default false), `value` (default `1`). Komponen menghasilkan input tersembunyi bernilai `0` dan checkbox bernilai `1` saat aktif, sehingga kontrol yang dimatikan tetap memiliki nilai dalam request.
+`x-ui.switch` needs a `name`; `label`, `hint`, `checked` (default false) and `value` (default `1`) are optional. The component renders a hidden input with value `0` and a checkbox with value `1` when on, so a switched-off control still sends a value in the request.
 
 ```blade
-<x-ui.switch name="published" label="Terbitkan" :checked="(bool) ($record->published ?? false)" />
+<x-ui.switch name="published" label="{{ __('Publish') }}" :checked="(bool) ($record->published ?? false)" />
 ```
 
-Di server gunakan `$request->boolean('published')`; jangan menganggap prop `checked` melakukan validasi atau penyimpanan.
+On the server use `$request->boolean('published')`; don't assume the `checked` prop validates or saves anything.
 
-`old(name, checked)` memulihkan pilihan setelah redirect. Input tersembunyi dan checkbox menggunakan `name` yang sama: ini disengaja agar form HTML selalu mengirim `0` atau `1`. Jika Anda perlu nilai lain lewat prop `value`, sesuaikan juga konversi nilainya di server.
+`old(name, checked)` restores the choice after a redirect. The hidden input and the checkbox share the same `name` on purpose, so the HTML form always sends `0` or `1`. If you need a different value through the `value` prop, adjust the server-side conversion too.
 
 ## 🔎 Combobox {#combobox}
 
-`x-ui.combobox` membutuhkan `id` dan `label`; `name`, `placeholder`, `options` opsional. `options` berupa string atau `['value' => '...', 'label' => '...']`. Input teks untuk pencarian pilihan; **nilai form berada pada hidden input**, yang diisi setelah opsi dipilih. Saat pertama tampil komponen belum mengisi pilihan dari `old()`/nilai edit; tambahkan dukungan itu jika dipakai pada halaman edit.
+`x-ui.combobox` needs an `id` and a `label`; `name`, `placeholder` and `options` are optional. `options` are strings or `['value' => '...', 'label' => '...']`. The text input is for searching options; **the form value is in a hidden input**, filled once an option is chosen. On first render the component doesn't restore a choice from `old()` or an edit value; add that support if you use it on an edit page.
 
 ```blade
-<x-ui.combobox id="category-search" label="Kategori" name="category_id"
-    :options="[['value' => '1', 'label' => 'Panduan'], ['value' => '2', 'label' => 'Laporan']]" />
+<x-ui.combobox id="category-search" label="{{ __('Category') }}" name="category_id"
+    :options="[['value' => '1', 'label' => __('Guides')], ['value' => '2', 'label' => __('Reports')]]" />
 ```
 
-Daftar opsi difilter di browser saat mengetik. Pengguna dapat memilih memakai klik atau panah dan Enter; setelah dipilih, label tampil pada input teks dan `value` dipindahkan ke input tersembunyi. Mengubah teks setelah pemilihan akan mengosongkan nilai tersembunyi. Untuk halaman edit, komponen saat ini belum menyediakan `value` terpilih awal atau pemulihan `old()`; perlu diperluas sebelum dipakai untuk edit data nyata. Opsi yang ditampilkan sudah dirender saat server mengirim HTML; pencarian ini tidak meminta data jarak jauh.
+The option list is filtered in the browser as you type. Users can choose with a click or with the arrow keys and Enter; once chosen, the label shows in the text input and the `value` moves to the hidden input. Changing the text after choosing clears the hidden value. For edit pages, the component doesn't yet provide an initial selected `value` or `old()` restore; extend it before using it to edit real data. The options are rendered when the server sends the HTML; this search doesn't fetch remote data.
 
-## 📅 Rentang tanggal {#rentang-tanggal}
+## 📅 Date range {#date-range}
 
-`x-ui.date-range` memakai Flatpickr untuk dua tanggal dan tombol preset 7/30 hari. Gunakan `from-name="from"` dan `to-name="to"` agar nilai ISO `Y-m-d` terkirim ke Laravel; tanpa nama input hanya untuk demo. Validasi urutan di server tetap diperlukan. Lihat [referensi date range](/komponen/date-range).
+`x-ui.date-range` uses Flatpickr for the two dates plus 7/30-day preset buttons. Use `from-name="from"` and `to-name="to"` so ISO `Y-m-d` values are sent to Laravel; without input names it's demo-only. You still need to validate the order on the server. The calendar shows month and day names in the active language. See the [date range reference](/components/date-range).
 
 ```blade
-<x-ui.date-range id="periode-laporan" label="Periode laporan" />
+<x-ui.date-range id="report-period" label="{{ __('Report period') }}" />
 ```
 
-## 📎 Pratinjau berkas {#pratinjau-berkas}
+## 📎 File preview {#file-preview}
 
-`x-ui.file-preview` membutuhkan `id`; prop `label`, `accept`, `maxMb` (default 5). Elemen menyediakan area pilih/seret, nama dan ukuran berkas, thumbnail gambar atau ikon PDF, tombol hapus, dan pesan error. Pratinjau gambar/PDF dan pemeriksaan jenis/ukuran dilakukan oleh JS. Input bawaan **belum memiliki `name`**; tambah `name="attachment"` pada input di komponen sebelum menggunakan unggahan form, lalu tambahkan `enctype="multipart/form-data"`, validasi Laravel, dan penyimpanan server. JS saat ini menerima PNG/JPG/PDF meskipun prop `accept` diubah; selaraskan aturan klien dan server ketika menambah jenis berkas. `maxMb` merupakan validasi klien, bukan pembatas ukuran upload PHP atau Laravel.
+`x-ui.file-preview` needs an `id`; its props are `label`, `accept` and `maxMb` (default 5). It provides a choose/drag area, the file name and size, an image thumbnail or PDF icon, a remove button and an error message. The image/PDF preview and the type/size checks are done in JS. The built-in input **has no `name` yet**; add `name="attachment"` to the input in the component before using it in a form upload, then add `enctype="multipart/form-data"`, Laravel validation and server storage. The JS currently accepts PNG/JPG/PDF even if you change the `accept` prop; keep client and server rules aligned when you add file types. `maxMb` is client-side validation, not a PHP or Laravel upload size limit.
 
 ```blade
-<x-ui.file-preview id="berkas-demo" label="Pilih berkas" :max-mb="5" />
+<x-ui.file-preview id="demo-file" label="{{ __('Choose a file') }}" :max-mb="5" />
 ```
 
-Contoh interaktif ada di `/components/filters`; panduan backend di [form & unggah](/integrasi/form).
+An interactive example is at `/components/filters`; the backend guide is in [forms & uploads](/integration/forms).

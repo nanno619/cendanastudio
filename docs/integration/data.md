@@ -1,8 +1,8 @@
-# 📊 Tabel & grafik dari server
+# 📊 Server-side tables & charts
 
-## 📄 Pilih jenis paginasi
+## 📄 Choose a pagination approach
 
-`data-table` menyaring, mengurutkan, dan memaginasi **baris HTML yang sudah ada di halaman**. Jika controller hanya merender 15 dari ribuan entri, pencarian browser tidak akan menemukan entri di halaman server lainnya. Untuk dataset besar gunakan query, paginasi, serta parameter URL dari Laravel dan lepaskan atribut `data-table` agar dua mekanisme tidak saling bertabrakan.
+`data-table` filters, sorts and paginates **the HTML rows already on the page**. If the controller only renders 15 of thousands of entries, browser search won't find entries on other server pages. For large datasets, use Laravel queries, pagination and URL parameters, and remove the `data-table` attribute so the two mechanisms don't clash.
 
 ```php
 public function index(Request $request): View
@@ -20,24 +20,24 @@ public function index(Request $request): View
 
 ```blade
 <form method="GET" action="{{ route('examples.records.index') }}" class="flex gap-2">
-    <input class="input" type="search" name="q" value="{{ request('q') }}" aria-label="Cari entri" />
-    <select class="select" name="status" aria-label="Filter status">
-        <option value="">Semua status</option>
-        <option value="aktif" @selected(request('status') === 'aktif')>Aktif</option>
-        <option value="draf" @selected(request('status') === 'draf')>Draf</option>
+    <input class="input" type="search" name="q" value="{{ request('q') }}" aria-label="{{ __('Search entries') }}" />
+    <select class="select" name="status" aria-label="{{ __('Filter by status') }}">
+        <option value="">{{ __('All statuses') }}</option>
+        <option value="active" @selected(request('status') === 'active')>{{ __('Active') }}</option>
+        <option value="draft" @selected(request('status') === 'draft')>{{ __('Draft') }}</option>
     </select>
-    <x-ui.button type="submit">Terapkan</x-ui.button>
+    <x-ui.button type="submit">{{ __('Apply') }}</x-ui.button>
 </form>
 
-{{-- Render tabel HTML memakai $records; jangan beri data-table pada wrapper. --}}
+{{-- Render the HTML table from $records; don't put data-table on the wrapper. --}}
 {{ $records->links() }}
 ```
 
-Jika memakai `x-ui.table-state` sebagai fallback, bedakan tabel yang belum berisi data (`empty`) dengan tabel yang kosong karena pencarian (`filtered`). Untuk sorting dari server, terima hanya nama kolom yang diizinkan (allowlist) sebelum meneruskannya ke `orderBy`; jangan gunakan nama kolom bebas dari input request. `x-ui.pagination` yang tersedia belum terhubung benar ke `$elements` paginator; gunakan `$records->links()` sampai komponen itu disempurnakan.
+If you use `x-ui.table-state` as a fallback, distinguish a table with no data yet (`empty`) from one that's empty because of a search (`filtered`). For server-side sorting, only accept column names from an allowlist before passing them to `orderBy`; never use free-form column names from request input. The existing `x-ui.pagination` isn't fully wired to the paginator's `$elements` yet; use `$records->links()` until that component is finished.
 
-## 📈 Siapkan grafik dari data nyata
+## 📈 Build charts from real data
 
-Prop `x-ui.chart` menerima array PHP. Misalnya hitung jumlah entri per status di controller:
+`x-ui.chart` props accept PHP arrays. For example, count entries per status in the controller:
 
 ```php
 $counts = Record::query()
@@ -45,10 +45,13 @@ $counts = Record::query()
     ->groupBy('status')
     ->pluck('total', 'status');
 
-$chartItems = collect(['draf', 'ditinjau', 'aktif', 'arsip'])
-    ->map(fn ($status, $index) => [
-        'label' => ucfirst($status),
-        'value' => (int) ($counts[$status] ?? 0),
+$labels = ['draft' => __('Draft'), 'in-review' => __('In review'), 'active' => __('Active'), 'archived' => __('Archived')];
+
+$chartItems = collect($labels)
+    ->values()
+    ->map(fn ($label, $index) => [
+        'label' => $label,
+        'value' => (int) ($counts[array_keys($labels)[$index]] ?? 0),
         'color' => $index + 1,
     ])
     ->all();
@@ -58,11 +61,11 @@ return view('admin.analytics', compact('chartItems'));
 
 ```blade
 @if (collect($chartItems)->sum('value') > 0)
-    <x-ui.chart type="donut" aria="Komposisi status entri"
-        :items="$chartItems" total-label="Entri" />
+    <x-ui.chart type="donut" aria="{{ __('Entry status breakdown') }}"
+        :items="$chartItems" total-label="{{ __('Entries') }}" />
 @else
-    <x-ui.table-state state="empty" title="Belum ada entri" />
+    <x-ui.table-state state="empty" title="{{ __('No entries yet') }}" />
 @endif
 ```
 
-Contoh mengasumsikan model/tabel `Record` dari [panduan CRUD](/integrasi/crud). Untuk grafik tren, bentuk `labels` dan `series` dengan urutan periode yang sama; siapkan seri lengkap termasuk periode bernilai nol. Data pada `admin/dashboard.blade.php` saat ini masih angka statis, jadi ganti juga nilai kartu statistik dan grafik di sana setelah membuat query aplikasi Anda.
+The example assumes the `Record` model/table from the [CRUD guide](/integration/crud). For trend charts, build `labels` and `series` in the same period order, and fill in every period including those with zero. The data in `admin/dashboard.blade.php` is still static, so replace the stat card and chart values there once your app's queries exist.

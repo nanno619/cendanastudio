@@ -1,38 +1,38 @@
 # 📭 Empty
 
-`<x-ui.empty>` adalah placeholder untuk bagian/halaman yang benar-benar belum memiliki konten, di luar tabel. Sumber: `resources/views/components/ui/empty.blade.php`.
+`<x-ui.empty>` is a placeholder for sections or pages that genuinely have no content yet, outside of tables. Source: `resources/views/components/ui/empty.blade.php`.
 
 ## 🧩 API
 
-| Prop | Default | Fungsi |
+| Prop | Default | Purpose |
 | --- | --- | --- |
-| `icon` | `file-text` | Ikon pada bidang lingkaran |
-| `title` | `Belum ada data` | Judul kosong |
-| `description` | `null` | Penjelasan tindakan berikutnya |
-| Slot utama | kosong | Aksi opsional |
+| `icon` | `file-text` | Icon in the circle |
+| `title` | “No data yet” (translated) | Empty-state heading |
+| `description` | `null` | Explanation of the next step |
+| Main slot | empty | Optional actions |
 
-Tidak ada `variant`/`state`; ikon dan teks ditampilkan sebagai status umum. Komponen merender slot hanya jika tidak kosong. Atribut `class` tambahan tidak diproses pada root; jika butuh jarak khusus, bungkus komponen dalam elemen lain.
+There's no `variant`/`state`; the icon and text show a general status. The slot only renders when it isn't empty. Extra `class` attributes aren't applied to the root; if you need custom spacing, wrap the component in another element.
 
-## 📦 Belum ada produk
+## 📦 No products yet
 
 ```blade
-<x-ui.empty icon="package" title="Belum ada produk"
-    description="Tambahkan produk pertama agar muncul di katalog.">
-    <a href="{{ route('products.create') }}" class="btn btn-primary">Tambah produk</a>
+<x-ui.empty icon="package" title="{{ __('No products yet') }}"
+    description="{{ __('Add your first product to see it in the catalogue.') }}">
+    <a href="{{ route('products.create') }}" class="btn btn-primary">{{ __('Add product') }}</a>
 </x-ui.empty>
 ```
 
-Route `products.create` adalah ilustrasi route milik aplikasi Anda.
+The `products.create` route illustrates a route in your own app.
 
-## 🗂️ Tanpa aksi dan keadaan kondisional
+## 🗂️ No action, and conditional states
 
 ```blade
 @forelse ($messages as $message)
     <p>{{ $message->subject }}</p>
 @empty
-    <x-ui.empty icon="mail" title="Kotak masuk kosong"
-        description="Pesan baru akan muncul di halaman ini." />
+    <x-ui.empty icon="mail" title="{{ __('Your inbox is empty') }}"
+        description="{{ __('New messages will appear on this page.') }}" />
 @endforelse
 ```
 
-Untuk proses sedang memuat, kegagalan request, atau hasil pencarian kosong, pilih [table state](/komponen/table-state) yang memang menyediakan state `loading`, `error`, dan `filtered`.
+For loading, failed requests or empty search results, choose the [table state](/components/table-state), which provides the `loading`, `error` and `filtered` states.

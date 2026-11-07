@@ -1,47 +1,47 @@
-# 📊 Grafik & statistik
+# 📊 Charts & stats
 
-`x-ui.chart` menghasilkan elemen `data-chart` yang digambar sebagai SVG oleh `resources/js/admin/charts.js` tanpa dependensi chart eksternal. Nilai mengikuti token warna `--chart-1` hingga `--chart-5` dalam `resources/css/app.css`.
+`x-ui.chart` renders a `data-chart` element that `resources/js/admin/charts.js` draws as SVG, with no external chart dependency. Colours follow the `--chart-1` to `--chart-5` tokens in `resources/css/app.css`.
 
-## 🧱 Grafik dari komponen {#grafik-dari-komponen}
+## 🧱 Charts from the component {#charts-from-the-component}
 
-Tipe yang didukung JavaScript: `line`, `bar`, `area`, `stacked`, `donut`, `radial`, `spark`, `hbar`. Komponen mendukung `type`, `labels`, `series`, `items`, `values`, `height` (default 240), `aria`, `summary`, `legend`, `smooth`, `prefix`, `suffix`, `size`, `totalLabel`. Bentuk data tergantung tipe; contoh resmi ada di `resources/views/showcase/charts.blade.php` dan dashboard.
+Types supported by the JavaScript: `line`, `bar`, `area`, `stacked`, `donut`, `radial`, `spark`, `hbar`. The component supports `type`, `labels`, `series`, `items`, `values`, `height` (default 240), `aria`, `summary`, `legend`, `smooth`, `prefix`, `suffix`, `size` and `totalLabel`. The data shape depends on the type; the canonical examples are in `resources/views/showcase/charts.blade.php` and the dashboard.
 
 ```blade
 <x-ui.chart
     type="bar"
-    aria="Jumlah pesanan setiap bulan"
-    :labels="['Jul', 'Agu', 'Sep']"
-    :series="[['name' => 'Pesanan', 'data' => [24, 32, 40], 'color' => 1]]"
+    aria="{{ __('Orders per month') }}"
+    :labels="array_map('__', ['Jul', 'Aug', 'Sep'])"
+    :series="[['name' => __('Orders'), 'data' => [24, 32, 40], 'color' => 1]]"
     :legend="true"
-    summary="Jumlah pesanan meningkat selama tiga bulan." />
+    summary="{{ __('Orders grew over three months.') }}" />
 ```
 
-Untuk donat gunakan `items` dengan label dan nilai:
+For a donut, use `items` with labels and values:
 
 ```blade
-<x-ui.chart type="donut" aria="Komposisi kanal pesanan"
+<x-ui.chart type="donut" aria="{{ __('Orders by channel') }}"
     :items="[
-        ['label' => 'Situs', 'value' => 60, 'color' => 1],
-        ['label' => 'Toko', 'value' => 40, 'color' => 2],
-    ]" total-label="Pesanan" />
+        ['label' => __('Website'), 'value' => 60, 'color' => 1],
+        ['label' => __('Physical store'), 'value' => 40, 'color' => 2],
+    ]" total-label="{{ __('Orders') }}" />
 ```
 
-`labels` menunjukkan sumbu horizontal untuk grafik kartesius; tiap item di `series` memiliki `name`, `data` (urutan sama dengan labels) dan `color` opsional. `summary` menjadi `<figcaption>` sehingga grafik memiliki penjelasan tekstual. Data angka bukan hasil query otomatis; siapkan arraynya di controller seperti [contoh grafik dari server](/integrasi/data).
+`labels` is the horizontal axis for cartesian charts; each `series` item has a `name`, `data` (in the same order as the labels) and an optional `color`. `summary` becomes a `<figcaption>`, so the chart has a text description. The numbers aren't queried automatically; prepare the arrays in a controller as in the [server-side chart example](/integration/data). Wrap labels and series names in `__()` so they follow the interface language; month and day abbreviations (`Jan`, `Mon`…) already have Malay translations.
 
-### 📈 Line, area, bar, dan stacked
+### 📈 Line, area, bar and stacked
 
-Keempat tipe memakai pasangan `labels` dan `series`. `labels` adalah urutan kategori/waktu; masing-masing `series` harus memiliki `name` dan array `data` dengan panjang dan urutan yang sama. `bar` membandingkan nilai antar label; `stacked` menjumlahkan kontribusi seluruh seri pada label yang sama; `area` mengisi bidang di bawah kurva; `line` mempertahankan garis saja. `smooth` memengaruhi garis/area, `legend` menampilkan daftar seri, sementara `prefix` dan `suffix` mengatur format angka pada grafik.
+All four types use `labels` with `series`. `labels` is the order of categories/periods; each `series` must have a `name` and a `data` array of the same length and order. `bar` compares values across labels; `stacked` sums every series' contribution for the same label; `area` fills the space under the curve; `line` keeps only the line. `smooth` affects lines/areas, `legend` shows the series list, and `prefix` and `suffix` format the numbers on the chart. Numbers use Malaysian formatting (`1,234.5`).
 
-### 🍩 Donut dan tipe lanjutan
+### 🍩 Donut and advanced types
 
-`donut` memakai `items` berisi `label`, `value`, dan opsional `color`. `totalLabel` memberi keterangan pada angka total. Mesin JS juga mendukung `radial`, `hbar`, serta `spark`; contoh `spark` paling mudah dilihat pada `x-ui.stat-card` di dashboard. Sebelum menggunakan tipe lanjutan, lihat struktur atribut tipe terkait di `resources/js/admin/charts.js`: komponen Blade tidak menyediakan prop khusus `value`, `label`, `kind`, atau `color` pada root untuk seluruh variasi mentah; beberapa variasi membutuhkan markup `data-chart` langsung seperti di halaman admin.
+`donut` uses `items` with a `label`, a `value` and an optional `color`. `totalLabel` captions the total. The JS engine also supports `radial`, `hbar` and `spark`; `spark` is easiest to see in the dashboard's `x-ui.stat-card`. Before using an advanced type, check its attribute structure in `resources/js/admin/charts.js`: the Blade component doesn't expose root-level `value`, `label`, `kind` or `color` props for every raw variation, and some need `data-chart` markup directly, as on the admin pages.
 
-### 🧩 Aksesibilitas dan input data
+### 🧩 Accessibility and data input
 
-Prop `aria` menjadi label pada SVG yang dihasilkan, sedangkan `summary` menjadi `<figcaption>` yang dapat dibaca tanpa menafsirkan grafik. Sertakan ringkasan yang menyatakan pola atau nilai penting, bukan hanya mengulang judul. Jangan menaruh data dari request secara mentah ke atribut JSON; siapkan dan validasi nilai di controller. Bila semua nilai kosong/nol, tampilkan state kosong alih-alih memaksakan visualisasi.
+The `aria` prop becomes the generated SVG's label, and `summary` becomes a `<figcaption>` readers can follow without interpreting the chart. Write a summary that states the pattern or key values, not just the title again. Don't put raw request data into JSON attributes; prepare and validate the values in the controller. When every value is empty or zero, show an empty state instead of forcing a chart.
 
-## 🔄 Data kosong dan render ulang
+## 🔄 Empty data and redrawing
 
-Untuk rentang tanpa nilai, tampilkan `<x-ui.table-state state="empty">` alih-alih grafik kosong. Grafis diinisialisasi saat halaman dimuat (`window.Charts.init(document)` melalui `App.initPage`). Jika data sudah berubah pada elemen grafik yang sama, perbarui `dataset` lalu panggil `window.Charts.draw(element)`. `Charts.init` melewati elemen yang sudah pernah diinisialisasi; jangan memanggilnya untuk berharap data lama tergambar ulang.
+For a range with no values, show `<x-ui.table-state state="empty">` instead of an empty chart. Charts initialise on page load (`window.Charts.init(document)` through `App.initPage`). If the data on the same chart element changes, update its `dataset` and call `window.Charts.draw(element)`. `Charts.init` skips elements it has already initialised; don't call it expecting old data to redraw.
 
-`x-ui.stat-card` memakai mesin grafik yang sama untuk sparkline. Detail prop dan contohnya ada di [tata letak & tampilan](/komponen/tampilan).
+`x-ui.stat-card` uses the same chart engine for its sparkline. Prop details and examples are in [layout & display](/components/layout).

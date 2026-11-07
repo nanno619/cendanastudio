@@ -1,37 +1,37 @@
 # 📎 File preview
 
-`<x-ui.file-preview>` menampilkan area pilih/seret berkas, thumbnail gambar, metadata file, tombol hapus dan pesan error lokal. Sumber: `resources/views/components/ui/file-preview.blade.php`; logika: `resources/js/admin/advanced-inputs.js`.
+`<x-ui.file-preview>` shows a choose/drag area, an image thumbnail, file metadata, a remove button and a local error message. Source: `resources/views/components/ui/file-preview.blade.php`; logic: `resources/js/admin/advanced-inputs.js`.
 
-## 🧩 Prop
+## 🧩 Props
 
-| Prop | Default | Fungsi |
+| Prop | Default | Purpose |
 | --- | --- | --- |
-| `id` | wajib | ID input file/label |
-| `label` | `Pilih berkas` | Teks utama dropzone |
-| `accept` | `image/png,image/jpeg,application/pdf` | Petunjuk filter dialog file browser |
-| `maxMb` | `5` | Batas ukuran lokal dalam MB |
+| `id` | required | File input/label ID |
+| `label` | “Choose a file” (translated) | Main dropzone text |
+| `accept` | `image/png,image/jpeg,application/pdf` | Hint for the browser's file dialog filter |
+| `maxMb` | `5` | Local size limit in MB |
 
-Atribut `class` dan lainnya diterapkan pada pembungkus, **bukan input file**. Input bawaan belum memiliki `name`, sehingga berkas tidak terkirim ke Laravel tanpa mengubah komponen.
+`class` and other attributes apply to the wrapper, **not the file input**. The built-in input has no `name` yet, so files aren't sent to Laravel unless you change the component.
 
-## 🖼️ Varian ukuran dan pratinjau
+## 🖼️ Size variants and preview
 
 ```blade
-<x-ui.file-preview id="lampiran-demo" label="Pilih gambar atau PDF" />
-<x-ui.file-preview id="lampiran-besar" label="Pilih lampiran" :max-mb="10" class="mt-6" />
+<x-ui.file-preview id="demo-attachment" label="{{ __('Choose an image or PDF') }}" />
+<x-ui.file-preview id="large-attachment" label="{{ __('Choose an attachment') }}" :max-mb="10" class="mt-6" />
 ```
 
-JS sekarang menerima hanya MIME PNG, JPG, dan PDF, terlepas dari prop `accept`. Bila mengubah `accept` atau batas ukuran, selaraskan validasi di `advanced-inputs.js` dan Laravel. Gambar dipratinjau melalui object URL lokal; PDF ditampilkan sebagai ikon dan nama, bukan isi PDF. Tombol hapus mengosongkan input dan mencabut object URL.
+The JS currently only accepts PNG, JPG and PDF MIME types, regardless of the `accept` prop. If you change `accept` or the size limit, align the validation in `advanced-inputs.js` and in Laravel. Images are previewed through a local object URL; PDFs show as an icon and name, not their content. The remove button clears the input and revokes the object URL. Error and size messages are translated through the [JavaScript strings](/guide/theming#language).
 
-## 📤 Mengaktifkan upload Laravel
+## 📤 Enabling Laravel uploads
 
-Tambahkan `name` pada input di `file-preview.blade.php`; jika hendak konfigurabel, tambahkan prop `'name' => null` dan keluarkan atribut `name` dari prop tersebut pada `<input type="file">`. Sesudah komponen diubah:
+Add a `name` to the input in `file-preview.blade.php`; to make it configurable, add a `'name' => null` prop and output it as the `name` attribute on `<input type="file">`. After changing the component:
 
 ```blade
 <form method="POST" action="{{ route('attachments.store') }}" enctype="multipart/form-data">
     @csrf
-    <x-ui.file-preview id="lampiran" name="attachment" label="Lampiran entri" />
-    <x-ui.button type="submit">Unggah</x-ui.button>
+    <x-ui.file-preview id="attachment" name="attachment" label="{{ __('Entry attachment') }}" />
+    <x-ui.button type="submit">{{ __('Upload') }}</x-ui.button>
 </form>
 ```
 
-Route `attachments.store` merupakan contoh route yang Anda buat. Di controller lakukan `$request->validate(['attachment' => ['required', 'file', 'mimes:png,jpg,jpeg,pdf', 'max:5120']])`, lalu simpan pada disk aplikasi. `accept` dan `maxMb` di browser **bukan** validasi keamanan server. Rincian lengkap di [panduan unggah](/integrasi/form#unggah-berkas).
+The `attachments.store` route is an example route you'd create. In the controller, call `$request->validate(['attachment' => ['required', 'file', 'mimes:png,jpg,jpeg,pdf', 'max:5120']])`, then store the file on your app's disk. `accept` and `maxMb` in the browser are **not** server security validation. Full details are in the [upload guide](/integration/forms#file-uploads).

@@ -1,90 +1,90 @@
-# 📋 Tabel & status data
+# 📋 Tables & data states
 
-## 🧱 Tabel HTML
+## 🧱 HTML tables
 
-Belum ada komponen `<x-ui.table>`. Gunakan elemen `<table class="table">` di dalam pembungkus `overflow-x-auto`, seperti pada `resources/views/showcase/tables.blade.php`. Varian CSS: `table-striped`, `table-compact`, `table-bordered`.
+There's no `<x-ui.table>` component yet. Use a `<table class="table">` inside an `overflow-x-auto` wrapper, as in `resources/views/showcase/tables.blade.php`. CSS variants: `table-striped`, `table-compact`, `table-bordered`.
 
 ```blade
 <div class="card overflow-x-auto">
     <table class="table min-w-[600px]">
-        <thead><tr><th>Nama</th><th>Status</th></tr></thead>
+        <thead><tr><th>{{ __('Name') }}</th><th>{{ __('Status') }}</th></tr></thead>
         <tbody>
             @foreach ($records as $record)
-                <tr><td>{{ $record->title }}</td><td>{{ $record->status }}</td></tr>
+                <tr><td>{{ $record->title }}</td><td>{{ __($record->status) }}</td></tr>
             @endforeach
         </tbody>
     </table>
 </div>
 ```
 
-## 🔎 Tabel interaktif bawaan
+## 🔎 Built-in interactive tables
 
-`data-table` pada pembungkus mengaktifkan interaksi di `resources/js/admin/interactions.js`: pencarian `data-table-search`, filter select `data-table-filter` berdasarkan `data-status` tiap `<tr>`, sort lewat `<th data-sort>` (`data-sort="num"` untuk angka), paginasi di `data-table-pager`, keterangan `data-table-info`, dan tampilan kosong `data-table-empty`. `data-page-size` mengatur jumlah baris per halaman (default JS: 8). Checkbox `data-check-all` dan `data-check-row` menampilkan `data-bulk`/`data-bulk-count`. Lihat implementasi lengkap di `/components/tables` atau `/examples/records`.
+`data-table` on the wrapper turns on the interactions in `resources/js/admin/interactions.js`: search with `data-table-search`, a `data-table-filter` select that matches each `<tr>`'s `data-status`, sorting with `<th data-sort>` (`data-sort="num"` for numbers), pagination in `data-table-pager`, a summary in `data-table-info`, and an empty view in `data-table-empty`. `data-page-size` sets the rows per page (JS default: 8). The `data-check-all` and `data-check-row` checkboxes drive `data-bulk`/`data-bulk-count`. See the full implementation at `/components/tables` or `/examples/records`.
 
 ```blade
 <div class="card" data-table data-page-size="6">
-    <input type="search" data-table-search aria-label="Cari entri" class="input" />
-    <select data-table-filter class="select" aria-label="Filter status">
-        <option value="">Semua</option><option value="aktif">Aktif</option>
+    <input type="search" data-table-search aria-label="{{ __('Search entries') }}" class="input" />
+    <select data-table-filter class="select" aria-label="{{ __('Filter by status') }}">
+        <option value="">{{ __('All') }}</option><option value="active">{{ __('Active') }}</option>
     </select>
     <div class="overflow-x-auto">
-        <table class="table"><thead><tr><th data-sort>Judul</th><th>Status</th></tr></thead>
+        <table class="table"><thead><tr><th data-sort>{{ __('Title') }}</th><th>{{ __('Status') }}</th></tr></thead>
             <tbody>
                 @foreach ($records as $record)
-                    <tr data-status="{{ $record->status }}"><td>{{ $record->title }}</td><td>{{ $record->status }}</td></tr>
+                    <tr data-status="{{ $record->status }}"><td>{{ $record->title }}</td><td>{{ __($record->status) }}</td></tr>
                 @endforeach
             </tbody>
         </table>
     </div>
-    <div data-table-empty hidden>Tidak ada hasil.</div>
+    <div data-table-empty hidden>{{ __('No results') }}</div>
     <p data-table-info></p><div data-table-pager></div>
 </div>
 ```
 
-Tabel demo hanya memproses **baris yang sudah dirender di browser**. Jangan mencampur `data-table` ini dengan paginasi server dan berharap pencarian meliputi seluruh database; ikuti [tabel dari server](/integrasi/data) untuk data besar.
+The demo table only processes **rows already rendered in the browser**. Don't mix this `data-table` with server pagination and expect search to cover the whole database; follow [server-side tables](/integration/data) for large data.
 
-### ↕️ Pencarian, filter, dan urutan
+### ↕️ Search, filter and sort
 
-Pencarian membandingkan teks semua sel kecuali sel terakhir (biasanya kolom aksi) dan tidak mengirim request. Filter membaca `data-status` pada `<tr>` dan mencocokkannya secara persis dengan nilai `<select>`; pastikan status dalam opsi dan baris menggunakan slug yang sama, contohnya `aktif`. Untuk angka, beri `data-sort="num"` pada `<th>` dan bila isi sel berupa format tampilan (misalnya `RM 1,000.00`), pasang `data-value="1000"` pada `<td>` agar hasil urutan berdasarkan angka mentah. Teks sel lain diurutkan memakai locale `id`.
+Search compares the text of every cell except the last one (usually the actions column) and sends no request. The filter reads `data-status` on each `<tr>` and matches it exactly against the `<select>` value; make sure the options and the rows use the same slug, e.g. `active`. For numbers, put `data-sort="num"` on the `<th>`, and if the cell shows formatted text (such as `RM 1,000.00`), add `data-value="1000"` to the `<td>` so sorting uses the raw number. Other cell text is sorted using the page's active language (`<html lang>`). The info line and pager labels come from the [JavaScript translations](/guide/theming#language).
 
-### ☑️ Seleksi baris dan paginasi
+### ☑️ Row selection and pagination
 
-`data-check-all` memilih checkbox `data-check-row` pada baris yang terlihat; jumlah terpilih mengendalikan `data-bulk-count` dan `data-bulk`. Filter dan pergantian halaman menghapus seleksi. Tombol aksi bulk dalam showcase hanyalah contoh UI: untuk menghapus/mengekspor data nyata, tambahkan `value` ID pada checkbox, kumpulkan ID, lalu buat request ke route yang sesuai. Kontrol `data-table-pager` dibuat otomatis sebagai tombol browser, bukan tautan route Laravel.
+`data-check-all` selects the `data-check-row` checkboxes on visible rows; the selected count drives `data-bulk-count` and `data-bulk`. Filtering or changing page clears the selection. The bulk action buttons in the showcase are UI examples only: to delete or export real data, put the ID in each checkbox's `value`, collect the IDs, then send a request to the right route. The `data-table-pager` controls are generated as browser buttons, not Laravel route links.
 
-## 🧭 Keadaan kosong, memuat, error {#keadaan-kosong-memuat-error}
+## 🧭 Empty, loading and error states {#empty-loading-and-error-states}
 
-`x-ui.table-state` menerima `state` (`empty`, `loading`, `filtered`, `error`), `title`, `description`, serta slot untuk tombol pemulihan. `loading` selalu menampilkan skeleton; state lain menampilkan teks bawaan yang dapat diganti.
+`x-ui.table-state` takes `state` (`empty`, `loading`, `filtered`, `error`), `title`, `description` and a slot for recovery buttons. `loading` always shows a skeleton; the other states show built-in text that you can override.
 
-| `state` | Arti | Kapan ditampilkan |
+| `state` | Meaning | When to show it |
 | --- | --- | --- |
-| `loading` | Empat baris skeleton dengan `role="status"` | Saat permintaan data sedang berlangsung |
-| `empty` (default) | Belum ada data sama sekali | Sebelum pengguna membuat entri pertama |
-| `filtered` | Tidak ditemukan kecocokan | Setelah pencarian atau filter menghasilkan nol baris |
-| `error` | Data gagal dimuat; `role="alert"` | Saat request gagal, sertakan aksi coba lagi pada slot |
+| `loading` | Four skeleton rows with `role="status"` | While a data request is in progress |
+| `empty` (default) | No data at all yet | Before the user creates their first entry |
+| `filtered` | No matches | After a search or filter returns zero rows |
+| `error` | Data failed to load; `role="alert"` | When a request fails; include a retry action in the slot |
 
-`title` dan `description` mengganti teks default, tetapi pada state `loading` komponen tetap merender skeleton tanpa teks kustom/slot. Tombol pada slot hanya muncul saat slot tidak kosong dan state bukan `loading`.
+`title` and `description` replace the default text, but in the `loading` state the component always renders the skeleton without custom text or slot. Slot buttons only appear when the slot isn't empty and the state isn't `loading`. The default texts are translated.
 
 ```blade
-<x-ui.table-state state="filtered" title="Tidak ada hasil">
-    <a href="{{ route('examples.records.index') }}" class="btn btn-outline">Hapus filter</a>
+<x-ui.table-state state="filtered" title="{{ __('No results') }}">
+    <a href="{{ route('examples.records.index') }}" class="btn btn-outline">{{ __('Clear filters') }}</a>
 </x-ui.table-state>
 ```
 
-`x-ui.empty` adalah tampilan kosong umum dengan prop `icon`, `title`, `description` dan slot aksi. `x-ui.pagination` **belum digunakan di halaman showcase**; implementasinya memakai `$elements` tanpa membangunnya dari paginator, jadi jangan mengandalkannya langsung untuk output `$records->links()` sebelum disesuaikan. Untuk integrasi sekarang, gunakan `$records->links()` milik Laravel atau buat partial pagination sendiri.
+`x-ui.empty` is a generic empty view with `icon`, `title` and `description` props and an action slot. `x-ui.pagination` **isn't used on the showcase pages yet**; its implementation uses `$elements` without building it from the paginator, so don't rely on it directly for `$records->links()` output until it's adapted. For integration today, use Laravel's `$records->links()` or write your own pagination partial.
 
 ### 🗃️ `x-ui.empty` {#x-ui-empty}
 
-Gunakan untuk keadaan tanpa konten di luar konteks tabel, misalnya halaman pesanan pertama kali dibuka. `icon` default `file-text`; `title` default `Belum ada data`. Slot opsional dapat berisi tautan membuat data atau instruksi berikutnya. Komponen ini tidak membedakan gagal memuat dan filter tanpa hasil: untuk kasus itu pakai `x-ui.table-state`.
+Use it for no-content states outside a table, such as an orders page opened for the first time. `icon` defaults to `file-text`; `title` defaults to “No data yet”. The optional slot can hold a link to create data or a next-step hint. This component doesn't distinguish a failed load from a filter with no results: use `x-ui.table-state` for those.
 
 ```blade
-<x-ui.empty icon="package" title="Belum ada produk"
-    description="Produk yang ditambahkan akan tampil di sini.">
-    <a href="{{ route('products.create') }}" class="btn btn-primary">Tambah produk</a>
+<x-ui.empty icon="package" title="{{ __('No products yet') }}"
+    description="{{ __('Products you add will appear here.') }}">
+    <a href="{{ route('products.create') }}" class="btn btn-primary">{{ __('Add product') }}</a>
 </x-ui.empty>
 ```
 
-Nama route `products.create` di atas adalah contoh route aplikasi yang perlu Anda buat, bukan route bawaan aplikasi ini.
+The `products.create` route above is an example route you'd create in your app, not a built-in one.
 
-### 📄 `x-ui.pagination` (belum siap pakai) {#x-ui-pagination-belum-siap-pakai}
+### 📄 `x-ui.pagination` (not production-ready) {#x-ui-pagination-not-ready}
 
-Berkas komponennya menerima prop `paginator` dan memanggil `hasPages()`, `firstItem()`, `lastItem()`, `total()` dan URL sebelum/sesudah. Namun loop angka halamannya memakai `$elements` yang tidak didefinisikan di komponen tersebut. Saat mengembangkan komponen ini, bangun daftar elemen halaman dari paginator atau gunakan view pagination Laravel yang lengkap. Untuk `cursorPaginate()`, kontrak `total()`/`lastItem()` juga berbeda; contoh docs ini menggunakan `paginate()`.
+The component file takes a `paginator` prop and calls `hasPages()`, `firstItem()`, `lastItem()`, `total()` and the previous/next URLs. However, its page-number loop uses `$elements`, which the component never defines. When you develop this component, build the list of page elements from the paginator or use Laravel's complete pagination view. For `cursorPaginate()`, the `total()`/`lastItem()` contract also differs; these docs use `paginate()`.

@@ -1,49 +1,49 @@
 # ⌨️ Input
 
-`<x-ui.input>` merender `<input>` (atau input di dalam `.input-group` bila ada `icon`/`addon`) dengan dukungan `old()` dan error Laravel. Sumber: `resources/views/components/ui/input.blade.php`.
+`<x-ui.input>` renders an `<input>` (or an input inside `.input-group` when there's an `icon`/`addon`) with `old()` and Laravel error support. Source: `resources/views/components/ui/input.blade.php`.
 
-## 🧩 Prop dan atribut
+## 🧩 Props and attributes
 
-| Prop | Default | Fungsi |
+| Prop | Default | Purpose |
 | --- | --- | --- |
-| `name` | `null` | Nama field dan dasar ID otomatis |
-| `value` | `null` | Nilai awal; ditimpa `old(name)` setelah validasi |
-| `type` | `text` | Tipe input HTML |
-| `invalid` | `null` | Paksa status invalid; jika null gunakan `$errors->has(name)` |
-| `icon` | `null` | Ikon di kiri input |
-| `addon` | `null` | Label teks di kiri input |
+| `name` | `null` | Field name and base of the automatic ID |
+| `value` | `null` | Initial value; replaced by `old(name)` after validation |
+| `type` | `text` | HTML input type |
+| `invalid` | `null` | Force the invalid state; when null, uses `$errors->has(name)` |
+| `icon` | `null` | Icon on the left of the input |
+| `addon` | `null` | Text label on the left of the input |
 
-Atribut `placeholder`, `autocomplete`, `min`, `max`, `step`, `required`, `readonly`, `disabled`, dan kelas CSS diteruskan ke `<input>`. Berikan `id` bila tidak ingin memakai ID `f-{name}` bawaan.
+The `placeholder`, `autocomplete`, `min`, `max`, `step`, `required`, `readonly` and `disabled` attributes and CSS classes pass through to the `<input>`. Set an `id` if you don't want the default `f-{name}` ID.
 
-## 📝 Teks dan email
+## 📝 Text and email
 
 ```blade
-<x-ui.field name="title" label="Judul" :required="true">
-    <x-ui.input name="title" :value="$record?->title" placeholder="Contoh: Panduan tim" required />
+<x-ui.field name="title" label="{{ __('Title') }}" :required="true">
+    <x-ui.input name="title" :value="$record?->title" placeholder="{{ __('e.g. Team guide') }}" required />
 </x-ui.field>
-<x-ui.field name="email" label="Email">
+<x-ui.field name="email" label="{{ __('Email') }}">
     <x-ui.input name="email" type="email" autocomplete="email" icon="mail" />
 </x-ui.field>
 ```
 
-`icon` menunjukkan dekorasi input, bukan label. `<x-ui.field>` atau label HTML terpisah tetap diperlukan agar kontrol memiliki nama yang jelas.
+`icon` decorates the input; it isn't a label. You still need `<x-ui.field>` or a separate HTML label so the control has a clear name.
 
-## 💰 Angka, addon, dan validasi
+## 💰 Numbers, addons and validation
 
 ```blade
-<x-ui.field name="price" label="Harga">
+<x-ui.field name="price" label="{{ __('Price') }}">
     <x-ui.input name="price" type="number" addon="RM" min="0" step="0.01" :value="$product?->price" />
 </x-ui.field>
 <x-ui.input name="sku" value="KP-001" readonly />
 <x-ui.input name="serial" value="ABC-001" disabled />
 ```
 
-`addon` hanyalah label visual; request `price` tetap harus berisi angka dan divalidasi di server. `disabled` tidak dikirim dalam form, sedangkan `readonly` tetap dikirim. Saat `invalid` true atau `$errors` memiliki pesan, komponen menambah `aria-invalid="true"` dan `input-invalid`; pesan teksnya ditampilkan oleh [field](/komponen/field).
+`addon` is only a visual label; the `price` request value must still be a number and validated on the server. `disabled` fields aren't submitted with the form, while `readonly` ones are. When `invalid` is true or `$errors` has a message, the component adds `aria-invalid="true"` and `input-invalid`; the message text is shown by [field](/components/field).
 
-## 📎 File dan batasan
+## 📎 Files and limits
 
 ```blade
 <x-ui.input name="attachment" type="file" accept="image/png,image/jpeg" />
 ```
 
-Untuk `type="file"` komponen sengaja tidak mengisi `value`; browser melarang mengisi path file secara otomatis. Pastikan form memakai `enctype="multipart/form-data"` dan validasi server. Untuk area seret/thumbnail lokal gunakan [file preview](/komponen/file-preview).
+For `type="file"`, the component deliberately never fills `value`; browsers forbid pre-filling a file path. Make sure the form uses `enctype="multipart/form-data"` and validate on the server. For a drag area with a local thumbnail, use [file preview](/components/file-preview).

@@ -1,23 +1,23 @@
-# 🔌 Peta integrasi backend
+# 🔌 Backend integration map
 
-Aplikasi ini adalah tampilan Laravel Blade: saat ini `routes/web.php` memakai `Route::view`, data contoh berasal dari `config/cendana.php`, dan beberapa form hanya menampilkan toast. Anda dapat mempertahankan komponen tampilannya saat menambahkan backend sendiri.
+This app is a Laravel Blade frontend: `routes/web.php` currently uses `Route::view`, sample data comes from `config/cendana.php`, and some forms only show a toast. You can keep the display components while adding your own backend.
 
-| Yang ada sekarang | Saat memakai data nyata |
+| What exists today | When using real data |
 | --- | --- |
-| `Route::view` untuk halaman demo | Route ke controller dan kirim variabel ke view |
-| `config('cendana.demo.records')` | Query model atau sumber data aplikasi |
-| Form dengan `data-demo-form` | Form `POST`/`PUT` + `@csrf` + validasi + redirect |
-| Tabel `data-table` | Paginasi/filter dari database untuk dataset besar |
-| Grafik dengan array statis | Agregasi controller ke prop `labels`/`series` |
-| Link “Masuk” ke dashboard | Route login, guard/session, dan middleware `auth` |
-| Unggah pratinjau lokal | Nama input, validasi file, penyimpanan pada disk |
+| `Route::view` for demo pages | Route to a controller and pass variables to the view |
+| `config('cendana.demo.records')` | A model query or your app's data source |
+| Forms with `data-demo-form` | A `POST`/`PUT` form + `@csrf` + validation + redirect |
+| `data-table` tables | Database pagination/filtering for large datasets |
+| Charts with static arrays | Controller aggregates passed to the `labels`/`series` props |
+| Login via Laravel Fortify | Already wired up: see [authentication](/integration/auth) |
+| Local upload preview | Input names, file validation, storage on a disk |
 
-## 🗺️ Urutan kerja yang disarankan
+## 🗺️ Suggested order of work
 
-1. Baca [struktur & Blade](/panduan/struktur) untuk memahami layout dan prop.
-2. Ikuti [contoh CRUD](/integrasi/crud) untuk route, model, controller, dan daftar entri.
-3. Sambungkan [form & validasi](/integrasi/form).
-4. Untuk data besar dan visualisasi, gunakan [tabel & grafik server](/integrasi/data).
-5. Terakhir pasang [autentikasi & persiapan produksi](/integrasi/auth).
+1. Read [structure & Blade](/guide/structure) to understand layouts and props.
+2. Follow the [CRUD example](/integration/crud) for the route, model, controller and entry list.
+3. Connect [forms & validation](/integration/forms).
+4. For large data and visualisation, use [server-side tables & charts](/integration/data).
+5. Finally, review [authentication & production readiness](/integration/auth).
 
-Contoh di bagian ini adalah **kode contoh untuk ditambahkan**. Nama model, tabel, kolom, dan route yang digunakan tidak tersedia otomatis di aplikasi ini. Cocokkan dengan domain aplikasi Anda.
+The examples in this section are **sample code for you to add**. The model, table, column and route names don't exist in this app automatically. Match them to your own domain.

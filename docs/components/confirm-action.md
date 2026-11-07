@@ -1,37 +1,37 @@
 # 🛡️ Confirm action
 
-`<x-ui.confirm-action>` membungkus [modal](/komponen/modal) dengan form Laravel untuk tindakan yang memerlukan konfirmasi. Sumber: `resources/views/components/ui/confirm-action.blade.php`.
+`<x-ui.confirm-action>` wraps a [modal](/components/modal) around a Laravel form for actions that need confirmation. Source: `resources/views/components/ui/confirm-action.blade.php`.
 
-## 🧩 Prop
+## 🧩 Props
 
-| Prop | Default | Kegunaan |
+| Prop | Default | Purpose |
 | --- | --- | --- |
-| `id`, `title`, `description`, `action` | wajib | Identitas dialog, teks, URL form |
-| `method` | `DELETE` | HTTP method lewat `@method` bila bukan POST |
-| `label` | `Hapus` | Teks tombol kirim |
-| `tone` | `destructive` | `destructive` atau `primary` |
-| Slot utama | — | Penjelasan tambahan dalam dialog |
+| `id`, `title`, `description`, `action` | required | Dialog identity, text and form URL |
+| `method` | `DELETE` | HTTP method via `@method` when not POST |
+| `label` | “Delete” (translated) | Submit button text |
+| `tone` | `destructive` | `destructive` or `primary` |
+| Main slot | — | Extra explanation inside the dialog |
 
-Form selalu memakai method HTML POST dan `@csrf`; untuk DELETE/PUT/PATCH Blade menambahkan spoofing `@method`. Pastikan route sesuai method dan lakukan otorisasi di controller.
+The form always uses the HTML POST method and `@csrf`; for DELETE/PUT/PATCH, Blade adds `@method` spoofing. Make sure the route matches the method and authorize in the controller.
 
-## 🗑️ Konfirmasi hapus
+## 🗑️ Delete confirmation
 
 ```blade
-<x-ui.button variant="destructive" data-modal-open="#delete-record">Hapus</x-ui.button>
-<x-ui.confirm-action id="delete-record" title="Hapus entri?"
-    description="Tindakan ini tidak dapat dibatalkan."
+<x-ui.button variant="destructive" data-modal-open="#delete-record">{{ __('Delete') }}</x-ui.button>
+<x-ui.confirm-action id="delete-record" title="{{ __('Delete entry?') }}"
+    description="{{ __('This cannot be undone.') }}"
     :action="route('examples.records.destroy', $record)">
-    <p>Entri {{ $record->title }} akan dihapus permanen.</p>
+    <p>{{ __(':title will be permanently deleted.', ['title' => $record->title]) }}</p>
 </x-ui.confirm-action>
 ```
 
-## ✅ Konfirmasi tindakan non-destruktif
+## ✅ Confirming a non-destructive action
 
 ```blade
-<x-ui.button data-modal-open="#publish-record">Terbitkan</x-ui.button>
-<x-ui.confirm-action id="publish-record" title="Terbitkan entri?"
-    description="Entri akan terlihat oleh tim." :action="route('records.publish', $record)"
-    method="POST" label="Ya, terbitkan" tone="primary" />
+<x-ui.button data-modal-open="#publish-record">{{ __('Publish') }}</x-ui.button>
+<x-ui.confirm-action id="publish-record" title="{{ __('Publish entry?') }}"
+    description="{{ __('The entry will be visible to the team.') }}" :action="route('records.publish', $record)"
+    method="POST" label="{{ __('Yes, publish') }}" tone="primary" />
 ```
 
-Route `records.publish` ilustratif dan perlu Anda buat. Jangan mengandalkan modal untuk izin atau validasi; lakukan di server. Demo `/components/data-patterns` memakai POST ke route pratinjau yang hanya redirect dan tidak menghapus data.
+The `records.publish` route is illustrative and needs to be created. Don't rely on the modal for permissions or validation; do those on the server. The `/components/data-patterns` demo POSTs to a preview route that only redirects and deletes nothing.

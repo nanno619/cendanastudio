@@ -1,43 +1,43 @@
 # 📅 Date range
 
-`<x-ui.date-range>` menyajikan preset 7/30 hari dan dua input tanggal yang ditingkatkan oleh Flatpickr. Sumber: `resources/views/components/ui/date-range.blade.php`, `resources/js/admin/advanced-inputs.js`, dan `enhanced-controls.js`.
+`<x-ui.date-range>` offers 7/30-day presets and two date inputs enhanced by Flatpickr. Sources: `resources/views/components/ui/date-range.blade.php`, `resources/js/admin/advanced-inputs.js` and `enhanced-controls.js`.
 
 ## 🧩 API
 
-| Prop | Default | Fungsi |
+| Prop | Default | Purpose |
 | --- | --- | --- |
-| `id` | wajib | Dasar ID `{id}-from` dan `{id}-to` |
-| `label` | `Rentang tanggal` | Judul fieldset |
-| `fromName`, `toName` | `null` | Nama request untuk awal/akhir |
-| `from`, `to` | `null` | Nilai awal ISO `Y-m-d`; `old()` diprioritaskan bila nama ada |
-| Atribut root | — | Diteruskan ke `<fieldset data-date-range>` |
+| `id` | required | Base for the `{id}-from` and `{id}-to` IDs |
+| `label` | “Date range” (translated) | Fieldset heading |
+| `fromName`, `toName` | `null` | Request names for the start/end |
+| `from`, `to` | `null` | Initial ISO `Y-m-d` values; `old()` wins when names are set |
+| Root attributes | — | Passed to `<fieldset data-date-range>` |
 
-Jika `fromName`/`toName` tidak diisi, input tidak memiliki `name` dan hanya menjadi demo lokal. Nilai yang dikirim form tetap `Y-m-d` meskipun label kalender ditampilkan dengan nama bulan bahasa Indonesia. Tanpa JS, input teks meminta tanggal ISO; validasi server tetap diperlukan.
+Without `fromName`/`toName`, the inputs have no `name` and are only a local demo. The submitted value is always `Y-m-d`, even though the calendar shows month names in the interface language (English or Malay). Without JS, the text inputs ask for ISO dates; server validation is still needed.
 
-## 📆 Pemakaian demo dan beberapa instance
+## 📆 Demo use and multiple instances
 
 ```blade
-<x-ui.date-range id="periode-penjualan" label="Periode penjualan" from-name="from" to-name="to" />
-<x-ui.date-range id="periode-kunjungan" label="Periode kunjungan" class="mt-6" />
+<x-ui.date-range id="sales-period" label="{{ __('Sales period') }}" from-name="from" to-name="to" />
+<x-ui.date-range id="visits-period" label="{{ __('Visits period') }}" class="mt-6" />
 ```
 
-`id` harus unik agar label “Dari” dan “Sampai” menunjuk input yang tepat. Menekan preset menetapkan hari terakhir sebagai hari ini dan hari pertama termasuk dalam rentang; “Hapus” mengosongkan keduanya.
+The `id` must be unique so the “From” and “To” labels point at the right inputs. A preset sets the last day to today and includes the first day in the range; “Delete” clears both.
 
-## 🔗 Mengirim filter ke backend
+## 🔗 Sending the filter to the backend
 
-Untuk memakai dalam form GET, isi nama field dan nilai awal:
+To use it in a GET form, set the field names and initial values:
 
 ```blade
 <form method="GET" action="{{ route('examples.records.index') }}">
-    <x-ui.date-range id="periode-filter" from-name="from" to-name="to"
+    <x-ui.date-range id="filter-period" from-name="from" to-name="to"
         :from="request('from')" :to="request('to')" />
-    <x-ui.button type="submit">Terapkan</x-ui.button>
+    <x-ui.button type="submit">{{ __('Apply') }}</x-ui.button>
 </form>
 ```
 
-Tombol preset sendiri tidak mengirim request. Jika dua instance berada dalam form yang sama, gunakan **nama input berbeda** untuk tiap rentang. Tombol Hapus membersihkan kedua tanggal tetapi tetap memerlukan submit untuk memperbarui daftar server.
+The preset buttons don't send a request on their own. If two instances are in the same form, give each range **different input names**. The Delete button clears both dates but still needs a submit to refresh the server list.
 
-## ✅ Validasi tanggal
+## ✅ Date validation
 
 ```php
 $filters = $request->validate([
@@ -46,4 +46,4 @@ $filters = $request->validate([
 ]);
 ```
 
-Pesan kesalahan urutan yang muncul pada komponen hanya validasi browser. Query tanggal dapat memakai `whereDate('created_at', '>=', $filters['from'])` dan batas akhir serupa setelah nilai diperiksa.
+The order error shown by the component is browser validation only. Date queries can use `whereDate('created_at', '>=', $filters['from'])` and a similar end bound once the values are checked.

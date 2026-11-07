@@ -1,85 +1,85 @@
-# 💬 Umpan balik & dialog
+# 💬 Feedback & dialogs
 
 ## 📢 Alert {#alert}
 
-`x-ui.alert` menerima `variant` (`info`, `success`, `warning`, `danger`), `title` opsional, `solid` boolean, slot isi dan slot `action` opsional. Untuk pesan error `danger`, komponen memberi `role="alert"`.
+`x-ui.alert` takes `variant` (`info`, `success`, `warning`, `danger`), an optional `title`, a boolean `solid`, the content slot and an optional `action` slot. For `danger` error messages, the component adds `role="alert"`.
 
-`title` menghasilkan teks tebal di atas isi. `action` dapat dipakai untuk menempatkan tombol/tautan di sisi kanan pesan, contohnya tindakan memuat ulang:
+`title` renders bold text above the content. Use `action` to place a button or link on the right of the message, such as a reload action:
 
 ```blade
-<x-ui.alert variant="warning" title="Sinkronisasi tertunda">
-    Periksa kembali koneksi sebelum melanjutkan.
+<x-ui.alert variant="warning" title="{{ __('Sync pending') }}">
+    {{ __('Check your connection before continuing.') }}
     <x-slot:action>
-        <a href="{{ request()->fullUrl() }}" class="btn btn-outline btn-sm">Muat ulang</a>
+        <a href="{{ request()->fullUrl() }}" class="btn btn-outline btn-sm">{{ __('Reload') }}</a>
     </x-slot:action>
 </x-ui.alert>
 ```
 
-`solid` memberi gaya yang lebih menonjol pada background; gunakan `:solid="true"` untuk prop boolean. Pesan informatif biasa tidak otomatis memakai `role="alert"` sehingga tidak menginterupsi pembaca layar.
+`solid` gives a stronger background; use `:solid="true"` for the boolean prop. Ordinary informational messages don't get `role="alert"` automatically, so they don't interrupt screen readers.
 
 ```blade
-<x-ui.alert variant="success" title="Berhasil disimpan">
-    Perubahan tersedia pada halaman detail.
+<x-ui.alert variant="success" title="{{ __('Saved') }}">
+    {{ __('The changes are available on the detail page.') }}
 </x-ui.alert>
 ```
 
-Untuk flash message dari redirect Laravel, tampilkan secara server-rendered:
+For flash messages from a Laravel redirect, render them on the server:
 
 ```blade
 @if (session('status'))
-    <x-ui.alert variant="success" title="Berhasil">{{ session('status') }}</x-ui.alert>
+    <x-ui.alert variant="success" title="{{ __('Success') }}">{{ session('status') }}</x-ui.alert>
 @endif
 ```
 
 ## 🔔 Toast
 
-Toast dibuat oleh `window.App.toast({ title, description, tone, duration })`, dan ditampilkan dalam `#toasts` milik layout. Pilihan tone: `success`, `danger`, `warning`, `info`, `neutral`. Bisa juga dipicu dengan atribut pada elemen yang diklik:
+Toasts are created with `window.App.toast({ title, description, tone, duration })` and shown in the layout's `#toasts` container. Tone options: `success`, `danger`, `warning`, `info`, `neutral`. They can also be triggered by attributes on a clicked element:
 
 ```blade
-<button type="button" data-toast="info" data-toast-title="Pratinjau" data-toast-desc="Hanya tampilan demo">
-    Lihat pesan
+<button type="button" data-toast="info" data-toast-title="{{ __('Preview') }}" data-toast-desc="{{ __('Demo display only') }}">
+    {{ __('Show message') }}
 </button>
 ```
 
-`data-toast` menampilkan pesan saat klik; ini **bukan** konfirmasi penyimpanan server. Untuk tindakan nyata, tunggu hasil controller/redirect sebelum menampilkan sukses. Ketika membangun pesan toast dari data pengguna, hindari menyisipkan input tak tepercaya secara langsung: implementasi toast saat ini membentuk markup dengan `innerHTML`.
+`data-toast` shows the message on click; it is **not** confirmation of a server save. For real actions, wait for the controller/redirect result before showing success. When building toast messages from user data, avoid inserting untrusted input directly: the current toast implementation builds its markup with `innerHTML`.
 
-`duration` memakai milidetik; jika tidak diisi, toast menutup sekitar 4,5 detik setelah ditampilkan. `window.App.toast` membutuhkan kontainer `#toasts` yang sudah tersedia pada layout aktif. Jangan menjadikannya satu-satunya tempat menampilkan error form—pesan per field melalui `x-ui.field` tetap dibutuhkan.
+`duration` is in milliseconds; without it, the toast closes about 4.5 seconds after appearing. `window.App.toast` needs the `#toasts` container that the active layout provides. Don't make it the only place form errors appear; per-field messages through `x-ui.field` are still needed.
 
 ## 🪟 Modal & drawer
 
-Keduanya menghasilkan elemen HTML `<dialog>`. `x-ui.modal`: `id`, `title` wajib; `description`, `icon`, `tone`, `size` (`sm`, `lg`, `xl`) opsional; slot `footer` untuk aksi. `x-ui.drawer`: `id`, `title` wajib; `description` opsional; slot `footer` juga tersedia. Trigger memakai `data-modal-open="#id"`, penutup memakai `data-modal-close` di dalam dialog.
+Both render an HTML `<dialog>` element. `x-ui.modal`: `id` and `title` are required; `description`, `icon`, `tone` and `size` (`sm`, `lg`, `xl`) are optional; a `footer` slot holds actions. `x-ui.drawer`: `id` and `title` are required; `description` is optional; a `footer` slot is available too. Open them with `data-modal-open="#id"` and close them with `data-modal-close` inside the dialog.
 
 ```blade
-<button type="button" class="btn btn-outline" data-modal-open="#detail-info">Informasi</button>
+<button type="button" class="btn btn-outline" data-modal-open="#detail-info">{{ __('Information') }}</button>
 
-<x-ui.modal id="detail-info" title="Informasi entri" description="Tinjau sebelum melanjutkan." size="sm">
-    <p>Konten dialog.</p>
+<x-ui.modal id="detail-info" title="{{ __('Entry information') }}" description="{{ __('Review before continuing.') }}" size="sm">
+    <p>{{ __('Dialog content.') }}</p>
     <x-slot:footer>
-        <button type="button" class="btn btn-primary" data-modal-close>Tutup</button>
+        <button type="button" class="btn btn-primary" data-modal-close>{{ __('Close') }}</button>
     </x-slot:footer>
 </x-ui.modal>
 ```
 
-Untuk hapus data, letakkan form `method="POST"` dengan `@csrf` dan `@method('DELETE')` pada footer; tombol batal boleh menggunakan `data-modal-close`, **tombol submit jangan langsung memakai `data-modal-close` dan toast sukses**. Demo di `/components/feedback` hanya memperlihatkan interaksi antarmuka.
+To delete data, put a `method="POST"` form with `@csrf` and `@method('DELETE')` in the footer; the cancel button can use `data-modal-close`, but **don't give the submit button `data-modal-close` and a success toast**. The demo at `/components/feedback` only shows the interface interaction.
 
 ### 🧾 `x-ui.modal` {#x-ui-modal}
 
-Modal menerima `size="sm"` (`max-w-md`), default `lg` (`max-w-lg`), dan `xl` (`max-w-2xl`). `icon` opsional berada di samping judul; `tone` menentukan kelas avatar ikon (default `info`). `id` harus unik karena dipakai untuk label judul, deskripsi, dan pencarian oleh `data-modal-open`. Slot utama adalah isi, sementara `footer` menempatkan aksi di bagian bawah. Penutupan lewat Esc, klik backdrop, atau elemen `data-modal-close` diatur oleh `interactions.js`.
+The modal takes `size="sm"` (`max-w-md`), the default `lg` (`max-w-lg`) and `xl` (`max-w-2xl`). The optional `icon` sits next to the title; `tone` sets the icon avatar class (default `info`). The `id` must be unique because it's used for the title and description labels and by `data-modal-open` to find the dialog. The main slot is the body, and `footer` places actions at the bottom. Closing with Esc, a backdrop click or a `data-modal-close` element is handled by `interactions.js`.
 
 ### 🗄️ `x-ui.drawer` {#x-ui-drawer}
 
-Drawer menerima `id`, `title`, `description` dan slot `footer`. Konten drawer dibuat scrollable, sehingga cocok untuk filter panjang tanpa mendorong tombol aksi keluar layar. Pemicu dan mekanisme penutup sama dengan modal; tombol X bawaan sudah memiliki `data-modal-close`. Drawer hanya kerangka visual—filter dari dalamnya tetap perlu form GET atau logika request sendiri.
+The drawer takes `id`, `title`, `description` and a `footer` slot. Its content scrolls, so it suits long filters without pushing the action buttons off screen. Triggers and closing work the same as the modal; the built-in X button already has `data-modal-close` and a translated “Close …” label. The drawer is only a visual frame; filters inside it still need a GET form or your own request logic.
 
 ```blade
-<button type="button" class="btn btn-outline" data-modal-open="#drawer-status">Filter</button>
-<x-ui.drawer id="drawer-status" title="Filter entri">
-    <p>Pilih kriteria yang ingin diterapkan.</p>
+<button type="button" class="btn btn-outline" data-modal-open="#drawer-status">{{ __('Filter') }}</button>
+<x-ui.drawer id="drawer-status" title="{{ __('Filter entries') }}">
+    <p>{{ __('Choose the criteria to apply.') }}</p>
     <x-slot:footer>
-        <button type="button" class="btn btn-outline" data-modal-close>Batal</button>
+        <button type="button" class="btn btn-outline" data-modal-close>{{ __('Cancel') }}</button>
     </x-slot:footer>
 </x-ui.drawer>
 ```
 
-## ⏳ Progres & skeleton
+## ⏳ Progress & skeletons
 
-Progres `.progress`/`.progress-bar`, spinner `.spinner`, dan skeleton `.skeleton` adalah kelas CSS, bukan komponen Blade tersendiri. Contoh markup dan state tersedia di `resources/views/showcase/feedback.blade.php`.
+Progress bars (`.progress`/`.progress-bar`), spinners (`.spinner`) and skeletons (`.skeleton`) are CSS classes, not Blade components. Example markup and states are in `resources/views/showcase/feedback.blade.php`.

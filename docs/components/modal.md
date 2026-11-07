@@ -1,53 +1,53 @@
 # 🪟 Modal
 
-`<x-ui.modal>` membuat `<dialog>` untuk konfirmasi atau tindakan yang perlu perhatian khusus. Sumber: `resources/views/components/ui/modal.blade.php`; buka/tutup melalui `resources/js/admin/interactions.js`.
+`<x-ui.modal>` creates a `<dialog>` for confirmations or actions that need focused attention. Source: `resources/views/components/ui/modal.blade.php`; opening/closing is handled by `resources/js/admin/interactions.js`.
 
-## 🧩 Prop dan slot
+## 🧩 Props and slots
 
-| Prop/slot | Default | Fungsi |
+| Prop/slot | Default | Purpose |
 | --- | --- | --- |
-| `id` | wajib | ID unik dialog dan target tombol pembuka |
-| `title` | wajib | Judul dan label dialog |
-| `description` | `null` | Keterangan; terhubung via `aria-describedby` |
-| `icon` | `null` | Nama ikon di sisi judul |
-| `tone` | `info` | Warna bidang ikon, misalnya `info`, `danger`, `success` |
+| `id` | required | Unique dialog ID and target of the open button |
+| `title` | required | Dialog heading and label |
+| `description` | `null` | Description, linked via `aria-describedby` |
+| `icon` | `null` | Icon name next to the title |
+| `tone` | `info` | Icon area colour, e.g. `info`, `danger`, `success` |
 | `size` | `lg` | `sm` → `max-w-md`, `lg` → `max-w-lg`, `xl` → `max-w-2xl` |
-| Slot utama/`footer` | opsional | Isi dan kelompok tombol bawah |
+| Main slot/`footer` | optional | Body content and the bottom button group |
 
-Atribut lain seperti `class` diterapkan ke `<dialog>`. `tone` hanya dipakai saat `icon` ada; ukuran selain `sm`/`xl` menjadi ukuran default.
+Other attributes such as `class` apply to the `<dialog>`. `tone` is only used when there's an `icon`; sizes other than `sm`/`xl` use the default.
 
-## 📖 Modal informasi dan ukuran
+## 📖 Information modal and sizes
 
 ```blade
-<x-ui.button variant="outline" data-modal-open="#info">Lihat informasi</x-ui.button>
-<x-ui.modal id="info" title="Jadwal pembaruan" description="Aplikasi tetap dapat diakses." icon="info" size="sm">
-    <p>Pembaruan dijadwalkan Minggu pukul 01.00 WIB.</p>
+<x-ui.button variant="outline" data-modal-open="#info">{{ __('View information') }}</x-ui.button>
+<x-ui.modal id="info" title="{{ __('Maintenance schedule') }}" description="{{ __('The app stays available.') }}" icon="info" size="sm">
+    <p>{{ __('Maintenance is scheduled for Sunday at 01:00 MYT.') }}</p>
     <x-slot:footer>
-        <x-ui.button data-modal-close>Mengerti</x-ui.button>
+        <x-ui.button data-modal-close>{{ __('Got it') }}</x-ui.button>
     </x-slot:footer>
 </x-ui.modal>
 ```
 
-## 🗑️ Konfirmasi hapus yang sungguhan
+## 🗑️ A real delete confirmation
 
 ```blade
-<x-ui.button variant="destructive" data-modal-open="#hapus-entri">Hapus</x-ui.button>
-<x-ui.modal id="hapus-entri" title="Hapus entri?" description="Tindakan ini tidak dapat dibatalkan."
+<x-ui.button variant="destructive" data-modal-open="#delete-entry">{{ __('Delete') }}</x-ui.button>
+<x-ui.modal id="delete-entry" title="{{ __('Delete entry?') }}" description="{{ __('This cannot be undone.') }}"
     icon="trash" tone="danger" size="sm">
-    <p>Entri {{ $record->title }} akan dihapus.</p>
+    <p>{{ __(':title will be deleted.', ['title' => $record->title]) }}</p>
     <x-slot:footer>
-        <x-ui.button variant="outline" data-modal-close>Batal</x-ui.button>
+        <x-ui.button variant="outline" data-modal-close>{{ __('Cancel') }}</x-ui.button>
         <form method="POST" action="{{ route('examples.records.destroy', $record) }}">
             @csrf
             @method('DELETE')
-            <x-ui.button type="submit" variant="destructive">Ya, hapus</x-ui.button>
+            <x-ui.button type="submit" variant="destructive">{{ __('Yes, delete') }}</x-ui.button>
         </form>
     </x-slot:footer>
 </x-ui.modal>
 ```
 
-Route `destroy` mengikuti [contoh CRUD](/integrasi/crud). Tombol submit **tidak** diberi `data-modal-close` atau toast sukses sebelum respons server. Setelah redirect, tampilkan pesan flash dari controller.
+The `destroy` route follows the [CRUD example](/integration/crud). The submit button gets **no** `data-modal-close` and no success toast before the server responds. After the redirect, show the controller's flash message.
 
-## ⚙️ Perilaku dialog
+## ⚙️ Dialog behaviour
 
-Klik elemen dengan `data-modal-open="#id"` memanggil `showModal()`; `data-modal-close`, Esc, dan klik backdrop menutup dengan animasi. Pastikan `id` unik. Fokus/penutupan bawaan `<dialog>` dibantu browser; dialog sendiri tidak otomatis membuat submit form ataupun validasi server. Untuk panel samping gunakan [drawer](/komponen/drawer).
+Clicking an element with `data-modal-open="#id"` calls `showModal()`; `data-modal-close`, Esc and a backdrop click close it with an animation. Make sure the `id` is unique. The `<dialog>` element's built-in focus and closing behaviour comes from the browser; the dialog itself doesn't submit forms or validate on the server. For a side panel, use a [drawer](/components/drawer).

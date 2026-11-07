@@ -1,35 +1,35 @@
 # 🔽 Select
 
-`<x-ui.select>` membungkus `<select>` HTML dan mendukung pilihan dari array PHP, placeholder, nilai lama dari form, serta error Laravel. Sumber: `resources/views/components/ui/select.blade.php`.
+`<x-ui.select>` wraps an HTML `<select>` and supports options from a PHP array, a placeholder, old form values and Laravel errors. Source: `resources/views/components/ui/select.blade.php`.
 
-## 🧩 Prop
+## 🧩 Props
 
-| Prop | Default | Fungsi |
+| Prop | Default | Purpose |
 | --- | --- | --- |
-| `name` | `null` | Nama request dan ID otomatis |
-| `value` | `null` | Pilihan awal; dikalahkan `old(name)` |
-| `options` | `[]` | Peta nilai → label (`['aktif' => 'Aktif']`) |
-| `placeholder` | `null` | Opsi kosong dengan teks sendiri |
-| `includeBlank` | `false` | Opsi kosong bertuliskan `— Pilih —` |
-| `invalid` | `null` | Paksa tampilan invalid |
-| `searchable` | `false` | Aktifkan Choices.js untuk pencarian dan dropdown non-native |
-| Slot utama | kosong | Tambahan `<option>` manual |
+| `name` | `null` | Request name and automatic ID |
+| `value` | `null` | Initial choice; overridden by `old(name)` |
+| `options` | `[]` | Value → label map (`['active' => __('Active')]`) |
+| `placeholder` | `null` | Empty option with its own text |
+| `includeBlank` | `false` | Empty option reading “— Choose —” (translated) |
+| `invalid` | `null` | Force the invalid look |
+| `searchable` | `false` | Turn on Choices.js for search and a non-native dropdown |
+| Main slot | empty | Extra manual `<option>` elements |
 
-ID otomatis adalah `f-{name}`; atribut `required`, `disabled`, `multiple`, `aria-label`, `class`, dan `id` diteruskan ke `<select>`. Komponen mengubah nilai opsi dan `old()` menjadi string saat membandingkan.
+The automatic ID is `f-{name}`; the `required`, `disabled`, `multiple`, `aria-label`, `class` and `id` attributes pass through to the `<select>`. The component compares option values and `old()` as strings.
 
-## 📝 Pilihan tunggal dan placeholder
+## 📝 Single choice and placeholder
 
 ```blade
-<x-ui.field name="status" label="Status" :required="true">
-    <x-ui.select name="status" placeholder="Pilih status" required
+<x-ui.field name="status" label="{{ __('Status') }}" :required="true">
+    <x-ui.select name="status" placeholder="{{ __('Choose a status') }}" required
         :value="$record?->status"
-        :options="['draf' => 'Draf', 'ditinjau' => 'Ditinjau', 'aktif' => 'Aktif']" />
+        :options="['draft' => __('Draft'), 'in-review' => __('In review'), 'active' => __('Active')]" />
 </x-ui.field>
 ```
 
-Saat memakai `required`, opsi kosong membantu browser mendeteksi pilihan yang belum dibuat. Tanpa placeholder/includeBlank, opsi pertama langsung menjadi pilihan bawaan browser.
+With `required`, the empty option helps the browser detect a choice that hasn't been made. Without a placeholder/includeBlank, the first option becomes the browser's default choice.
 
-## 🗃️ Pilihan dari database
+## 🗃️ Options from the database
 
 ```php
 $categories = Category::query()->orderBy('name')->pluck('name', 'id')->all();
@@ -37,31 +37,31 @@ return view('admin.products.create', compact('categories'));
 ```
 
 ```blade
-<x-ui.select name="category_id" placeholder="Pilih kategori"
+<x-ui.select name="category_id" placeholder="{{ __('Choose a category') }}"
     :value="$product?->category_id" :options="$categories" />
 ```
 
-Model `Category` dan view pada contoh harus Anda buat sendiri. Gunakan validator `exists:categories,id` di server; prop options tidak memvalidasi request.
+You need to create the example `Category` model and view yourself. Use the `exists:categories,id` validator on the server; the options prop doesn't validate the request.
 
-## 🧰 Slot opsi dan batasan
+## 🧰 Option slot and limits
 
 ```blade
-<x-ui.select name="period" :include-blank="true" aria-label="Periode">
-    <option value="week" @selected(old('period') === 'week')>7 hari</option>
-    <option value="month" @selected(old('period') === 'month')>30 hari</option>
+<x-ui.select name="period" :include-blank="true" aria-label="{{ __('Period') }}">
+    <option value="week" @selected(old('period') === 'week')>{{ __('7 days') }}</option>
+    <option value="month" @selected(old('period') === 'month')>{{ __('30 days') }}</option>
 </x-ui.select>
 ```
 
-Opsi dalam slot tidak otomatis diberi `@selected` oleh komponen: atur sendiri. `multiple` hanya meneruskan atribut HTML; logika pemilihan `old()` bawaan dirancang untuk **satu** nilai. Untuk multi-select, sesuaikan komponen sebelum menggunakan array nilai.
+The component doesn't add `@selected` to slot options: set it yourself. `multiple` only passes the HTML attribute through; the built-in `old()` selection is designed for **one** value. For a multi-select, adapt the component before using arrays of values.
 
-## 🔎 Select yang dapat dicari (Choices.js)
+## 🔎 Searchable select (Choices.js)
 
 ```blade
-<x-ui.field name="category" label="Kategori">
-    <x-ui.select name="category" placeholder="Pilih kategori" :searchable="true"
+<x-ui.field name="category" label="{{ __('Category') }}">
+    <x-ui.select name="category" placeholder="{{ __('Choose a category') }}" :searchable="true"
         :value="old('category', $record?->category)"
-        :options="['panduan' => 'Panduan', 'laporan' => 'Laporan', 'arsip' => 'Arsip']" />
+        :options="['guides' => __('Guides'), 'reports' => __('Reports'), 'archive' => __('Archive')]" />
 </x-ui.field>
 ```
 
-Choices.js meningkatkan select secara progresif: option dan `name` tetap berasal dari `<select>` Blade, sehingga request Laravel masih berisi `category`. Pencarian berlangsung di browser dan dropdown menggunakan token terang/gelap dashboard. Tanpa JS, select HTML tetap berfungsi. Penggunaan di dalam modal dapat memerlukan penempatan dropdown khusus bila terpotong oleh `<dialog>`; uji konteks tempat Anda menaruhnya.
+Choices.js enhances the select progressively: the options and `name` still come from the Blade `<select>`, so the Laravel request still contains `category`. Search happens in the browser, the dropdown uses the dashboard's light/dark tokens, and its “No results” and search texts are translated. Without JS, the HTML select still works. Inside a modal, the dropdown may need special positioning if the `<dialog>` clips it; test it where you place it.

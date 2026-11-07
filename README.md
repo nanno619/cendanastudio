@@ -1,12 +1,12 @@
 # Cendana Studio — Admin Dashboard
 
-Cendana Studio adalah dashboard admin berbasis Laravel 13 dan Blade. Seluruh halaman utama sudah memakai Blade layout, Blade components, Vite, Tailwind CSS 4, JavaScript modular, tema terang/gelap, pilihan aksen, dan layout responsif.
+Cendana Studio is an admin dashboard built on Laravel 13 and Blade. Every main page uses Blade layouts, Blade components, Vite, Tailwind CSS 4, modular JavaScript, light/dark themes, accent options and a responsive layout. The interface is in English with a Bahasa Melayu translation.
 
-Panduan lengkap tersedia di situs VitePress dalam `docs/`: jalankan `npm run docs:dev` setelah `npm install`. Build dokumentasi dengan `npm run docs:build`. Dokumentasi mencakup referensi komponen `<x-ui.*>` dan cara menghubungkan halaman demo ke backend Laravel.
+The full guide is a VitePress site in `docs/`: run `npm run docs:dev` after `npm install`, and build it with `npm run docs:build`. It covers the `<x-ui.*>` component reference and how to connect the demo pages to a Laravel backend.
 
-## Menjalankan proyek
+## Running the project
 
-Prasyarat: PHP 8.3+, Composer, Node.js, dan MySQL (atau ubah `DB_CONNECTION` di `.env`, misalnya ke `sqlite`).
+Requirements: PHP 8.3+, Composer, Node.js, and MySQL (or change `DB_CONNECTION` in `.env`, for example to `sqlite`).
 
 ```bash
 composer install
@@ -15,7 +15,7 @@ cp .env.example .env
 php artisan key:generate
 ```
 
-Buat database kosong sesuai `DB_DATABASE` di `.env` (default `laravel`), sesuaikan `APP_URL`, `DB_USERNAME`, dan `DB_PASSWORD` bila perlu, lalu:
+Create an empty database matching `DB_DATABASE` in `.env` (default `laravel`), adjust `APP_URL`, `DB_USERNAME` and `DB_PASSWORD` if needed, then:
 
 ```bash
 php artisan migrate --seed
@@ -23,53 +23,55 @@ npm run dev
 php artisan serve
 ```
 
-Jika memakai Laravel Herd atau Valet, lewati `php artisan serve` dan setel `APP_URL` ke alamat situs Anda, misalnya `https://cendanastudio.test`.
+With Laravel Herd or Valet, skip `php artisan serve` and set `APP_URL` to your site address, for example `https://cendanastudio.test`.
 
-Masuk di `/login` dengan pengguna dari seeder: `test@example.com` / `password`. Ganti atau hapus pengguna ini di `database/seeders/DatabaseSeeder.php` sebelum produksi.
+Sign in at `/login` with the seeded user: `test@example.com` / `password`. Change or remove this user in `database/seeders/DatabaseSeeder.php` before production.
 
-Untuk build produksi:
+For a production build:
 
 ```bash
 npm run build
 php artisan optimize
 ```
 
-## Struktur utama
+## Main structure
 
-- `resources/views/components/layouts` — layout admin, guest, dan blank.
-- `resources/views/components/admin` — sidebar, header, footer, navigasi, dan customizer.
-- `resources/views/components/ui` — komponen UI reusable seperti card, button, field, badge, modal, drawer, combobox, date range, file preview, table state, dan chart.
-- `resources/views/admin` — dashboard, analitik, dan pengaturan akun.
-- `resources/views/showcase` — katalog komponen untuk referensi saat membangun proyek baru.
-- `resources/views/examples/records` — contoh alur daftar, detail, tambah, dan edit yang sepenuhnya frontend.
-- `resources/js/admin` — grafik SVG dan interaksi dashboard.
-- `resources/css/app.css` — design tokens, tema, dan component styles.
-- `config/cendana.php` — branding, navigasi, pilihan tema, serta data demo.
+- `resources/views/components/layouts` — admin, guest and blank layouts.
+- `resources/views/components/admin` — sidebar, header, footer, navigation and customizer.
+- `resources/views/components/ui` — reusable UI components such as card, button, field, badge, modal, drawer, combobox, date range, file preview, table state and chart.
+- `resources/views/components/locale` — the English/Malay language switcher.
+- `resources/views/admin` — dashboard, analytics and account settings.
+- `resources/views/showcase` — component catalogue to reference when building new pages.
+- `resources/views/examples/records` — fully frontend list, detail, create and edit flows.
+- `resources/js/admin` — SVG charts and dashboard interactions.
+- `resources/css/app.css` — design tokens, themes and component styles.
+- `config/cendana.php` — branding, navigation, languages, theme options and demo data.
+- `lang/` — Malay translations (`ms.json`, `ms/*.php`) and JavaScript strings (`en/js.php`, `ms/js.php`).
 
-## Halaman bawaan
+## Built-in pages
 
-| URL | Route name | Keterangan |
+| URL | Route name | Description |
 | --- | --- | --- |
-| `/dashboard` | `admin.dashboard` | Dashboard utama |
-| `/analytics` | `admin.analytics` | Analitik |
-| `/settings` | `admin.settings` | Pengaturan akun |
-| `/components/*` | `showcase.*` | Katalog komponen |
-| `/components/filters` | `showcase.filters` | Combobox, rentang tanggal, filter chip, dan unggah berkas |
-| `/components/table-states` | `showcase.table-states` | State tabel siap, memuat, kosong, tanpa hasil, dan error |
-| `/components/charts` | `showcase.charts` | Variasi grafik SVG dan state kosong |
-| `/examples/records` | `examples.records.index` | Contoh daftar dengan pencarian, filter, dan paginasi |
-| `/examples/records/new` | `examples.records.create` | Contoh form tambah |
-| `/examples/records/detail` | `examples.records.show` | Contoh halaman detail |
-| `/examples/records/edit` | `examples.records.edit` | Contoh form edit |
-| `/login` | `login` | Masuk (Laravel Fortify) |
-| `/forgot-password` | `password.request` | Lupa kata sandi |
-| `/demo/404` | `demo.404` | Demo halaman 404 |
+| `/dashboard` | `admin.dashboard` | Main dashboard |
+| `/analytics` | `admin.analytics` | Analytics |
+| `/settings` | `admin.settings` | Account settings |
+| `/components/*` | `showcase.*` | Component catalogue |
+| `/components/filters` | `showcase.filters` | Combobox, date range, filter chips and file upload |
+| `/components/table-states` | `showcase.table-states` | Ready, loading, empty, no results and error table states |
+| `/components/charts` | `showcase.charts` | SVG chart variations and empty state |
+| `/examples/records` | `examples.records.index` | Sample list with search, filters and pagination |
+| `/examples/records/new` | `examples.records.create` | Sample create form |
+| `/examples/records/detail` | `examples.records.show` | Sample detail page |
+| `/examples/records/edit` | `examples.records.edit` | Sample edit form |
+| `/login` | `login` | Sign in (Laravel Fortify) |
+| `/forgot-password` | `password.request` | Forgot password |
+| `/demo/404` | `demo.404` | Demo 404 page |
 
-Autentikasi (login, logout, atur ulang kata sandi, pembaruan profil dan kata sandi) sudah terhubung lewat Laravel Fortify dan semua halaman admin dilindungi middleware `auth`; lihat `docs/integrasi/auth.md`. Semua contoh data dan form contoh masih berupa presentational UI: form contoh hanya menampilkan toast dan tidak menyimpan data. Hubungkan validasi server dan persistensi sesuai kebutuhan proyek nyata.
+Authentication (login, logout, password reset, profile and password updates) is wired up through Laravel Fortify, and every admin page is protected by the `auth` middleware; see `docs/integration/auth.md`. All sample data and sample forms are still presentational UI: the sample forms only show a toast and don't save data. Connect server validation and persistence to fit your real project.
 
-## Kustomisasi
+## Customization
 
-Identitas dasar dapat diubah melalui `.env`:
+Basic identity is set in `.env`:
 
 ```dotenv
 ADMIN_NAME="Cendana Studio"
@@ -80,28 +82,32 @@ ADMIN_FOOTER="© Cendana Studio"
 ADMIN_SHOWCASE=true
 ```
 
-Menu sidebar didefinisikan di `config/cendana.php`. Tambahkan route, view, lalu masukkan item baru ke array `navigation`. Untuk menyembunyikan katalog komponen dan halaman contoh pada aplikasi produksi, gunakan `ADMIN_SHOWCASE=false`.
+The sidebar menu is defined in `config/cendana.php`. Add a route and a view, then add a new item to the `navigation` array. To hide the component catalogue and sample pages in production, set `ADMIN_SHOWCASE=false`.
 
-Contoh halaman baru:
+Example of a new page:
 
 ```blade
-<x-layouts.admin title="Produk" group="Katalog">
+<x-layouts.admin title="{{ __('Products') }}" group="{{ __('Catalogue') }}">
     <x-ui.page-header
-        title="Produk"
-        description="Kelola produk bisnis Anda."
+        title="{{ __('Products') }}"
+        description="{{ __('Manage your business products.') }}"
     />
 
     <x-ui.card>
-        Konten halaman
+        {{ __('Page content') }}
     </x-ui.card>
 </x-layouts.admin>
 ```
 
-## Tema dan preferensi
+## Language
 
-Customizer di kanan header mendukung mode sistem/terang/gelap, 12 warna aksen, ukuran radius, serta mode sidebar penuh/mini. Preferensi disimpan di `localStorage`, sehingga tidak memerlukan backend.
+English is the default (`APP_LOCALE=en`); users switch to Bahasa Melayu from the Customize drawer or the EN/MS buttons on the login page, and the choice is kept in the session. Write user-facing text in English inside `__()` and add the Malay version to `lang/ms.json`. Strings used by JavaScript go in `lang/en/js.php` and `lang/ms/js.php`. See `docs/guide/theming.md` for details.
 
-## Validasi
+## Theme and preferences
+
+The customizer on the right of the header supports system/light/dark modes, 12 accent colours, radius sizes and a full/mini sidebar. Preferences are stored in `localStorage`, so they need no backend.
+
+## Validation
 
 ```bash
 php artisan test
@@ -109,4 +115,4 @@ php artisan view:cache
 npm run build
 ```
 
-Sprite ikon lokal berada di `public/icons.svg`; aplikasi tidak bergantung pada CDN untuk ikon maupun font Inter.
+The local icon sprite is in `public/icons.svg`; the app doesn't rely on a CDN for icons or the Inter font.

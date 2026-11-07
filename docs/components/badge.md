@@ -1,58 +1,58 @@
 # 🏷️ Badge
 
-`<x-ui.badge>` menampilkan label status sebagai `<span>`; bukan tautan atau tombol. Sumber: `resources/views/components/ui/badge.blade.php`.
+`<x-ui.badge>` shows a status label as a `<span>`; it isn't a link or a button. Source: `resources/views/components/ui/badge.blade.php`.
 
-## 🧩 Prop dan pilihan variant
+## 🧩 Props and variants
 
-| Prop | Default | Fungsi |
+| Prop | Default | Purpose |
 | --- | --- | --- |
 | `variant` | `neutral` | `primary`, `soft`, `success`, `danger`, `warning`, `info`, `neutral`, `outline`, `solid-success`, `solid-danger`, `solid-warning`, `solid-info` |
-| `pill` | `false` | Bentuk ujung membulat penuh |
-| `dot` | `false` | Tanda titik status |
-| `icon` | `null` | Nama ikon dari sprite |
-| Slot utama | — | Teks label |
+| `pill` | `false` | Fully rounded ends |
+| `dot` | `false` | Status dot |
+| `icon` | `null` | Icon name from the sprite |
+| Main slot | — | Label text |
 
-Variant tidak dikenal kembali ke `neutral`. `class`, `title` dan atribut HTML lain diteruskan ke elemen `<span>`.
+Unknown variants fall back to `neutral`. `class`, `title` and other HTML attributes pass through to the `<span>`.
 
-## 🎨 Contoh semua keluarga gaya
-
-```blade
-<x-ui.badge variant="primary">Utama</x-ui.badge>
-<x-ui.badge variant="soft">Sorotan</x-ui.badge>
-<x-ui.badge variant="success">Aktif</x-ui.badge>
-<x-ui.badge variant="danger">Gagal</x-ui.badge>
-<x-ui.badge variant="warning">Menunggu</x-ui.badge>
-<x-ui.badge variant="info">Dalam proses</x-ui.badge>
-<x-ui.badge variant="neutral">Arsip</x-ui.badge>
-<x-ui.badge variant="outline">Draf</x-ui.badge>
-<x-ui.badge variant="solid-success">Selesai</x-ui.badge>
-<x-ui.badge variant="solid-danger">Dibatalkan</x-ui.badge>
-<x-ui.badge variant="solid-warning">Perlu tinjauan</x-ui.badge>
-<x-ui.badge variant="solid-info">Dikirim</x-ui.badge>
-```
-
-## ⚙️ Kombinasi pill, dot, ikon
+## 🎨 Every style family
 
 ```blade
-<x-ui.badge variant="success" :dot="true">Online</x-ui.badge>
-<x-ui.badge variant="warning" :pill="true">Menunggu pembayaran</x-ui.badge>
-<x-ui.badge variant="info" icon="truck" :pill="true">Dikirim</x-ui.badge>
+<x-ui.badge variant="primary">{{ __('Primary') }}</x-ui.badge>
+<x-ui.badge variant="soft">{{ __('Highlight') }}</x-ui.badge>
+<x-ui.badge variant="success">{{ __('Active') }}</x-ui.badge>
+<x-ui.badge variant="danger">{{ __('Failed') }}</x-ui.badge>
+<x-ui.badge variant="warning">{{ __('Pending') }}</x-ui.badge>
+<x-ui.badge variant="info">{{ __('In progress') }}</x-ui.badge>
+<x-ui.badge variant="neutral">{{ __('Archived') }}</x-ui.badge>
+<x-ui.badge variant="outline">{{ __('Draft') }}</x-ui.badge>
+<x-ui.badge variant="solid-success">{{ __('Completed') }}</x-ui.badge>
+<x-ui.badge variant="solid-danger">{{ __('Cancelled') }}</x-ui.badge>
+<x-ui.badge variant="solid-warning">{{ __('Needs review') }}</x-ui.badge>
+<x-ui.badge variant="solid-info">{{ __('Shipped') }}</x-ui.badge>
 ```
 
-Gunakan sintaks `:dot="true"` dan `:pill="true"` agar Blade mengirim boolean, bukan string `"false"` yang tetap truthy di PHP.
+## ⚙️ Combining pill, dot and icon
 
-## 🗃️ Status dari database
+```blade
+<x-ui.badge variant="success" :dot="true">{{ __('Online') }}</x-ui.badge>
+<x-ui.badge variant="warning" :pill="true">{{ __('Awaiting payment') }}</x-ui.badge>
+<x-ui.badge variant="info" icon="truck" :pill="true">{{ __('Shipped') }}</x-ui.badge>
+```
+
+Use `:dot="true"` and `:pill="true"` so Blade passes a boolean, not the string `"false"`, which is still truthy in PHP.
+
+## 🗃️ Statuses from the database
 
 ```blade
 @php
     $tone = match ($record->status) {
-        'aktif' => 'success',
-        'ditinjau' => 'info',
-        'draf' => 'warning',
+        'active' => 'success',
+        'in-review' => 'info',
+        'draft' => 'warning',
         default => 'neutral',
     };
 @endphp
-<x-ui.badge :variant="$tone" :dot="true">{{ ucfirst($record->status) }}</x-ui.badge>
+<x-ui.badge :variant="$tone" :dot="true">{{ __(ucfirst(str_replace('-', ' ', $record->status))) }}</x-ui.badge>
 ```
 
-Petakan nilai domain ke variant yang ada; jangan menjadikan input user langsung sebagai class CSS. Jelaskan status melalui teks, bukan warna atau titik saja. Lihat [`/components/buttons`](/panduan/mulai#halaman-yang-tersedia) untuk showcase tombol dan lencana.
+Map domain values to existing variants; never use user input directly as a CSS class. Describe the status in text, not only with colour or a dot. See [`/components/buttons`](/guide/getting-started#available-pages) for the buttons and badges showcase.

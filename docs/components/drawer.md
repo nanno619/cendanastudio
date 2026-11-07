@@ -1,50 +1,50 @@
 # 🗄️ Drawer
 
-`<x-ui.drawer>` adalah dialog berbentuk panel samping dengan header, area isi yang bisa discroll, dan footer opsional. Sumber: `resources/views/components/ui/drawer.blade.php`.
+`<x-ui.drawer>` is a side-panel dialog with a header, a scrollable content area and an optional footer. Source: `resources/views/components/ui/drawer.blade.php`.
 
 ## 🧩 API
 
-| Prop/slot | Default | Fungsi |
+| Prop/slot | Default | Purpose |
 | --- | --- | --- |
-| `id` | wajib | ID dialog/selector trigger |
-| `title` | wajib | Judul terhubung `aria-labelledby` |
-| `description` | `null` | Teks di bawah judul |
-| Slot utama | — | Konten scrollable |
-| `footer` | kosong | Area tindakan bawah |
+| `id` | required | Dialog ID / trigger selector |
+| `title` | required | Heading linked through `aria-labelledby` |
+| `description` | `null` | Text under the heading |
+| Main slot | — | Scrollable content |
+| `footer` | empty | Bottom action area |
 
-Drawer sudah memiliki tombol tutup X di header dengan `data-modal-close` dan label aksesibel. Tidak ada prop `size`/`tone` seperti [modal](/komponen/modal).
+The drawer already has an X close button in the header, with `data-modal-close` and an accessible label. There are no `size`/`tone` props like the [modal](/components/modal) has.
 
-## 🔎 Filter sederhana
+## 🔎 A simple filter
 
 ```blade
-<x-ui.button variant="outline" data-modal-open="#filter-entri">Atur filter</x-ui.button>
-<x-ui.drawer id="filter-entri" title="Filter entri" description="Pilih kriteria pencarian.">
-    <p>Gunakan form untuk menerapkan filter pada server.</p>
+<x-ui.button variant="outline" data-modal-open="#entry-filter">{{ __('Set filters') }}</x-ui.button>
+<x-ui.drawer id="entry-filter" title="{{ __('Filter entries') }}" description="{{ __('Choose your search criteria.') }}">
+    <p>{{ __('Use a form to apply filters on the server.') }}</p>
     <x-slot:footer>
-        <x-ui.button variant="outline" data-modal-close>Batal</x-ui.button>
+        <x-ui.button variant="outline" data-modal-close>{{ __('Cancel') }}</x-ui.button>
     </x-slot:footer>
 </x-ui.drawer>
 ```
 
-## 📝 Form GET di dalam drawer
+## 📝 A GET form inside the drawer
 
 ```blade
-<x-ui.drawer id="filter-data" title="Filter data">
+<x-ui.drawer id="data-filter" title="{{ __('Filter data') }}">
     <form id="filter-records" method="GET" action="{{ route('examples.records.index') }}" class="space-y-4">
-        <x-ui.field name="status" label="Status">
-            <x-ui.select name="status" placeholder="Semua status" :value="request('status')"
-                :options="['aktif' => 'Aktif', 'draf' => 'Draf']" />
+        <x-ui.field name="status" label="{{ __('Status') }}">
+            <x-ui.select name="status" placeholder="{{ __('All statuses') }}" :value="request('status')"
+                :options="['active' => __('Active'), 'draft' => __('Draft')]" />
         </x-ui.field>
     </form>
     <x-slot:footer>
-        <a href="{{ route('examples.records.index') }}" class="btn btn-outline">Hapus filter</a>
-        <x-ui.button type="submit" form="filter-records">Terapkan</x-ui.button>
+        <a href="{{ route('examples.records.index') }}" class="btn btn-outline">{{ __('Clear filters') }}</a>
+        <x-ui.button type="submit" form="filter-records">{{ __('Apply') }}</x-ui.button>
     </x-slot:footer>
 </x-ui.drawer>
 ```
 
-`form="filter-records"` menghubungkan tombol di footer yang berada di luar tag `<form>` ke form. Jangan memberi `data-modal-close` pada tombol Terapkan sehingga request GET selesai normal. Route dan variabel form sesuai [panduan tabel server](/integrasi/data).
+`form="filter-records"` connects the footer button, which sits outside the `<form>` tag, to the form. Don't give the Apply button `data-modal-close`, so the GET request completes normally. The route and form variables follow the [server-side tables guide](/integration/data).
 
-## ⚙️ Buka/tutup dan batasan
+## ⚙️ Opening, closing and limits
 
-Mekanismenya sama dengan modal: `data-modal-open="#filter-data"`, `data-modal-close`, Esc, dan klik backdrop. Konten tidak disimpan otomatis; URL query atau state JS adalah sumber filter sesungguhnya. `id` harus unik pada halaman.
+It works the same way as the modal: `data-modal-open="#data-filter"`, `data-modal-close`, Esc and a backdrop click. Content isn't saved automatically; the URL query or your JS state is the real source of the filters. The `id` must be unique on the page.

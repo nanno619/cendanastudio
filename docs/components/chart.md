@@ -1,85 +1,85 @@
 # 📈 Chart
 
-`<x-ui.chart>` menaruh konfigurasi grafik pada atribut `data-*`; `resources/js/admin/charts.js` menggambar SVG saat halaman siap. Tidak ada dependensi chart eksternal. File komponen: `resources/views/components/ui/chart.blade.php`.
+`<x-ui.chart>` puts the chart configuration in `data-*` attributes; `resources/js/admin/charts.js` draws the SVG once the page is ready. There's no external chart dependency. Component file: `resources/views/components/ui/chart.blade.php`.
 
-## 🧩 API dan bentuk data
+## 🧩 API and data shape
 
-| Prop | Default | Kegunaan |
+| Prop | Default | Purpose |
 | --- | --- | --- |
-| `type` | wajib | `line`, `area`, `bar`, `stacked`, `donut`, `radial`, `spark`, `hbar` |
-| `labels`, `series`, `items`, `values` | `[]` | Array data sesuai tipe grafik |
-| `height` | `240` | Tinggi grafik kartesius/spark (px) |
-| `aria` | `Grafik` | Label SVG untuk aksesibilitas |
-| `summary` | `null` | `<figcaption>` sesudah grafik |
-| `legend`, `smooth` | `false` | Penanda/kurva pada grafik kartesius |
-| `prefix`, `suffix` | `''` | Format angka tooltip/label |
-| `size`, `totalLabel` | `null` | Ukuran/label total (terutama donut) |
+| `type` | required | `line`, `area`, `bar`, `stacked`, `donut`, `radial`, `spark`, `hbar` |
+| `labels`, `series`, `items`, `values` | `[]` | Data arrays for the chart type |
+| `height` | `240` | Height of cartesian/spark charts (px) |
+| `aria` | “Chart” (translated) | SVG label for accessibility |
+| `summary` | `null` | `<figcaption>` after the chart |
+| `legend`, `smooth` | `false` | Legend/curves on cartesian charts |
+| `prefix`, `suffix` | `''` | Number format for tooltips/labels |
+| `size`, `totalLabel` | `null` | Size/total label (mainly donut) |
 
-Array PHP dikodekan menjadi JSON pada atribut. Pilih tipe berdasarkan pertanyaan data: tren waktu (`line`/`area`), perbandingan (`bar`), kontribusi bertumpuk (`stacked`), komposisi (`donut`).
+PHP arrays are encoded as JSON in the attributes. Choose the type from the data question: a trend over time (`line`/`area`), a comparison (`bar`), stacked contribution (`stacked`), or composition (`donut`).
 
-## 📉 Line dan area: dua contoh tren
+## 📉 Line and area: two trend examples
 
 ```blade
-<x-ui.chart type="line" aria="Kunjungan harian situs dan aplikasi"
-    :labels="['Sen', 'Sel', 'Rab', 'Kam']"
+<x-ui.chart type="line" aria="{{ __('Daily site and app visits') }}"
+    :labels="array_map('__', ['Mon', 'Tue', 'Wed', 'Thu'])"
     :series="[
-        ['name' => 'Situs', 'data' => [42, 48, 46, 58], 'color' => 1],
-        ['name' => 'Aplikasi', 'data' => [26, 31, 29, 36], 'color' => 2],
-    ]" summary="Kunjungan situs tertinggi pada Kamis." />
+        ['name' => __('Site'), 'data' => [42, 48, 46, 58], 'color' => 1],
+        ['name' => __('App'), 'data' => [26, 31, 29, 36], 'color' => 2],
+    ]" summary="{{ __('Site visits peaked on Thursday.') }}" />
 
-<x-ui.chart type="area" :smooth="true" aria="Tren entri empat bulan"
-    :labels="['Jun', 'Jul', 'Agu', 'Sep']"
-    :series="[['name' => 'Entri', 'data' => [18, 25, 29, 38], 'color' => 2]]" />
+<x-ui.chart type="area" :smooth="true" aria="{{ __('Four-month entry trend') }}"
+    :labels="array_map('__', ['Jun', 'Jul', 'Aug', 'Sep'])"
+    :series="[['name' => __('Entries'), 'data' => [18, 25, 29, 38], 'color' => 2]]" />
 ```
 
-Array `data` setiap seri harus sejajar dengan `labels`. Dua seri pada line otomatis memunculkan legenda. `smooth` berarti perender menggunakan kurva pada garis/area, bukan filter statistik atas data.
+Each series' `data` array must line up with `labels`. Two series on a line chart show a legend automatically. `smooth` means the renderer draws curves on the line/area; it isn't a statistical filter on the data.
 
-## 📊 Bar dan stacked: perbandingan
+## 📊 Bar and stacked: comparisons
 
 ```blade
-<x-ui.chart type="bar" aria="Pesanan setiap bulan" :legend="true"
-    :labels="['Jul', 'Agu', 'Sep']"
-    :series="[['name' => 'Pesanan', 'data' => [34, 42, 51], 'color' => 1]]" />
+<x-ui.chart type="bar" aria="{{ __('Orders per month') }}" :legend="true"
+    :labels="array_map('__', ['Jul', 'Aug', 'Sep'])"
+    :series="[['name' => __('Orders'), 'data' => [34, 42, 51], 'color' => 1]]" />
 
-<x-ui.chart type="stacked" aria="Pekerjaan per kanal"
-    :labels="['Sen', 'Sel', 'Rab']"
+<x-ui.chart type="stacked" aria="{{ __('Work by channel') }}"
+    :labels="array_map('__', ['Mon', 'Tue', 'Wed'])"
     :series="[
-        ['name' => 'Manual', 'data' => [12, 15, 14], 'color' => 1],
-        ['name' => 'Otomatis', 'data' => [7, 8, 10], 'color' => 2],
+        ['name' => __('Manual'), 'data' => [12, 15, 14], 'color' => 1],
+        ['name' => __('Automated'), 'data' => [7, 8, 10], 'color' => 2],
     ]" />
 ```
 
-## 🍩 Donut dan hbar: komposisi
+## 🍩 Donut and hbar: composition
 
 ```blade
-<x-ui.chart type="donut" aria="Sumber entri" total-label="Entri" :size="160"
+<x-ui.chart type="donut" aria="{{ __('Entry sources') }}" total-label="{{ __('Entries') }}" :size="160"
     :items="[
-        ['label' => 'Manual', 'value' => 520, 'color' => 1],
-        ['label' => 'Impor', 'value' => 280, 'color' => 2],
-        ['label' => 'Otomatis', 'value' => 200, 'color' => 3],
-    ]" summary="Dari 1.000 entri, 52% dibuat manual." />
+        ['label' => __('Manual'), 'value' => 520, 'color' => 1],
+        ['label' => __('Imported'), 'value' => 280, 'color' => 2],
+        ['label' => __('Automated'), 'value' => 200, 'color' => 3],
+    ]" summary="{{ __('Of 1,000 entries, 52% were created manually.') }}" />
 
-<x-ui.chart type="hbar" aria="Pekerjaan per tim" suffix=" pekerjaan"
+<x-ui.chart type="hbar" aria="{{ __('Work by team') }}" suffix=" {{ __('tasks') }}"
     :items="[
-        ['label' => 'Tim inti', 'value' => 35, 'color' => 1],
-        ['label' => 'Kolaborator', 'value' => 20, 'color' => 2],
+        ['label' => __('Core team'), 'value' => 35, 'color' => 1],
+        ['label' => __('Collaborators'), 'value' => 20, 'color' => 2],
     ]" />
 ```
 
-Donut dan hbar perlu nilai positif; renderer membagi terhadap total/nilai maksimum. Jika semuanya nol, tampilkan [table state kosong](/komponen/table-state) alih-alih menghitung persentase 0/0. Hbar saat ini menyusun label melalui `innerHTML` dalam JS: jangan mengirim teks label bebas dari pengguna tanpa escape/sanitasi.
+Donut and hbar need positive values; the renderer divides by the total/maximum. If everything is zero, show an [empty table state](/components/table-state) instead of computing 0/0 percentages. Hbar currently builds its labels through `innerHTML` in JS: don't pass free-form user text as labels without escaping or sanitising it.
 
-## ⚙️ Radial dan spark: atribut tambahan
+## ⚙️ Radial and spark: extra attributes
 
-Tipe `radial` membaca `data-value`, `data-label`, dan `data-color`, sedangkan `spark` dapat membaca `data-kind`/`data-color`. `x-ui.chart` **tidak memiliki prop khusus** untuk atribut itu dan `$attributes` pada komponen diterapkan ke `<figure>`, bukan elemen grafik dalamnya. Oleh karena itu, tulis markup `data-chart` langsung atau perluas komponen sebelum memakai tipe tersebut.
+The `radial` type reads `data-value`, `data-label` and `data-color`, while `spark` can read `data-kind`/`data-color`. `x-ui.chart` has **no dedicated props** for these, and the component's `$attributes` apply to the `<figure>`, not the inner chart element. So write `data-chart` markup directly, or extend the component, before using these types.
 
 ```blade
-<div data-chart="radial" data-value="72" data-label="Target" data-color="chart-2" data-size="120"></div>
-<div data-chart="spark" data-aria="Tren pesanan" data-values="[12,15,14,19,24]"
+<div data-chart="radial" data-value="72" data-label="{{ __('Target') }}" data-color="chart-2" data-size="120"></div>
+<div data-chart="spark" data-aria="{{ __('Order trend') }}" data-values="[12,15,14,19,24]"
     data-kind="area" data-color="success" data-height="48"></div>
 ```
 
-Gunakan nama warna CSS dari sistem (`chart-1`..`chart-5`, `success`), bukan nilai tak tepercaya dari request. `x-ui.stat-card` sudah menyajikan sparkline di dalam kartu KPI.
+Use colour names from the system (`chart-1`..`chart-5`, `success`), not untrusted values from the request. `x-ui.stat-card` already presents a sparkline inside a KPI card.
 
-## 🔄 Data Laravel, aksesibilitas, render ulang
+## 🔄 Laravel data, accessibility and redrawing
 
-Siapkan `labels`/`series`/`items` pada controller dan kirim melalui `:labels="$labels"`, `:series="$series"`. Berikan `aria` yang menjelaskan grafik dan `summary` berisi temuan dalam bahasa biasa. `window.Charts.init(scope)` hanya menginisialisasi elemen baru; setelah mengganti `dataset` pada elemen lama, panggil `window.Charts.draw(element)` untuk redraw. Grafik yang tidak memiliki data sebaiknya diganti state kosong. Contoh query terhubung ada di [grafik dari server](/integrasi/data#siapkan-grafik-dari-data-nyata).
+Prepare `labels`/`series`/`items` in the controller and pass them with `:labels="$labels"`, `:series="$series"`. Give an `aria` that describes the chart and a `summary` stating the finding in plain language. `window.Charts.init(scope)` only initialises new elements; after replacing the `dataset` on an existing element, call `window.Charts.draw(element)` to redraw. A chart with no data is better replaced by an empty state. A connected query example is in [charts from the server](/integration/data#build-charts-from-real-data).
