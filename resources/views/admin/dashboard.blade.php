@@ -1,6 +1,6 @@
 <x-layouts.admin title="Dashboard" group="Platform">
 <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-  <x-ui.page-header title="Ringkasan" description="Performa toko Anda selama 30 hari terakhir." />
+  <x-ui.page-header title="Ringkasan" description="Performa bisnis Anda selama 30 hari terakhir." />
   <div class="grid gap-2 sm:flex sm:items-center">
     <button type="button" class="btn btn-outline w-full sm:w-auto"><x-ui.icon name="calendar" class="h-4 w-4 text-muted-foreground" />29 Agu – 28 Sep 2026</button>
     <button type="button" class="btn btn-primary w-full sm:w-auto" data-toast="success" data-toast-title="Laporan sedang disiapkan" data-toast-desc="Berkas akan diunduh otomatis."><x-ui.icon name="download" />Unduh laporan</button>
@@ -50,7 +50,7 @@
     <div class="flex items-center justify-between gap-4 p-6 pb-4">
       <div>
         <h2 class="card-title">Pesanan terbaru</h2>
-        <p class="card-desc mt-1.5">Enam pesanan terakhir dari toko Anda.</p>
+        <p class="card-desc mt-1.5">Enam pesanan terakhir dari bisnis Anda.</p>
       </div>
       @if (config('kenanga.showcase'))
         <a href="{{ route('showcase.tables') }}" class="btn btn-outline btn-sm">Lihat semua</a>

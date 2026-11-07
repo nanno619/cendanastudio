@@ -2,7 +2,7 @@
   <form method="POST" action="{{ route('login.store') }}" class="mt-6 space-y-4">
     @csrf
     <x-ui.field label="Email" name="email">
-      <x-ui.input type="email" name="email" placeholder="ayu@kopikenanga.id" autocomplete="email" autofocus required />
+      <x-ui.input type="email" name="email" placeholder="nama@email.com" autocomplete="email" autofocus required />
     </x-ui.field>
     <x-ui.field name="password">
       <div class="flex items-center justify-between">
