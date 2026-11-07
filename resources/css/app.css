@@ -301,9 +301,9 @@
     .flatpickr-calendar .numInputWrapper span.arrowDown::after { border-top-color: hsl(var(--foreground)); }
     .input[readonly] { @apply bg-muted; }
     .input.flatpickr-input[type='hidden'] { display: none; }
-    .kenanga-date-display[readonly] { @apply cursor-pointer bg-card text-foreground; }
-    .kenanga-date-display[readonly]:focus { @apply border-primary outline-none ring-2 ring-ring/30; }
-    .kenanga-date-display[aria-invalid='true'] { @apply border-destructive; }
+    .cendana-date-display[readonly] { @apply cursor-pointer bg-card text-foreground; }
+    .cendana-date-display[readonly]:focus { @apply border-primary outline-none ring-2 ring-ring/30; }
+    .cendana-date-display[aria-invalid='true'] { @apply border-destructive; }
     .input-invalid { @apply border-destructive focus-visible:border-destructive focus-visible:ring-destructive/30; }
     .input-valid { @apply border-positive focus-visible:border-positive focus-visible:ring-positive/30; }
     .label { @apply text-sm font-medium leading-none; }

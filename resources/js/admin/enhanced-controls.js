@@ -4,8 +4,8 @@ import { Indonesian } from 'flatpickr/dist/l10n/id.js';
 
 function initControls(scope = document) {
   scope.querySelectorAll('[data-enhanced-select]').forEach((select) => {
-    if (select._kenangaChoices) return;
-    select._kenangaChoices = new Choices(select, {
+    if (select._cendanaChoices) return;
+    select._cendanaChoices = new Choices(select, {
       searchEnabled: true,
       searchPlaceholderValue: 'Cari pilihan…',
       itemSelectText: '',
@@ -24,7 +24,7 @@ function initControls(scope = document) {
       locale: Indonesian,
       dateFormat: 'Y-m-d',
       altInput: true,
-      altInputClass: 'input kenanga-date-display',
+      altInputClass: 'input cendana-date-display',
       altFormat: 'j F Y',
       allowInput: false,
       disableMobile: true,

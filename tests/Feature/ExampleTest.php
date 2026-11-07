@@ -31,7 +31,7 @@ class ExampleTest extends TestCase
         }
     }
 
-    public function test_kenanga_pages_render_successfully(): void
+    public function test_cendana_pages_render_successfully(): void
     {
         $paths = [
             '/dashboard',

@@ -411,7 +411,7 @@
       var tpl = $('template[data-page="' + key + '"]') || $('template[data-page="index"]');
       pageRoot.replaceChildren(tpl.content.cloneNode(true));
       body.dataset.layout = tpl.dataset.layout === 'blank' ? 'blank' : 'app';
-      document.title = tpl.dataset.title + ' · Kenanga Admin';
+      document.title = tpl.dataset.title + ' · Cendana Studio';
       var g = $('#crumb-group'), tt = $('#crumb-title');
       if (g) g.textContent = tpl.dataset.group;
       if (tt) tt.textContent = tpl.dataset.title;
