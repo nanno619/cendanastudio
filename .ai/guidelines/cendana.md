@@ -10,7 +10,7 @@ Cendana Studio admin dashboard: Laravel 13 + Blade, originally sliced from the H
 
 ```bash
 composer dev                 # server + queue:listen + pail logs + vite, concurrently
-npm run dev                  # vite only (enough under Herd)
+npm run dev                  # Vite 8 only (enough under Herd); serves https://vite.cendanastudio.test:5173 via Herd's cert
 npm run build                # production asset build
 php artisan migrate --seed   # first admin from ADMIN_SEED_* in .env (local fallback test@example.com / password)
 
@@ -23,6 +23,10 @@ vendor/bin/pint --test <changed paths>   # code style; config/auth.php, UserFact
 npm run docs:dev             # VitePress docs site in docs/
 npm run docs:build           # fails on dead page links (not on dead #anchors)
 ```
+
+Frontend toolchain: Vite 8 + `laravel-vite-plugin` 3 + Tailwind 4 (`@tailwindcss/vite`). The dev server writes `public/hot` while running; the user runs it in their own terminal, so never stop or replace their process; ask them to restart it after frontend dependency upgrades.
+
+Security audits: run `composer audit` and `npm audit` after dependency changes. Three npm advisories are known and accepted: VitePress 1.6.4 bundles its own Vite 5/esbuild (only affects `npm run docs:dev`). Wait for a stable VitePress 2 instead of installing the alpha.
 
 README's validation checklist before finishing: `php artisan test`, `php artisan view:cache` (catches Blade compile errors), `npm run build`. Run `npm run docs:build` too when docs change.
 
