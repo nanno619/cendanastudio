@@ -1,12 +1,12 @@
 /*
- * charts.js: grafik SVG ringan tanpa dependensi.
- * Warna mengikuti CSS variable (--chart-1..5, --success, dst) sehingga otomatis
- * ikut berubah saat tema atau aksen diganti.
+ * charts.js: lightweight SVG charts with no dependencies.
+ * Colours follow CSS variables (--chart-1..5, --success, etc.) so they update
+ * automatically when the theme or accent changes.
  *
- * Pemakaian:  <div data-chart="area" data-labels='["Sen","Sel"]' data-series='[{"name":"A","data":[1,2]}]'></div>
- * Tipe: area | line | bar | stacked | donut | radial | spark | hbar
+ * Usage:  <div data-chart="area" data-labels='["Mon","Tue"]' data-series='[{"name":"A","data":[1,2]}]'></div>
+ * Types: area | line | bar | stacked | donut | radial | spark | hbar
  *
- * Di React: ganti dengan Recharts / Chart.js / visx, data-nya sama persis.
+ * In React: swap for Recharts / Chart.js / visx; the data shape is identical.
  */
 (function (global) {
   'use strict';
@@ -91,7 +91,7 @@
 
     box.innerHTML = '';
     box.style.position = 'relative';
-    var sv = svg('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': c.aria || 'Grafik' }, box);
+    var sv = svg('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': c.aria || __t('chart') }, box);
     sv.style.cssText = 'display:block;width:100%;height:' + H + 'px';
 
     tk.forEach(function (t) {
@@ -188,7 +188,7 @@
     box.classList.add('flex', 'flex-wrap', 'items-center', 'justify-center', 'gap-4');
     var wrap = html('div', 'relative shrink-0', box);
     wrap.style.cssText = 'width:' + size + 'px;height:' + size + 'px';
-    var sv = svg('svg', { viewBox: '0 0 ' + size + ' ' + size, width: size, height: size, role: 'img', 'aria-label': c.aria || 'Grafik donat' }, wrap);
+    var sv = svg('svg', { viewBox: '0 0 ' + size + ' ' + size, width: size, height: size, role: 'img', 'aria-label': c.aria || __t('chart_donut') }, wrap);
     svg('circle', { cx: mid, cy: mid, r: R, fill: 'none', 'stroke-width': sw, style: 'stroke:hsl(var(--muted))' }, sv);
     var off = 0, segs = [];
     I.forEach(function (it, i) {
@@ -203,7 +203,7 @@
     var ctr = html('div', 'pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center', wrap);
     var big = html('p', 'text-2xl font-semibold tabular-nums', ctr);
     var small = html('p', 'text-xs text-muted-foreground', ctr);
-    function reset() { big.textContent = total.toLocaleString('ms-MY'); small.textContent = c.total || 'Total'; segs.forEach(function (s) { s.style.opacity = 1; }); }
+    function reset() { big.textContent = total.toLocaleString('ms-MY'); small.textContent = c.total || __t('total'); segs.forEach(function (s) { s.style.opacity = 1; }); }
     function focus(i) { big.textContent = Number(I[i].value).toLocaleString('ms-MY'); small.textContent = I[i].label; segs.forEach(function (s, j) { s.style.opacity = j === i ? 1 : 0.3; }); }
     var ul = html('ul', 'min-w-[14rem] max-w-full flex-1 space-y-2.5 text-sm', box);
     I.forEach(function (it, i) {
@@ -239,7 +239,7 @@
     var V = c.values, n = V.length, W = Math.max(box.clientWidth, 80), H = +c.height || 36, col = colorOf(c.color || 'chart-1');
     var max = Math.max.apply(null, V), min = Math.min.apply(null, V), rng = max - min || 1;
     box.innerHTML = '';
-    var sv = svg('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': c.aria || 'Tren' }, box);
+    var sv = svg('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': c.aria || __t('trend') }, box);
     sv.style.cssText = 'display:block;width:100%;height:' + H + 'px';
     if (c.kind === 'bar') {
       var bw = W / n;

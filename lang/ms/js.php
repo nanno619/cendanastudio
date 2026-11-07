@@ -1,0 +1,27 @@
+<?php
+
+return [
+    'chart' => 'Carta',
+    'chart_donut' => 'Carta donut',
+    'close' => 'Tutup',
+    'copied' => 'Disalin ke papan keratan',
+    'date_range_help' => 'Pilih tarikh atau gunakan pratetap.',
+    'date_range_invalid' => 'Tarikh mula tidak boleh selepas tarikh akhir.',
+    'date_range_period' => 'Tempoh: :from hingga :to.',
+    'file_local_preview' => 'pratonton setempat',
+    'file_size' => 'Saiz fail melebihi had :max MB.',
+    'file_type' => 'Gunakan fail PNG, JPG atau PDF.',
+    'filter_active' => 'Status aktif: :list.',
+    'filter_all' => 'Memaparkan semua status.',
+    'next' => 'Seterusnya',
+    'previous' => 'Sebelumnya',
+    'processing' => 'Memproses',
+    'select_no_choices' => 'Tiada pilihan',
+    'select_no_results' => 'Tiada hasil',
+    'select_placeholder' => 'Pilih satu pilihan',
+    'select_search' => 'Cari pilihan…',
+    'table_empty' => 'Tiada data',
+    'table_showing' => 'Memaparkan :from–:to daripada :total',
+    'trend' => 'Trend',
+    'total' => 'Jumlah',
+];

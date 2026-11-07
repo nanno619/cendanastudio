@@ -18,5 +18,13 @@
         } catch (error) {}
     })();
 </script>
+<script>
+    window.__i18n = @json(__('js'));
+    window.__t = function (key, replace) {
+        var text = window.__i18n[key] || key;
+        Object.keys(replace || {}).forEach(function (name) { text = text.split(':' + name).join(replace[name]); });
+        return text;
+    };
+</script>
 @vite(['resources/css/app.css', 'resources/js/app.js'])
 

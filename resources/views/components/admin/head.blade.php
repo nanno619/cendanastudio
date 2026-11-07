@@ -8,7 +8,7 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <title>{{ $title ?? 'Dashboard' }} &middot; {{ $site->name }}</title>
 
-{{-- Terapkan preferensi sebelum render agar tidak berkedip --}}
+{{-- Apply preferences before render to avoid a flash --}}
 <script>
     (function () {
         try {

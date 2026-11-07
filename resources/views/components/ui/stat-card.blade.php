@@ -1,7 +1,8 @@
 @props([
     'title', 'value', 'icon', 'tile' => 'bg-soft text-soft-foreground', 'tone' => 'success',
-    'direction' => 'up', 'delta', 'note' => 'dari bulan lalu', 'spark' => null,
+    'direction' => 'up', 'delta', 'note' => null, 'spark' => null,
 ])
+@php $note ??= __('vs last month'); @endphp
 <div {{ $attributes->class('card p-6') }}>
     <div class="flex items-start justify-between gap-3">
         <div>

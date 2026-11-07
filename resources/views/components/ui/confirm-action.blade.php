@@ -1,4 +1,5 @@
-@props(['id', 'title', 'description', 'action', 'method' => 'DELETE', 'label' => 'Hapus', 'tone' => 'destructive'])
+@props(['id', 'title', 'description', 'action', 'method' => 'DELETE', 'label' => null, 'tone' => 'destructive'])
+@php $label ??= __('Delete'); @endphp
 
 @php
     $buttonVariant = in_array($tone, ['destructive', 'primary'], true) ? $tone : 'destructive';
@@ -7,7 +8,7 @@
 <x-ui.modal :id="$id" :title="$title" :description="$description" :icon="$buttonVariant === 'destructive' ? 'trash' : 'info'" :tone="$buttonVariant === 'destructive' ? 'danger' : 'info'" size="sm">
     {{ $slot }}
     <x-slot:footer>
-        <x-ui.button variant="outline" data-modal-close>Batal</x-ui.button>
+        <x-ui.button variant="outline" data-modal-close>{{ __('Cancel') }}</x-ui.button>
         <form action="{{ $action }}" method="POST">
             @csrf
             @if($verb !== 'POST') @method($verb) @endif

@@ -1,4 +1,4 @@
-<aside id="sidebar" class="fixed inset-y-0 left-0 z-50 flex w-64 flex-col overflow-hidden border-r bg-sidebar" aria-label="Navigasi utama">
+<aside id="sidebar" class="fixed inset-y-0 left-0 z-50 flex w-64 flex-col overflow-hidden border-r bg-sidebar" aria-label="{{ __('Main navigation') }}">
     <div class="p-3">
         <button type="button" class="flex w-full items-center gap-2.5 rounded-md p-2 text-left hover:bg-accent focus-ring">
             <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground"><x-ui.icon name="layers" /></span>
@@ -14,7 +14,7 @@
         @foreach (config('cendana.navigation') as $group)
             @continue(($group['showcase'] ?? false) && ! config('cendana.showcase'))
             <div>
-                <p class="sb-label mb-1 px-2 text-xs font-medium text-muted-foreground">{{ $group['label'] }}</p>
+                <p class="sb-label mb-1 px-2 text-xs font-medium text-muted-foreground">{{ __($group['label']) }}</p>
                 <ul class="space-y-0.5">
                     @foreach ($group['items'] as $item)
                         @if (! empty($item['children']))
@@ -25,7 +25,7 @@
                             <li>
                                 <button type="button" class="nav-link" data-collapse="#{{ $submenuId }}" aria-expanded="{{ $submenuActive ? 'true' : 'false' }}">
                                     <x-ui.icon :name="$item['icon']" class="h-4 w-4 shrink-0" />
-                                    <span class="sb-label flex-1 truncate">{{ $item['label'] }}</span>
+                                    <span class="sb-label flex-1 truncate">{{ __($item['label']) }}</span>
                                     <x-ui.icon name="chevron-right" @class(['nav-chevron sb-label h-4 w-4 transition-transform', 'rotate-90' => $submenuActive]) />
                                 </button>
                                 <ul id="{{ $submenuId }}" class="nav-sub sb-label" @if(! $submenuActive) hidden @endif>
@@ -45,7 +45,7 @@
 
     <div class="border-t p-3">
         <a href="#" class="nav-link mb-1">
-            <x-ui.icon name="help" class="h-4 w-4 shrink-0" /><span class="sb-label">Bantuan</span>
+            <x-ui.icon name="help" class="h-4 w-4 shrink-0" /><span class="sb-label">{{ __('Help') }}</span>
         </a>
         @auth
             <a href="{{ route('admin.settings') }}" class="flex items-center gap-2.5 rounded-md p-2 hover:bg-accent focus-ring">
@@ -56,7 +56,7 @@
             <form method="POST" action="{{ route('logout') }}" class="mt-1">
                 @csrf
                 <button type="submit" class="nav-link">
-                    <x-ui.icon name="logout" class="h-4 w-4 shrink-0" /><span class="sb-label">Keluar</span>
+                    <x-ui.icon name="logout" class="h-4 w-4 shrink-0" /><span class="sb-label">{{ __('Sign out') }}</span>
                 </button>
             </form>
         @endauth

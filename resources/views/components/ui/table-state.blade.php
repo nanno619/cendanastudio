@@ -1,8 +1,8 @@
 @props(['state' => 'empty', 'title' => null, 'description' => null])
 
 @if ($state === 'loading')
-    <div role="status" aria-label="Memuat data" {{ $attributes->class('space-y-3 p-6') }}>
-        <span class="sr-only">Memuat data…</span>
+    <div role="status" aria-label="{{ __('Loading data') }}" {{ $attributes->class('space-y-3 p-6') }}>
+        <span class="sr-only">{{ __('Loading data…') }}</span>
         @for ($row = 0; $row < 4; $row++)
             <div class="flex items-center gap-4"><span class="skeleton h-9 w-9 shrink-0 rounded-full"></span><span class="skeleton h-4 flex-1"></span><span class="skeleton h-4 w-16"></span></div>
         @endfor
@@ -10,9 +10,9 @@
 @else
     @php
         $defaults = match ($state) {
-            'filtered' => ['search', 'Tidak ada hasil', 'Coba kata kunci lain atau hapus filter yang aktif.'],
-            'error' => ['alert-circle', 'Data gagal dimuat', 'Periksa koneksi, lalu coba muat ulang.'],
-            default => ['file-text', 'Belum ada data', 'Data baru akan muncul di sini setelah ditambahkan.'],
+            'filtered' => ['search', __('No results'), __('Try another keyword or clear the active filters.')],
+            'error' => ['alert-circle', __('Data failed to load'), __('Check your connection, then try reloading.')],
+            default => ['file-text', __('No data yet'), __('New data will appear here once it is added.')],
         };
     @endphp
     <div @if ($state === 'error') role="alert" @else role="status" @endif {{ $attributes->class('flex flex-col items-center justify-center px-6 py-12 text-center') }}>

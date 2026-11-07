@@ -1,8 +1,11 @@
 <?php
 
+use App\Http\Controllers\LocaleController;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/dashboard');
+
+Route::post('/locale', LocaleController::class)->name('locale.update');
 
 Route::middleware('auth')->group(function (): void {
     Route::view('/dashboard', 'admin.dashboard')->name('admin.dashboard');
@@ -21,7 +24,7 @@ Route::middleware('auth')->group(function (): void {
             Route::view('/feedback', 'showcase.feedback')->name('feedback');
             Route::view('/navigation', 'showcase.navigation')->name('navigation');
             Route::view('/data-patterns', 'showcase.data-patterns')->name('data-patterns');
-            Route::post('/data-patterns/preview', fn () => redirect()->route('showcase.data-patterns')->with('status', 'Pratinjau konfirmasi selesai; tidak ada data yang dihapus.'))->name('data-patterns.preview');
+            Route::post('/data-patterns/preview', fn () => redirect()->route('showcase.data-patterns')->with('status', __('Confirmation preview complete; no data was deleted.')))->name('data-patterns.preview');
         });
 
         Route::prefix('examples/records')->name('examples.records.')->group(function (): void {

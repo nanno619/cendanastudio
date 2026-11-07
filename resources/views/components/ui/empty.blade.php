@@ -1,4 +1,5 @@
-@props(['icon' => 'file-text', 'title' => 'Belum ada data', 'description' => null])
+@props(['icon' => 'file-text', 'title' => null, 'description' => null])
+@php $title ??= __('No data yet'); @endphp
 
 <div class="flex flex-col items-center justify-center gap-2 px-6 py-14 text-center">
     <span class="avatar avatar-xl avatar-soft">

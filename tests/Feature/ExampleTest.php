@@ -99,8 +99,8 @@ class ExampleTest extends TestCase
             ->assertOk()
             ->assertSee('data-enhanced-select', false)
             ->assertSee('role="tabpanel"', false)
-            ->assertSee('Panduan orientasi untuk anggota tim baru.')
-            ->assertSee('Filter aktif:')
+            ->assertSee('An orientation guide for new team members.')
+            ->assertSee('Active filters:')
             ->assertSee('method="POST"', false);
 
         $this->get('/components/filters')

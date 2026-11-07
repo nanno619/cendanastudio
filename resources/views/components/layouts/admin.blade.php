@@ -1,6 +1,6 @@
 @props(['title', 'group' => 'Platform'])
 <!DOCTYPE html>
-<html lang="id">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <x-layouts.head :title="$title" />
 </head>

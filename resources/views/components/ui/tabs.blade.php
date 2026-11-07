@@ -5,7 +5,7 @@
     $selected = $active ?? array_key_first($tabs);
 @endphp
 <div {{ $attributes->except('aria-label')->class('min-w-0') }} data-tabs>
-    <div class="tabs-{{ $style }}" role="tablist" aria-label="{{ $attributes->get('aria-label', 'Navigasi tab') }}">
+    <div class="tabs-{{ $style }}" role="tablist" aria-label="{{ $attributes->get('aria-label', __('Tab navigation')) }}">
         @foreach($tabs as $key => $label)
             <button type="button" role="tab" class="tab" id="{{ $id }}-tab-{{ $key }}" aria-controls="{{ $id }}-panel-{{ $key }}"
                 aria-selected="{{ $key == $selected ? 'true' : 'false' }}" tabindex="{{ $key == $selected ? '0' : '-1' }}">{{ $label }}</button>

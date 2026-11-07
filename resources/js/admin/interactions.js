@@ -1,13 +1,13 @@
 /*
- * app.js: perilaku interaktif template. Memakai event delegation dan atribut data-*,
- * jadi satu file ini menangani semua halaman.
+ * interactions.js: interactive behaviour for every page. Uses event delegation and
+ * data-* attributes, so this one file handles all pages.
  *
- * Peta ke React:
- *   data-dropdown / data-tabs / data-collapse  -> state useState di komponen masing-masing
+ * React mapping:
+ *   data-dropdown / data-tabs / data-collapse  -> useState in each component
  *   dialog + data-modal-open                   -> <Dialog> (shadcn/ui, Radix)
  *   data-table                                 -> TanStack Table
  *   App.toast()                                -> sonner / react-hot-toast
- *   preferensi (tema, aksen, radius, sidebar)  -> Context + localStorage
+ *   preferences (theme, accent, radius, sidebar) -> Context + localStorage
  */
 (function () {
   'use strict';
@@ -28,7 +28,7 @@
   };
 
   /* =====================================================
-     PREFERENSI: tema, aksen, radius, mode sidebar
+     PREFERENCES: theme, accent, radius, sidebar mode
      ===================================================== */
   var DEFAULTS = { theme: 'system', accent: 'indigo', radius: '0.5', sbmode: 'full' };
   function pref(k) { return store.get(k) || DEFAULTS[k]; }
@@ -115,7 +115,7 @@
       '<svg class="mt-0.5 h-4 w-4 shrink-0 ' + t[1] + '" aria-hidden="true"><use href="' + iconHref(t[0]) + '"/></svg>' +
       '<div class="min-w-0 flex-1"><p class="font-medium">' + (o.title || '') + '</p>' +
       (o.description ? '<p class="mt-0.5 text-muted-foreground">' + o.description + '</p>' : '') + '</div>' +
-      '<button type="button" class="-m-1 rounded p-1 text-muted-foreground hover:text-foreground" aria-label="Tutup"><svg class="h-4 w-4"><use href="' + iconHref('x') + '"/></svg></button>';
+      '<button type="button" class="-m-1 rounded p-1 text-muted-foreground hover:text-foreground" aria-label="' + __t('close') + '"><svg class="h-4 w-4"><use href="' + iconHref('x') + '"/></svg></button>';
     var timer;
     var close = function () {
       if (el.dataset.closing) return;
@@ -129,7 +129,7 @@
   }
 
   /* =====================================================
-     DROPDOWN (menu diposisikan fixed agar tidak terpotong tabel/overflow)
+     DROPDOWN (menus are position: fixed so tables/overflow don't clip them)
      ===================================================== */
   function closeMenus(except) {
     $$('[data-dropdown] .menu').forEach(function (m) {
@@ -245,13 +245,13 @@
     }
     if ((el = t.closest('[data-copy]'))) {
       try { navigator.clipboard.writeText(el.dataset.copy); } catch (er) {}
-      toast({ title: 'Disalin ke papan klip', tone: 'success' });
+      toast({ title: __t('copied'), tone: 'success' });
       return;
     }
     if ((el = t.closest('[data-load]'))) {
       var label = el.innerHTML;
       el.disabled = true;
-      el.innerHTML = '<span class="spinner"></span>Memproses';
+      el.innerHTML = '<span class="spinner"></span>' + __t('processing');
       setTimeout(function () { el.disabled = false; el.innerHTML = label; }, 1600);
     }
   });
@@ -280,7 +280,7 @@
     if (window.Charts) Charts.init(document);
   }
 
-  /* Pilih semua / baris pada tabel */
+  /* Select all / table rows */
   document.addEventListener('change', function (e) {
     var t = e.target, tbl = t.closest && t.closest('[data-table]');
     if (!tbl) return;
@@ -300,7 +300,7 @@
   }
 
   /* =====================================================
-     DATA TABLE: cari, filter, urut, paginasi (client-side)
+     DATA TABLE: search, filter, sort, paginate (client-side)
      ===================================================== */
   function initTable(t) {
     if (t.__init) return; t.__init = true;
@@ -325,7 +325,7 @@
         b.addEventListener('click', function () { st.page = p; draw(); });
         pager.appendChild(b);
       }
-      btn('‹', st.page - 1, { disabled: st.page <= 1, aria: 'Sebelumnya' });
+      btn('‹', st.page - 1, { disabled: st.page <= 1, aria: __t('previous') });
       var list = [];
       for (var p = 1; p <= pages; p++) {
         if (p === 1 || p === pages || Math.abs(p - st.page) <= 1) list.push(p);
@@ -335,7 +335,7 @@
         if (p === '…') { var s = document.createElement('span'); s.className = 'px-1 text-muted-foreground'; s.textContent = '…'; pager.appendChild(s); }
         else btn(String(p), p, { current: p === st.page });
       });
-      btn('›', st.page + 1, { disabled: st.page >= pages, aria: 'Berikutnya' });
+      btn('›', st.page + 1, { disabled: st.page >= pages, aria: __t('next') });
     }
 
     function draw() {
@@ -348,7 +348,7 @@
         var num = th && th.dataset.sort === 'num';
         list.sort(function (a, b) {
           var x = cell(a, st.col), y = cell(b, st.col);
-          return (num ? parseFloat(x) - parseFloat(y) : x.localeCompare(y, 'id')) * st.dir;
+          return (num ? parseFloat(x) - parseFloat(y) : x.localeCompare(y, document.documentElement.lang || 'en')) * st.dir;
         });
       }
       var pages = Math.max(1, Math.ceil(list.length / st.size));
@@ -357,7 +357,7 @@
       rows.forEach(function (r) { r.hidden = true; });
       list.forEach(function (r, i) { r.hidden = !(i >= s && i < e); tbody.appendChild(r); });
       if (empty) empty.hidden = list.length > 0;
-      if (info) info.textContent = list.length ? 'Menampilkan ' + (s + 1) + '–' + Math.min(e, list.length) + ' dari ' + list.length + ' data' : 'Tidak ada data';
+      if (info) info.textContent = list.length ? __t('table_showing', { from: s + 1, to: Math.min(e, list.length), total: list.length }) : __t('table_empty');
       if (pager) drawPager(pages);
       ths.forEach(function (h) { h.setAttribute('aria-sort', h.cellIndex === st.col ? (st.dir > 0 ? 'ascending' : 'descending') : 'none'); });
       var ca = $('[data-check-all]', t); if (ca) ca.checked = false;
@@ -387,7 +387,7 @@
   }
 
   /* =====================================================
-     INIT HALAMAN (dipanggil ulang setiap konten halaman berganti)
+     PAGE INIT (re-run whenever the page content changes)
      ===================================================== */
   function initPage(scope) {
     scope = scope || document;
@@ -401,8 +401,8 @@
   window.App = { toast: toast, setPref: setPref, initPage: initPage };
 
   /* =====================================================
-     ROUTER PRATINJAU (hanya aktif pada pratinjau satu-file: window.__SPA__)
-     Pada build multi-halaman, tiap halaman dimuat normal oleh browser.
+     PREVIEW ROUTER (only active in the single-file preview: window.__SPA__)
+     In the multi-page build, each page loads normally in the browser.
      ===================================================== */
   function startSpa() {
     var pageRoot = $('#page-root');
@@ -427,7 +427,7 @@
     go();
   }
 
-  /* Mulai */
+  /* Start */
   syncPrefs();
   if (window.__SPA__) startSpa(); else initPage(document);
 })();

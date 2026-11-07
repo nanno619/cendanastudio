@@ -1,4 +1,5 @@
-@props(['id', 'label', 'options' => [], 'name' => null, 'placeholder' => 'Cari dan pilih…'])
+@props(['id', 'label', 'options' => [], 'name' => null, 'placeholder' => null])
+@php $placeholder ??= __('Search and choose…'); @endphp
 
 <div data-combobox {{ $attributes->class('relative min-w-0 space-y-2') }}>
     <label class="label" for="{{ $id }}">{{ $label }}</label>
@@ -12,6 +13,6 @@
             @endphp
             <div id="{{ $id }}-option-{{ $loop->index }}" role="option" aria-selected="false" class="cursor-pointer rounded-md px-3 py-2 text-sm hover:bg-accent" data-combobox-option data-value="{{ $optionValue }}">{{ $optionLabel }}</div>
         @endforeach
-        <p class="px-3 py-2 text-sm text-muted-foreground" role="status" hidden data-combobox-empty>Tidak ada pilihan yang cocok.</p>
+        <p class="px-3 py-2 text-sm text-muted-foreground" role="status" hidden data-combobox-empty>{{ __('No matching options.') }}</p>
     </div>
 </div>

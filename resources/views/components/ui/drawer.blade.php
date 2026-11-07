@@ -9,7 +9,7 @@
                     <p id="{{ $id }}-description" class="mt-1 text-sm text-muted-foreground">{{ $description }}</p>
                 @endif
             </div>
-            <button type="button" class="btn btn-ghost btn-icon btn-sm shrink-0" data-modal-close aria-label="Tutup {{ $title }}"><x-ui.icon name="x" /></button>
+            <button type="button" class="btn btn-ghost btn-icon btn-sm shrink-0" data-modal-close aria-label="{{ __('Close :title', ['title' => $title]) }}"><x-ui.icon name="x" /></button>
         </div>
         <div class="min-h-0 flex-1 overflow-y-auto p-5">{{ $slot }}</div>
         @isset($footer)

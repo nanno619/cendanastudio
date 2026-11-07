@@ -1,4 +1,4 @@
-/* Input lanjutan untuk halaman showcase. Semua state hanya hidup di browser. */
+/* Advanced inputs for the showcase pages. All state lives in the browser only. */
 (function () {
   'use strict';
 
@@ -75,9 +75,9 @@
         if (input._flatpickr && input._flatpickr.altInput) input._flatpickr.altInput.setAttribute('aria-invalid', String(invalid));
       });
       status.className = invalid ? 'field-error' : 'field-help';
-      status.textContent = invalid ? 'Tanggal awal tidak boleh setelah tanggal akhir.' :
-        from.value && to.value ? 'Periode: ' + from.value + ' hingga ' + to.value + '.' :
-        'Pilih tanggal atau gunakan preset.';
+      status.textContent = invalid ? __t('date_range_invalid') :
+        from.value && to.value ? __t('date_range_period', { from: from.value, to: to.value }) :
+        __t('date_range_help');
     }
     presets.forEach(function (button) {
       button.addEventListener('click', function () {
@@ -108,7 +108,7 @@
     function update() {
       var chosen = chips.slice(1).filter(function (chip) { return chip.getAttribute('aria-pressed') === 'true'; });
       chips[0].setAttribute('aria-pressed', String(chosen.length === 0));
-      summary.textContent = chosen.length ? 'Status aktif: ' + chosen.map(function (chip) { return chip.textContent.trim(); }).join(', ') + '.' : 'Menampilkan semua status.';
+      summary.textContent = chosen.length ? __t('filter_active', { list: chosen.map(function (chip) { return chip.textContent.trim(); }).join(', ') }) : __t('filter_all');
     }
     chips.forEach(function (chip, index) { chip.addEventListener('click', function () {
       if (index === 0) chips.slice(1).forEach(function (item) { item.setAttribute('aria-pressed', 'false'); });
@@ -138,11 +138,11 @@
       var validType = ['image/png', 'image/jpeg', 'application/pdf'].includes(file.type);
       var maxBytes = Number(root.dataset.maxMb || 5) * 1024 * 1024;
       if (!validType || file.size > maxBytes) {
-        error.textContent = !validType ? 'Gunakan berkas PNG, JPG, atau PDF.' : 'Ukuran berkas melebihi batas ' + root.dataset.maxMb + ' MB.';
+        error.textContent = !validType ? __t('file_type') : __t('file_size', { max: root.dataset.maxMb });
         error.hidden = false; input.value = ''; return;
       }
       root.querySelector('[data-file-name]').textContent = file.name;
-      root.querySelector('[data-file-size]').textContent = (file.size / 1024 / 1024).toLocaleString('ms-MY', { maximumFractionDigits: 2 }) + ' MB · pratinjau lokal';
+      root.querySelector('[data-file-size]').textContent = (file.size / 1024 / 1024).toLocaleString('ms-MY', { maximumFractionDigits: 2 }) + ' MB · ' + __t('file_local_preview');
       image.hidden = !file.type.startsWith('image/');
       icon.hidden = !image.hidden;
       if (!image.hidden) { objectUrl = URL.createObjectURL(file); image.src = objectUrl; }
