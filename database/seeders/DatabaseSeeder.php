@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use RuntimeException;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,11 +13,25 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $admin = config('cendana.seed_admin');
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        if (blank($admin['email']) || blank($admin['password'])) {
+            if (app()->isProduction()) {
+                throw new RuntimeException('Set ADMIN_SEED_EMAIL and ADMIN_SEED_PASSWORD in .env before seeding production.');
+            }
+
+            // Local convenience only: a throwaway login so the dashboard can be opened right away.
+            $admin = ['name' => 'Test User', 'email' => 'test@example.com', 'password' => 'password'];
+            $this->command?->warn('ADMIN_SEED_EMAIL/ADMIN_SEED_PASSWORD not set; seeding test@example.com / password.');
+        }
+
+        if (mb_strlen($admin['password']) < 12 && app()->isProduction()) {
+            throw new RuntimeException('ADMIN_SEED_PASSWORD must be at least 12 characters in production.');
+        }
+
+        User::updateOrCreate(
+            ['email' => $admin['email']],
+            ['name' => $admin['name'] ?: 'Administrator', 'password' => $admin['password'], 'email_verified_at' => now()],
+        );
     }
 }

@@ -38,6 +38,12 @@ return [
         'footer' => env('ADMIN_FOOTER', '© Cendana Studio'),
     ],
     'showcase' => (bool) env('ADMIN_SHOWCASE', true),
+    // First admin login created by `php artisan db:seed`. Required in production; never commit real values.
+    'seed_admin' => [
+        'name' => env('ADMIN_SEED_NAME', 'Administrator'),
+        'email' => env('ADMIN_SEED_EMAIL'),
+        'password' => env('ADMIN_SEED_PASSWORD'),
+    ],
     'locales' => [
         'en' => 'English',
         'ms' => 'Bahasa Melayu',

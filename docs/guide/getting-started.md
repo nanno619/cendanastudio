@@ -14,7 +14,7 @@ php artisan key:generate
 php artisan migrate --seed
 ```
 
-On Windows, use `copy .env.example .env` instead of `cp`. `.env.example` uses MySQL: create an empty database matching `DB_DATABASE` first, or switch `DB_CONNECTION` to `sqlite`. The migrations create Laravel's default tables, **not** dashboard data; the seeder adds a login user, `test@example.com` / `password`.
+On Windows, use `copy .env.example .env` instead of `cp`. `.env.example` uses MySQL: create an empty database matching `DB_DATABASE` first, or switch `DB_CONNECTION` to `sqlite`. The migrations create Laravel's default tables, **not** dashboard data; the seeder adds the first admin from `ADMIN_SEED_EMAIL`/`ADMIN_SEED_PASSWORD` in `.env` (locally it falls back to `test@example.com` / `password` when those are empty).
 
 Run the Laravel server and the asset server in separate terminals:
 

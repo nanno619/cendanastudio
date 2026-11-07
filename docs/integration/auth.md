@@ -16,7 +16,7 @@ All three use `<x-auth.shell>` (`resources/views/components/auth/shell.blade.php
 
 Account settings (`/settings`) send `PUT user/profile-information` and `PUT user/password`. Errors are shown per error bag (`updateProfileInformation`, `updatePassword`). Validation, login and password-reset messages follow the visitor's language; the Malay versions are in `lang/ms/*.php`.
 
-To create the first user: `php artisan db:seed` (creates `test@example.com` with password `password`) or `php artisan tinker`. Change it before production.
+To create the first user, set `ADMIN_SEED_NAME`, `ADMIN_SEED_EMAIL` and `ADMIN_SEED_PASSWORD` in `.env` and run `php artisan db:seed`. The seeder uses `updateOrCreate`, so re-running it resets that user's name and password instead of creating a duplicate. Locally, empty values fall back to `test@example.com` / `password`; in production the seeder refuses to run without them and requires a password of at least 12 characters. Don't commit real values; set them only in the server's `.env`, and you can clear `ADMIN_SEED_PASSWORD` after seeding.
 
 Password-reset emails use the `MAIL_MAILER` driver in `.env` (default `log`; see `storage/logs`).
 

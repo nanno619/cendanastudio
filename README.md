@@ -25,7 +25,7 @@ php artisan serve
 
 With Laravel Herd or Valet, skip `php artisan serve` and set `APP_URL` to your site address, for example `https://cendanastudio.test`.
 
-Sign in at `/login` with the seeded user: `test@example.com` / `password`. Change or remove this user in `database/seeders/DatabaseSeeder.php` before production.
+The seeder creates the first admin from `ADMIN_SEED_NAME`, `ADMIN_SEED_EMAIL` and `ADMIN_SEED_PASSWORD` in `.env`. Locally, if those are empty, it falls back to `test@example.com` / `password`; in production it refuses to run without them and requires a password of at least 12 characters. Sign in at `/login`.
 
 For a production build:
 
