@@ -1,12 +1,12 @@
-# Kenanga Admin — Laravel Blade Starter Kit
+# Cendana Studio — Admin Dashboard
 
-Kenanga Admin adalah starter kit dashboard Laravel 12 yang dislicing dari template HTML `kenanga-admin-template`. Seluruh halaman utama sudah memakai Blade layout, Blade components, Vite, Tailwind CSS 4, JavaScript modular, tema terang/gelap, pilihan aksen, dan layout responsif.
+Cendana Studio adalah dashboard admin berbasis Laravel 13 dan Blade. Seluruh halaman utama sudah memakai Blade layout, Blade components, Vite, Tailwind CSS 4, JavaScript modular, tema terang/gelap, pilihan aksen, dan layout responsif.
 
 Panduan lengkap tersedia di situs VitePress dalam `docs/`: jalankan `npm run docs:dev` setelah `npm install`. Build dokumentasi dengan `npm run docs:build`. Dokumentasi mencakup referensi komponen `<x-ui.*>` dan cara menghubungkan halaman demo ke backend Laravel.
 
 ## Menjalankan proyek
 
-Prasyarat: PHP 8.2+, Composer, Node.js, dan MySQL (atau ubah `DB_CONNECTION` di `.env`, misalnya ke `sqlite`).
+Prasyarat: PHP 8.3+, Composer, Node.js, dan MySQL (atau ubah `DB_CONNECTION` di `.env`, misalnya ke `sqlite`).
 
 ```bash
 composer install
@@ -23,7 +23,7 @@ npm run dev
 php artisan serve
 ```
 
-Jika memakai Laravel Herd atau Valet, lewati `php artisan serve` dan setel `APP_URL` ke alamat situs Anda, misalnya `https://nama-folder.test`.
+Jika memakai Laravel Herd atau Valet, lewati `php artisan serve` dan setel `APP_URL` ke alamat situs Anda, misalnya `https://cendanastudio.test`.
 
 Masuk di `/login` dengan pengguna dari seeder: `test@example.com` / `password`. Ganti atau hapus pengguna ini di `database/seeders/DatabaseSeeder.php` sebelum produksi.
 
@@ -67,15 +67,16 @@ php artisan optimize
 
 Autentikasi (login, logout, atur ulang kata sandi, pembaruan profil dan kata sandi) sudah terhubung lewat Laravel Fortify dan semua halaman admin dilindungi middleware `auth`; lihat `docs/integrasi/auth.md`. Semua contoh data dan form contoh masih berupa presentational UI: form contoh hanya menampilkan toast dan tidak menyimpan data. Hubungkan validasi server dan persistensi sesuai kebutuhan proyek nyata.
 
-## Kustomisasi starter kit
+## Kustomisasi
 
 Identitas dasar dapat diubah melalui `.env`:
 
 ```dotenv
-ADMIN_NAME="Kenanga Admin"
-ADMIN_BRAND_NAME="Kenanga Admin"
-ADMIN_WORKSPACE="Kopi Kenanga"
-ADMIN_WORKSPACE_DESCRIPTION="Toko online"
+ADMIN_NAME="Cendana Studio"
+ADMIN_BRAND_NAME="Cendana Studio Admin"
+ADMIN_WORKSPACE="Cendana Studio"
+ADMIN_WORKSPACE_DESCRIPTION="Cendana Studio CRM"
+ADMIN_FOOTER="© Cendana Studio"
 ADMIN_SHOWCASE=true
 ```
 
@@ -87,7 +88,7 @@ Contoh halaman baru:
 <x-layouts.admin title="Produk" group="Katalog">
     <x-ui.page-header
         title="Produk"
-        description="Kelola produk toko Anda."
+        description="Kelola produk bisnis Anda."
     />
 
     <x-ui.card>
@@ -108,4 +109,4 @@ php artisan view:cache
 npm run build
 ```
 
-Sprite ikon lokal berada di `public/icons.svg`; starter kit tidak bergantung pada CDN untuk ikon maupun font Inter.
+Sprite ikon lokal berada di `public/icons.svg`; aplikasi tidak bergantung pada CDN untuk ikon maupun font Inter.
