@@ -131,6 +131,13 @@
   /* =====================================================
      DROPDOWN (menus are position: fixed so tables/overflow don't clip them)
      ===================================================== */
+  function hasOpenMenu() {
+    return $$('[data-dropdown] .menu').some(function (m) {
+      return !m.hidden && !m.classList.contains('hidden') && !m.dataset.closing;
+    });
+  }
+  // Scroll/resize fire every frame: only read the DOM, and only close when a menu is actually open.
+  function closeMenusIfOpen() { if (hasOpenMenu()) closeMenus(); }
   function closeMenus(except) {
     $$('[data-dropdown] .menu').forEach(function (m) {
       if (m === except || m.hidden || m.classList.contains('hidden') || m.dataset.closing) return;
@@ -265,8 +272,8 @@
       next.focus(); selectTab(next);
     }
   });
-  window.addEventListener('scroll', closeMenus, true);
-  window.addEventListener('resize', closeMenus);
+  window.addEventListener('scroll', closeMenusIfOpen, { capture: true, passive: true });
+  window.addEventListener('resize', closeMenusIfOpen, { passive: true });
 
   function selectTab(tab) {
     var list = tab.closest('[role="tablist"]');
