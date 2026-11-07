@@ -54,7 +54,7 @@ Remote `origin` is `git@github.com:nanno619/cendanastudio.git`. Commit messages 
 - `layouts/` — `<x-layouts.admin title="" group="">` (sidebar + header + customizer + `#toasts`), `guest`, `blank`.
 - `admin/` — app shell pieces (sidebar, header, nav-link, customizer).
 - `ui/` — reusable `<x-ui.*>` library (card, button, field, modal, drawer, combobox, date-range, table-state, chart, etc.). Documented per component in `docs/components/`; the live catalog is `resources/views/showcase/`. Reuse these rather than writing raw markup.
-- Two icon components: `<x-ui.icon name="">` references the external sprite `public/icons.svg#i-{name}`; `<x-icon>` references an inline `#i-{name}` symbol. No CDN for icons or fonts (Inter via `@fontsource`).
+- Icons: use `<x-ui.icon name="">` (external sprite `public/icons.svg#i-{name}`). The legacy `<x-icon>` references an inline `#i-{name}` symbol the layouts don't load; don't use it. No CDN for icons or fonts (Inter via `@fontsource`).
 
 **Frontend JS** (`resources/js/admin/`, imported by `resources/js/app.js`) is vanilla, global, and driven by **event delegation on `data-*` attributes** — `data-dropdown`, `data-tabs`, `data-collapse`, `data-modal-open`/`data-modal-close` (native `<dialog>`), `data-table` (client-side search/filter/paginate), `data-toast`, `data-dismiss`, `data-copy`, `data-pref`. New interactive behavior should follow the same attribute pattern rather than per-page scripts. `charts.js` renders SVG charts from props passed by `<x-ui.chart>`; `advanced-inputs.js` handles combobox/date-range/file preview (choices.js, flatpickr).
 
