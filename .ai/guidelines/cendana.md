@@ -48,6 +48,8 @@ Remote `origin` is `git@github.com:nanno619/cendanastudio.git`. Always create co
 
 **Auth is real** via Laravel Fortify: `FortifyServiceProvider` registers views (`auth.login`, `auth.forgot-password`, `auth.reset-password`) and the `App\Actions\Fortify\*` actions; login is rate-limited at 5/min per email+IP. All admin pages sit behind `auth` middleware; `/locale`, `/demo/404` and `/testing` are public. The seeder (`DatabaseSeeder`) creates the first admin from `config('cendana.seed_admin')` (`ADMIN_SEED_NAME/EMAIL/PASSWORD`) via `updateOrCreate`; in production it throws without credentials or with a password under 12 chars, locally it falls back to `test@example.com` / `password`.
 
+**Authorization** uses `spatie/laravel-permission` (v8): `User` has the `HasRoles` trait, permissions register on Laravel's gate (`$user->can('edit records')`, `@can`), and the `role`, `permission` and `role_or_permission` middleware aliases are registered in `bootstrap/app.php`. No roles or permissions are defined yet. Clear `PermissionRegistrar::forgetCachedPermissions()` in tests that create them.
+
 **`config/cendana.php` drives the shell**: branding (from `ADMIN_*` env vars: `ADMIN_NAME` = browser title suffix, `ADMIN_BRAND_NAME`, `ADMIN_WORKSPACE` + `_DESCRIPTION` = sidebar/login, `ADMIN_FOOTER` = footer text), `seed_admin`, `locales`, sidebar `navigation` (groups → items with `route`, `active` route pattern, `icon`, optional `children`), theme accent list and radius options. Adding a page = route + view + navigation entry. `ADMIN_SHOWCASE=false` removes the `/components/*` and `/examples/records/*` routes entirely (they are registered inside `if (config('cendana.showcase'))`).
 
 **Blade components** (`resources/views/components/`):

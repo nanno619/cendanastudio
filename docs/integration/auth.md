@@ -20,6 +20,33 @@ To create the first user, set `ADMIN_SEED_NAME`, `ADMIN_SEED_EMAIL` and `ADMIN_S
 
 Password-reset emails use the `MAIL_MAILER` driver in `.env` (default `log`; see `storage/logs`).
 
+## 🧑‍⚖️ Roles & permissions
+
+Authorization uses [spatie/laravel-permission](https://spatie.be/docs/laravel-permission). The `User` model has the `HasRoles` trait, and the package's tables (`roles`, `permissions` and their pivot tables) are created by its migration. No roles or permissions are defined yet; create them in a seeder:
+
+```php
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+
+$edit = Permission::findOrCreate('edit records');
+Role::findOrCreate('editor')->givePermissionTo($edit);
+
+$user->assignRole('editor');
+```
+
+Permissions register on Laravel's gate, so check them the usual way: `$user->can('edit records')`, `Gate::authorize('edit records')`, or `@can('edit records')` in Blade. To protect routes, use the middleware aliases registered in `bootstrap/app.php`:
+
+```php
+Route::middleware(['auth', 'role:admin'])->group(function (): void {
+    // admin-only routes
+});
+
+Route::get('/records/{record}/edit', RecordEditController::class)
+    ->middleware(['auth', 'permission:edit records']);
+```
+
+`role_or_permission:admin|edit records` allows either. Prefer checking **permissions** over role names in code, so changing what a role can do doesn't mean editing controllers. Permissions are cached; the cache clears automatically when you change roles or permissions through the package.
+
 ## 🛡️ Admin routes
 
 The dashboard, analytics, settings, component catalogue and sample entries sit inside `Route::middleware('auth')` in `routes/web.php`. New private CRUD routes belong in that group too. `/demo/404`, `/testing` and the `locale.update` route stay public (the login page needs the language switch); remove or protect `/testing` before production.

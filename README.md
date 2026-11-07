@@ -67,7 +67,7 @@ php artisan optimize
 | `/forgot-password` | `password.request` | Forgot password |
 | `/demo/404` | `demo.404` | Demo 404 page |
 
-Authentication (login, logout, password reset, profile and password updates) is wired up through Laravel Fortify, and every admin page is protected by the `auth` middleware; see `docs/integration/auth.md`. All sample data and sample forms are still presentational UI: the sample forms only show a toast and don't save data. Connect server validation and persistence to fit your real project.
+Authentication (login, logout, password reset, profile and password updates) is wired up through Laravel Fortify, and every admin page is protected by the `auth` middleware; see `docs/integration/auth.md`. Roles and permissions use `spatie/laravel-permission` (`HasRoles` on `User`, `role`/`permission` route middleware); none are defined yet. All sample data and sample forms are still presentational UI: the sample forms only show a toast and don't save data. Connect server validation and persistence to fit your real project.
 
 ## Customization
 
