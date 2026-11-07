@@ -107,6 +107,16 @@ English is the default (`APP_LOCALE=en`); users switch to Bahasa Melayu from the
 
 The customizer on the right of the header supports system/light/dark modes, 12 accent colours, radius sizes and a full/mini sidebar. Preferences are stored in `localStorage`, so they need no backend.
 
+## AI tooling (Laravel Boost)
+
+[Laravel Boost](https://laravel.com/docs/boost) is installed as a dev dependency for Claude Code. Project rules live in `.ai/guidelines/cendana.md`; `php artisan boost:update` (run automatically after `composer update`) composes them with Boost's Laravel guidelines into `CLAUDE.md` and installs skills into `.claude/skills/`. Both are generated and git-ignored, so after cloning run:
+
+```bash
+php artisan boost:install
+```
+
+`.mcp.json` registers the Boost MCP server (`php artisan boost:mcp`) so Claude Code can read docs, routes, config and the database schema.
+
 ## Validation
 
 ```bash
