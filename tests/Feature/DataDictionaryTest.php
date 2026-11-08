@@ -94,6 +94,32 @@ class DataDictionaryTest extends TestCase
         $this->assertSame(0, Activity::query()->count());
     }
 
+    public function test_seeder_fills_every_category(): void
+    {
+        $this->seed(LookupSeeder::class);
+
+        foreach (LookupCategory::cases() as $category) {
+            $this->assertNotEmpty(LookupItem::options($category), $category->value);
+        }
+        $this->assertSame(['fuel', 'stationery', 'stamping', 'meal', 'toll', 'accommodation', 'medical'], array_keys(LookupItem::options(LookupCategory::ClaimType)));
+        $this->assertSame('success', LookupItem::query()->inCategory(LookupCategory::Statuses)->where('code', 'approved')->value('tone'));
+    }
+
+    public function test_items_cannot_be_reached_through_another_category(): void
+    {
+        $gender = LookupItem::factory()->create(['category' => LookupCategory::Gender, 'code' => 'male', 'label_en' => 'Male']);
+
+        $this->actingAs($this->superAdmin)
+            ->get(route('administrations.data-dictionary.items.edit', [LookupCategory::Race, $gender]))
+            ->assertNotFound();
+
+        $this->actingAs($this->superAdmin)
+            ->patch(route('administrations.data-dictionary.items.status', [LookupCategory::Race, $gender]))
+            ->assertNotFound();
+
+        $this->assertTrue($gender->fresh()->is_active);
+    }
+
     public function test_item_changes_are_audited(): void
     {
         $item = LookupItem::factory()->create(['label_en' => 'Selangor']);

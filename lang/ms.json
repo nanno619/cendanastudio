@@ -822,5 +822,17 @@
     "Deactivate": "Nyahaktifkan",
     "Activate": "Aktifkan",
     "Deactivate :label": "Nyahaktifkan :label",
-    "Activate :label": "Aktifkan :label"
+    "Activate :label": "Aktifkan :label",
+    "Race": "Bangsa",
+    "Marital Status": "Status Perkahwinan",
+    "Leave Type": "Jenis Cuti",
+    "Claim Type": "Jenis Tuntutan",
+    "Gender": "Jantina",
+    "Statuses": "Status",
+    "Ethnic groups recorded in staff and client profiles.": "Kumpulan etnik yang direkodkan dalam profil kakitangan dan pelanggan.",
+    "Marital status recorded in staff profiles.": "Status perkahwinan yang direkodkan dalam profil kakitangan.",
+    "Kinds of leave staff can apply for.": "Jenis cuti yang boleh dipohon oleh kakitangan.",
+    "Kinds of expenses staff can claim.": "Jenis perbelanjaan yang boleh dituntut oleh kakitangan.",
+    "Gender recorded in staff and client profiles.": "Jantina yang direkodkan dalam profil kakitangan dan pelanggan.",
+    "Approval statuses for leave and claim applications.": "Status kelulusan bagi permohonan cuti dan tuntutan."
 }
