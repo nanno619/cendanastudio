@@ -19,7 +19,7 @@
 
 <span {{ $attributes->class(['badge', $map[$variant] ?? $map['neutral'], 'pill' => $pill, 'badge-dot' => $dot]) }}>
     @if ($icon)
-        <x-icon :name="$icon" class="h-3 w-3" />
+        <x-ui.icon :name="$icon" class="h-3 w-3" />
     @endif
     {{ $slot }}
 </span>

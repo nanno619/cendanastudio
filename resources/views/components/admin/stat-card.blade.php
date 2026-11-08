@@ -35,7 +35,7 @@
             <p class="mt-1.5 text-2xl font-semibold tabular-nums tracking-tight">{{ $value }}</p>
         </div>
         <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-md {{ $tones[$tone] ?? $tones['primary'] }}">
-            <x-icon :name="$icon" class="h-4 w-4" />
+            <x-ui.icon :name="$icon" class="h-4 w-4" />
         </span>
     </div>
 
@@ -49,7 +49,7 @@
                     'text-muted-foreground' => $trend === null,
                 ])>
                     @if ($trend)
-                        <x-icon :name="$trend === 'up' ? 'trend-up' : 'trend-down'" class="h-3.5 w-3.5" />
+                        <x-ui.icon :name="$trend === 'up' ? 'trend-up' : 'trend-down'" class="h-3.5 w-3.5" />
                     @endif
                     {{ $delta }}
                     @if ($slot->isNotEmpty())

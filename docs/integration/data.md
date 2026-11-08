@@ -33,7 +33,7 @@ public function index(Request $request): View
 {{ $records->links() }}
 ```
 
-If you use `x-ui.table-state` as a fallback, distinguish a table with no data yet (`empty`) from one that's empty because of a search (`filtered`). For server-side sorting, only accept column names from an allowlist before passing them to `orderBy`; never use free-form column names from request input. The existing `x-ui.pagination` isn't fully wired to the paginator's `$elements` yet; use `$records->links()` until that component is finished.
+If you use `x-ui.table-state` as a fallback, distinguish a table with no data yet (`empty`) from one that's empty because of a search (`filtered`). For server-side sorting, only accept column names from an allowlist before passing them to `orderBy`; never use free-form column names from request input. Render the page links with `<x-ui.pagination :paginator="$records" />`; it builds the page window itself and keeps `withQueryString()` filters in every link.
 
 ## 📈 Build charts from real data
 
