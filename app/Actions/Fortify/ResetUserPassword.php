@@ -25,8 +25,13 @@ class ResetUserPassword implements ResetsUserPasswords
             'password' => $this->passwordRules(),
         ])->validate();
 
-        $user->forceFill([
+        // Nobody is signed in during a reset, so record it against the user instead of letting the model log it as "System".
+        activity()->withoutLogging(fn () => $user->forceFill([
             'password' => Hash::make($input['password']),
-        ])->save();
+        ])->save());
+
+        activity()->causedBy($user)->performedOn($user)->event('password-reset')
+            ->withChanges(['attributes' => ['password' => '[hidden]'], 'old' => ['password' => '[hidden]']])
+            ->log('Reset password with an email link');
     }
 }

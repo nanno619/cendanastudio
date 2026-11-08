@@ -3,9 +3,8 @@
     $causer = $activity->causer;
     $subject = $activity->subject;
     $subjectType = $activity->subject_type ? __(\Illuminate\Support\Str::headline(class_basename($activity->subject_type))) : null;
-    $initials = fn (string $name): string => collect(preg_split('/\s+/', trim($name)) ?: [])->take(2)->map(fn (string $part): string => mb_strtoupper(mb_substr($part, 0, 1)))->implode('');
     $context = collect($activity->properties ?? [])->reject(fn ($value): bool => blank($value));
-    $contextLabels = ['ip' => __('IP address'), 'user_agent' => __('Browser / device')];
+    $contextLabels = ['ip' => __('IP address'), 'user_agent' => __('Browser / device'), 'email' => __('Email used'), 'remember' => __('Remember me'), 'roles' => __('Roles')];
 @endphp
 
 <x-layouts.admin title="{{ __('Audit entry #:id', ['id' => $activity->id]) }}" group="{{ __('Administrations') }}">
@@ -85,7 +84,7 @@
                     @foreach ($context as $key => $value)
                         <div class="min-w-0">
                             <dt class="text-xs font-medium text-muted-foreground">{{ $contextLabels[$key] ?? __(\Illuminate\Support\Str::headline($key)) }}</dt>
-                            <dd class="mt-1 break-words text-sm font-medium @if ($key === 'ip') font-mono @endif">{{ is_scalar($value) ? $value : json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) }}</dd>
+                            <dd class="mt-1 break-words text-sm font-medium @if ($key === 'ip') font-mono @endif">{{ is_bool($value) ? ($value ? __('Yes') : __('No')) : (is_scalar($value) ? $value : json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) }}</dd>
                         </div>
                     @endforeach
                 </dl>
@@ -102,7 +101,7 @@
                     <dd class="mt-2">
                         @if ($causer)
                             <div class="flex min-w-0 items-center gap-2.5">
-                                <span class="avatar" aria-hidden="true">{{ $initials($causer->name) }}</span>
+                                <span class="avatar" aria-hidden="true">{{ $causer->initials }}</span>
                                 <div class="min-w-0">
                                     <p class="truncate font-medium">{{ $causer->name }}</p>
                                     <p class="truncate text-xs text-muted-foreground">{{ $causer->email }}</p>

@@ -21,7 +21,7 @@ class ActivityLogTest extends TestCase
             ->withProperties(['field' => 'name'])
             ->log('updated profile');
 
-        $activity = Activity::sole();
+        $activity = Activity::query()->where('description', 'updated profile')->sole();
         $this->assertSame('updated profile', $activity->description);
         $this->assertTrue($activity->causer->is($user));
         $this->assertTrue($activity->subject->is($user));

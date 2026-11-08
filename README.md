@@ -76,7 +76,7 @@ Authentication (login, logout, password reset, profile and password updates) is 
 Beyond Laravel and Fortify, these are installed and ready to use:
 
 - `spatie/laravel-permission` — roles and permissions
-- `spatie/laravel-activitylog` — audit trail of who changed what
+- `spatie/laravel-activitylog` — audit trail of who changed what: sign-ins, sign-outs, failed sign-ins, lockouts, account and password changes, and role changes are recorded and shown at `/administrations/audit-trail`
 - `spatie/laravel-medialibrary` — files and images attached to models (public disk; run `php artisan storage:link`)
 - `maatwebsite/excel` — CSV/XLSX exports and imports
 - `barryvdh/laravel-dompdf` — PDF generation from Blade views

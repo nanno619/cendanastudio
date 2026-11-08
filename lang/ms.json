@@ -763,5 +763,13 @@
     "No": "Tidak",
     "Email Verified At": "E-mel disahkan pada",
     "View entry #:id": "Lihat entri #:id",
-    "View :name": "Lihat :name"
+    "View :name": "Lihat :name",
+    "Failed Login": "Log masuk gagal",
+    "Lockout": "Dikunci",
+    "Password Reset": "Tetapan semula kata laluan",
+    "Role Assigned": "Peranan diberi",
+    "Role Removed": "Peranan dibuang",
+    "Email used": "E-mel digunakan",
+    "Remember me": "Ingat saya",
+    "Roles": "Peranan"
 }

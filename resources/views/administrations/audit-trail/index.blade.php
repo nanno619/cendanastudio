@@ -1,6 +1,5 @@
 @php
     $eventLabel = fn (?string $event): string => $event ? __(\Illuminate\Support\Str::headline($event)) : __('Other');
-    $initials = fn (string $name): string => collect(preg_split('/\s+/', trim($name)) ?: [])->take(2)->map(fn (string $part): string => mb_strtoupper(mb_substr($part, 0, 1)))->implode('');
     $today = now($timezone)->toDateString();
     $yesterday = now($timezone)->subDay()->toDateString();
     $isFiltered = collect($filters)->filter(fn ($value): bool => filled($value))->isNotEmpty();
@@ -131,7 +130,7 @@
                             <td>
                                 @if ($activity->causer)
                                     <div class="flex min-w-0 items-center gap-2.5">
-                                        <span class="avatar avatar-sm" aria-hidden="true">{{ $initials($activity->causer->name) }}</span>
+                                        <span class="avatar avatar-sm" aria-hidden="true">{{ $activity->causer->initials }}</span>
                                         <div class="min-w-0">
                                             <p class="truncate font-medium">{{ $activity->causer->name }}</p>
                                             <p class="truncate text-xs text-muted-foreground">{{ $activity->causer->email }}</p>

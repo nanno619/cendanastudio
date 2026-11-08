@@ -27,6 +27,9 @@ class AuditTrailTest extends TestCase
         }
 
         $this->superAdmin = User::factory()->create(['name' => 'Studio Owner'])->assignRole(RoleName::SuperAdmin);
+
+        // Creating fixtures is itself audited; start each test from an empty trail.
+        Activity::query()->delete();
     }
 
     public function test_guests_are_redirected_to_login(): void
