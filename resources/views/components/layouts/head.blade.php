@@ -22,8 +22,10 @@
     window.__i18n = @json(__('js'));
     window.__t = function (key, replace) {
         var text = window.__i18n[key] || key;
-        Object.keys(replace || {}).forEach(function (name) { text = text.split(':' + name).join(replace[name]); });
-        return text;
+        // One pass over whole placeholder names, so ":to" never eats the start of ":total".
+        return text.replace(/:([A-Za-z_]+)/g, function (match, name) {
+            return replace && Object.prototype.hasOwnProperty.call(replace, name) ? String(replace[name]) : match;
+        });
     };
 </script>
 @vite(['resources/css/app.css', 'resources/js/app.js'])
