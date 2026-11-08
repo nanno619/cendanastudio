@@ -434,6 +434,18 @@
     go();
   }
 
+  /* Busy submit buttons: <button type="submit" data-busy-text="Saving…"> shows the text and blocks
+     double submits while a slow server action (e.g. a backup) runs. */
+  document.addEventListener('submit', function (e) {
+    if (e.defaultPrevented) return;
+    var button = e.target.querySelector('button[type="submit"][data-busy-text]');
+    if (!button || button.disabled) return;
+    button.textContent = button.dataset.busyText;
+    button.setAttribute('aria-busy', 'true');
+    // Disable after the browser has captured the form data, so the button's own name/value still submits.
+    setTimeout(function () { button.disabled = true; }, 0);
+  });
+
   /* Start */
   syncPrefs();
   if (window.__SPA__) startSpa(); else initPage(document);

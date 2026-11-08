@@ -61,6 +61,7 @@ return [
             ['id' => 'administrations', 'label' => 'Administrations', 'icon' => 'shield', 'role' => Role::SuperAdmin->value, 'children' => [
                 ['label' => 'Audit Trail', 'route' => 'administrations.audit-trail.index', 'active' => 'administrations.audit-trail.*'],
                 ['label' => 'Data Dictionary', 'route' => 'administrations.data-dictionary.index', 'active' => 'administrations.data-dictionary.*'],
+                ['label' => 'Backups', 'route' => 'administrations.backups.index', 'active' => 'administrations.backups.*'],
             ]],
         ]],
         ['label' => 'Components', 'showcase' => true, 'items' => [

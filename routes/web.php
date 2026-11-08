@@ -3,10 +3,13 @@
 use App\Enums\Role;
 use App\Http\Controllers\Administration\AuditTrailController;
 use App\Http\Controllers\Administration\AuditTrailEntryController;
+use App\Http\Controllers\Administration\BackupController;
 use App\Http\Controllers\Administration\CreateLookupItemController;
 use App\Http\Controllers\Administration\DataDictionaryCategoryController;
 use App\Http\Controllers\Administration\DataDictionaryController;
+use App\Http\Controllers\Administration\DownloadBackupController;
 use App\Http\Controllers\Administration\EditLookupItemController;
+use App\Http\Controllers\Administration\RunBackupController;
 use App\Http\Controllers\Administration\StoreLookupItemController;
 use App\Http\Controllers\Administration\ToggleLookupItemController;
 use App\Http\Controllers\Administration\UpdateLookupItemController;
@@ -25,6 +28,9 @@ Route::middleware('auth')->group(function (): void {
     Route::middleware('role:'.Role::SuperAdmin->value)->prefix('administrations')->name('administrations.')->group(function (): void {
         Route::get('/audit-trail', AuditTrailController::class)->name('audit-trail.index');
         Route::get('/audit-trail/{activity}', AuditTrailEntryController::class)->whereNumber('activity')->name('audit-trail.show');
+        Route::get('/backups', BackupController::class)->name('backups.index');
+        Route::post('/backups', RunBackupController::class)->middleware('throttle:3,10')->name('backups.store');
+        Route::get('/backups/{disk}/{file}', DownloadBackupController::class)->where('file', '[A-Za-z0-9._-]+\.zip')->name('backups.download');
         Route::get('/data-dictionary', DataDictionaryController::class)->name('data-dictionary.index');
         Route::get('/data-dictionary/{category}', DataDictionaryCategoryController::class)->name('data-dictionary.show');
         Route::prefix('/data-dictionary/{category}/items')->name('data-dictionary.items.')->group(function (): void {

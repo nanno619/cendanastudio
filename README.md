@@ -57,6 +57,7 @@ php artisan optimize
 | `/settings` | `admin.settings` | Account settings |
 | `/administrations/audit-trail` | `administrations.audit-trail.index` | Audit trail of sign-ins and changes (Super Admin only) |
 | `/administrations/audit-trail/{id}` | `administrations.audit-trail.show` | One audit entry: before/after values, context, related activity |
+| `/administrations/backups` | `administrations.backups.index` | Backup health, Back up now, download backups (Super Admin only) |
 | `/administrations/data-dictionary` | `administrations.data-dictionary.index` | Data Dictionary categories (Super Admin only) |
 | `/administrations/data-dictionary/{category}` | `administrations.data-dictionary.show` | Items in one category (code, English/Malay labels, order, status) |
 | `/administrations/data-dictionary/{category}/items/create` | `administrations.data-dictionary.items.create` | Add an item; edit at `…/items/{id}/edit`, activate/deactivate via `…/items/{id}/status` |
@@ -82,6 +83,7 @@ Beyond Laravel and Fortify, these are installed and ready to use:
 - `spatie/laravel-activitylog` — audit trail of who changed what: sign-ins, sign-outs, failed sign-ins, lockouts, account and password changes, and role changes are recorded and shown at `/administrations/audit-trail`
 - `spatie/laravel-medialibrary` — files and images attached to models (public disk; run `php artisan storage:link`)
 - `maatwebsite/excel` — CSV/XLSX exports and imports
+- `spatie/laravel-backup` — nightly database + upload backups to the server and optionally an S3-compatible bucket, managed at `/administrations/backups` (needs `mysqldump` and the scheduler cron; see `.env.example` for `BACKUP_*` settings)
 - `barryvdh/laravel-dompdf` — PDF generation from Blade views
 - `barryvdh/laravel-debugbar` — development-only debug toolbar (shown when `APP_DEBUG=true`)
 
