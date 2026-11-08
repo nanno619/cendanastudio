@@ -63,6 +63,8 @@ return [
             'path' => storage_path('logs/laravel.log'),
             'level' => env('LOG_LEVEL', 'debug'),
             'replace_placeholders' => true,
+            // Group-writable: the web server and the scheduler cron run as different users sharing the group.
+            'permission' => 0664,
         ],
 
         'daily' => [
@@ -71,6 +73,8 @@ return [
             'level' => env('LOG_LEVEL', 'debug'),
             'days' => env('LOG_DAILY_DAYS', 14),
             'replace_placeholders' => true,
+            // Group-writable: the web server and the scheduler cron run as different users sharing the group.
+            'permission' => 0664,
         ],
 
         'slack' => [

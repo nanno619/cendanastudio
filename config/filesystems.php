@@ -51,6 +51,8 @@ return [
         'backups' => [
             'driver' => 'local',
             'root' => storage_path('app/backups'),
+            // Create storage/app/backups/<BACKUP_NAME> and storage/app/backup-temp once on the server with
+            // chmod 2775 (group-writable, setgid), so the web server and the cron user can both write.
             'throw' => false,
             'report' => false,
         ],
