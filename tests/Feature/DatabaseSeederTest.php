@@ -20,7 +20,7 @@ class DatabaseSeederTest extends TestCase
         $this->seed(DatabaseSeeder::class);
         $this->seed(DatabaseSeeder::class);
 
-        $user = User::sole();
+        $user = User::where('email', 'owner@example.test')->sole();
         $this->assertSame('owner@example.test', $user->email);
         $this->assertSame('Studio Owner', $user->name);
         $this->assertTrue(Hash::check('a-long-secret-pass', $user->password));

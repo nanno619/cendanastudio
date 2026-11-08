@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\Role;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use RuntimeException;
@@ -29,9 +30,13 @@ class DatabaseSeeder extends Seeder
             throw new RuntimeException('ADMIN_SEED_PASSWORD must be at least 12 characters in production.');
         }
 
+        $this->call(RoleSeeder::class);
+
         User::updateOrCreate(
             ['email' => $admin['email']],
             ['name' => $admin['name'] ?: 'Administrator', 'password' => $admin['password'], 'email_verified_at' => now()],
-        );
+        )->syncRoles(Role::SuperAdmin);
+
+        $this->call(RoleUserSeeder::class);
     }
 }
