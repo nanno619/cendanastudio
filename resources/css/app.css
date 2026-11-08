@@ -171,7 +171,7 @@
   body[data-layout="blank"] #main { padding-left: 0; }
   body[data-layout="blank"] #page-root { max-width: none; padding: 0; margin: 0; }
 
-  /* Tooltip tanpa JS: <button data-tip="Teks"> */
+  /* CSS-only tooltip: <button data-tip="Text" aria-label="Text">; data-tip-pos="bottom|left|right" */
   [data-tip] { position: relative; }
   [data-tip]::after {
     content: attr(data-tip); position: absolute; left: 50%; bottom: calc(100% + 6px); transform: translateX(-50%);
@@ -180,6 +180,7 @@
   }
   [data-tip-pos~="bottom"]::after { bottom: auto; top: calc(100% + 6px); }
   [data-tip-pos~="left"]::after { left: auto; right: 0; transform: none; }
+  [data-tip-pos~="right"]::after { left: calc(100% + 6px); right: auto; bottom: auto; top: 50%; transform: translateY(-50%); }
   [data-tip]:hover::after, [data-tip]:focus-visible::after { opacity: 1; }
   dialog::backdrop { background: rgb(0 0 0 / .5); }
 

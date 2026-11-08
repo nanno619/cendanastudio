@@ -317,7 +317,7 @@
     var pager = $('[data-table-pager]', t), info = $('[data-table-info]', t), empty = $('[data-table-empty]', t);
     var ths = $$('th[data-sort]', t);
     rows.forEach(function (r) {
-      r.__txt = $$('td', r).slice(0, -1).map(function (c) { return c.textContent.trim().toLowerCase(); }).join(' ');
+      r.__txt = $$('td', r).filter(function (c) { return !c.hasAttribute('data-actions'); }).map(function (c) { return c.textContent.trim().toLowerCase(); }).join(' ');
     });
     function cell(r, i) { var c = r.cells[i]; return c ? (c.dataset.value != null ? c.dataset.value : c.textContent.trim()) : ''; }
 

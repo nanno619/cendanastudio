@@ -33,27 +33,21 @@
     <table class="table min-w-[760px]">
       <thead>
         <tr>
+          <th class="w-12" scope="col"><span class="sr-only">{{ __('Actions') }}</span></th>
           <th class="w-10"><input type="checkbox" data-check-all aria-label="{{ __('Select all') }}"></th>
           <th data-sort>{{ __('Customers') }}</th>
           <th data-sort>{{ __('Role') }}</th>
           <th>{{ __('Status') }}</th>
           <th data-sort="num" class="text-right">{{ __('Orders') }}</th>
           <th data-sort>{{ __('Last active') }}</th>
-          <th class="w-12" scope="col" aria-label="{{ __('Actions') }}"></th>
         </tr>
       </thead>
       <tbody>
         @foreach (config('cendana.demo.users') as $item)<tr data-status="{{ $item['statusKey'] }}">
-          <td><input type="checkbox" data-check-row aria-label="{{ __('Select :name', ['name' => $item['name']]) }}"></td>
-          <td><div class="flex items-center gap-3"><span class="avatar avatar-{{ $item['avTone'] }}">{{ $item['initials'] }}</span><div class="leading-tight"><p class="font-medium">{{ $item['name'] }}</p><p class="text-xs text-muted-foreground">{{ $item['email'] }}</p></div></div></td>
-          <td>{{ __($item['role']) }}</td>
-          <td><span class="badge badge-{{ $item['tone'] }} badge-dot">{{ __($item['status']) }}</span></td>
-          <td class="text-right tabular-nums" data-value="{{ $item['orders'] }}">{{ $item['orders'] }}</td>
-          <td class="text-muted-foreground">{{ __($item['seen']) }}</td>
-          <td class="text-right">
+          <td data-actions>
             <div data-dropdown>
-              <button type="button" data-dropdown-toggle aria-expanded="false" aria-label="{{ __('Actions for :name', ['name' => $item['name']]) }}" class="btn btn-ghost btn-icon btn-sm text-muted-foreground"><x-ui.icon name="more" /></button>
-              <div class="menu menu-right" hidden>
+              <button type="button" data-dropdown-toggle aria-expanded="false" aria-label="{{ __('Actions for :name', ['name' => $item['name']]) }}" data-tip="{{ __('Actions') }}" data-tip-pos="right" class="btn btn-ghost btn-icon btn-sm text-muted-foreground"><x-ui.icon name="more" /></button>
+              <div class="menu" hidden>
                 <button type="button" class="menu-item"><x-ui.icon name="eye" />{{ __('View details') }}</button>
                 <button type="button" class="menu-item"><x-ui.icon name="edit" />{{ __('Edit') }}</button>
                 <button type="button" class="menu-item"><x-ui.icon name="mail" />{{ __('Send email') }}</button>
@@ -62,6 +56,12 @@
               </div>
             </div>
           </td>
+          <td><input type="checkbox" data-check-row aria-label="{{ __('Select :name', ['name' => $item['name']]) }}"></td>
+          <td><div class="flex items-center gap-3"><span class="avatar avatar-{{ $item['avTone'] }}">{{ $item['initials'] }}</span><div class="leading-tight"><p class="font-medium">{{ $item['name'] }}</p><p class="text-xs text-muted-foreground">{{ $item['email'] }}</p></div></div></td>
+          <td>{{ __($item['role']) }}</td>
+          <td><span class="badge badge-{{ $item['tone'] }} badge-dot">{{ __($item['status']) }}</span></td>
+          <td class="text-right tabular-nums" data-value="{{ $item['orders'] }}">{{ $item['orders'] }}</td>
+          <td class="text-muted-foreground">{{ __($item['seen']) }}</td>
         </tr>@endforeach
       </tbody>
     </table>

@@ -13,15 +13,15 @@
         </div>
     </div>
     <div class="overflow-x-auto border-t">
-        <table class="table min-w-[620px]"><thead><tr><th data-sort>{{ __('Title') }}</th><th data-sort>{{ __('Category') }}</th><th data-sort>{{ __('Owner') }}</th><th>{{ __('Status') }}</th><th data-sort>{{ __('Updated') }}</th><th class="text-right" scope="col" aria-label="{{ __('Actions') }}"></th></tr></thead>
+        <table class="table min-w-155"><thead><tr><th class="w-12" scope="col"><span class="sr-only">{{ __('Actions') }}</span></th><th data-sort>{{ __('Title') }}</th><th data-sort>{{ __('Category') }}</th><th data-sort>{{ __('Owner') }}</th><th>{{ __('Status') }}</th><th data-sort>{{ __('Updated') }}</th></tr></thead>
             <tbody>
                 @foreach (config('cendana.demo.records') as $record)
                     <tr data-status="{{ $record['statusKey'] }}">
+                        <td data-actions><a href="{{ route('examples.records.show') }}" class="btn btn-ghost btn-icon btn-sm text-muted-foreground" data-tip="{{ __('View') }}" data-tip-pos="right" aria-label="{{ __('View :name', ['name' => __($record['title'])]) }}"><x-ui.icon name="eye" /></a></td>
                         <td><a href="{{ route('examples.records.show') }}" class="font-medium text-primary hover:underline">{{ __($record['title']) }}</a><p class="mt-0.5 text-xs text-muted-foreground">{{ $record['code'] }}</p></td>
                         <td>{{ __($record['category']) }}</td><td>{{ $record['owner'] }}</td>
                         <td><span class="badge badge-{{ $record['tone'] }}">{{ __($record['status']) }}</span></td>
                         <td class="text-muted-foreground">{{ __($record['updated']) }}</td>
-                        <td class="text-right"><a href="{{ route('examples.records.show') }}" class="btn btn-ghost btn-sm">{{ __('View') }}</a></td>
                     </tr>
                 @endforeach
             </tbody>

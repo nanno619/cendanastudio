@@ -19,3 +19,6 @@ For translated `@props` defaults, set the prop to `null` and fill it with a bloc
 
 ## Format money and numbers the Malaysian way
 Show money as MYR (`RM 48.00`, `RM 16.7k`) and numbers with dot decimals and comma thousands (`1,284`, `+13.2%`).
+
+## Put row actions first, as icon buttons with tooltips
+In tables, the actions column is the first column (before any select checkbox), with an `sr-only` "Actions" header and `data-actions` on each cell (table search skips it). Each action is an icon button (`btn btn-ghost btn-icon btn-sm text-muted-foreground` + `<x-ui.icon>`), never a text button, labelled with `data-tip="{{ __('View') }}" data-tip-pos="right"` for the tooltip and an `aria-label` naming the row (`__('View entry #:id', [...])`). Several actions go in one `data-dropdown` "more" menu without `menu-right`, so it opens toward the table.

@@ -41,11 +41,30 @@ There's no `<x-ui.table>` component yet. Use a `<table class="table">` inside an
 </div>
 ```
 
+### 🖱️ Row actions
+
+Put the actions column **first**. Each action is an icon button with a tooltip: `data-tip` shows the label on hover and keyboard focus, `data-tip-pos="right"` keeps it inside the table's scroll area, and `aria-label` names the row for screen readers. Mark the cell `data-actions` so table search ignores it. With several actions, use one "more" icon that opens a `data-dropdown` menu.
+
+```blade
+<thead><tr><th class="w-12" scope="col"><span class="sr-only">{{ __('Actions') }}</span></th><th>{{ __('Title') }}</th></tr></thead>
+<tbody>
+    <tr>
+        <td data-actions>
+            <a href="{{ route('records.show', $record) }}" class="btn btn-ghost btn-icon btn-sm text-muted-foreground"
+               data-tip="{{ __('View') }}" data-tip-pos="right" aria-label="{{ __('View :name', ['name' => $record->title]) }}">
+                <x-ui.icon name="eye" />
+            </a>
+        </td>
+        <td>{{ $record->title }}</td>
+    </tr>
+</tbody>
+```
+
 The demo table only processes **rows already rendered in the browser**. Don't mix this `data-table` with server pagination and expect search to cover the whole database; follow [server-side tables](/integration/data) for large data.
 
 ### ↕️ Search, filter and sort
 
-Search compares the text of every cell except the last one (usually the actions column) and sends no request. The filter reads `data-status` on each `<tr>` and matches it exactly against the `<select>` value; make sure the options and the rows use the same slug, e.g. `active`. For numbers, put `data-sort="num"` on the `<th>`, and if the cell shows formatted text (such as `RM 1,000.00`), add `data-value="1000"` to the `<td>` so sorting uses the raw number. Other cell text is sorted using the page's active language (`<html lang>`). The info line and pager labels come from the [JavaScript translations](/guide/theming#language).
+Search compares the text of every cell except those marked `data-actions` (the row actions cell) and sends no request. The filter reads `data-status` on each `<tr>` and matches it exactly against the `<select>` value; make sure the options and the rows use the same slug, e.g. `active`. For numbers, put `data-sort="num"` on the `<th>`, and if the cell shows formatted text (such as `RM 1,000.00`), add `data-value="1000"` to the `<td>` so sorting uses the raw number. Other cell text is sorted using the page's active language (`<html lang>`). The info line and pager labels come from the [JavaScript translations](/guide/theming#language).
 
 ### ☑️ Row selection and pagination
 
