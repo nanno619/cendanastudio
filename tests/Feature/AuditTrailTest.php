@@ -190,7 +190,7 @@ class AuditTrailTest extends TestCase
                 'attributes' => ['email' => 'new@demo.test', 'password' => 'new-secret-hash'],
                 'old' => ['email' => 'old@demo.test', 'password' => 'old-secret-hash'],
             ])
-            ->withProperties(['ip' => '10.0.0.7'])
+            ->withProperties(['ip' => '10.0.0.7', 'user_agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:144.0) Gecko/20100101 Firefox/144.0'])
             ->log("Updated Aminah's account");
 
         $this->actingAs($this->superAdmin)
@@ -202,6 +202,7 @@ class AuditTrailTest extends TestCase
             ->assertDontSee('old-secret-hash')
             ->assertDontSee('new-secret-hash')
             ->assertSee('10.0.0.7')
+            ->assertSeeInOrder(['Firefox 144 on Windows', 'Gecko/20100101 Firefox/144.0'])
             ->assertSee('Aminah Finance')
             ->assertSee('Studio Owner');
     }

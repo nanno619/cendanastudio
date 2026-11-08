@@ -84,7 +84,12 @@
                     @foreach ($context as $key => $value)
                         <div class="min-w-0">
                             <dt class="text-xs font-medium text-muted-foreground">{{ $contextLabels[$key] ?? __(\Illuminate\Support\Str::headline($key)) }}</dt>
-                            <dd class="mt-1 break-words text-sm font-medium @if ($key === 'ip') font-mono @endif">{{ is_bool($value) ? ($value ? __('Yes') : __('No')) : (is_scalar($value) ? $value : json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) }}</dd>
+                            @if ($key === 'user_agent' && ($browser = \App\Support\UserAgent::describe($value)))
+                                <dd class="mt-1 text-sm font-medium">{{ $browser }}</dd>
+                                <dd class="mt-0.5 break-words font-mono text-xs text-muted-foreground">{{ $value }}</dd>
+                            @else
+                                <dd class="mt-1 break-words text-sm font-medium @if ($key === 'ip') font-mono @endif">{{ is_bool($value) ? ($value ? __('Yes') : __('No')) : (is_scalar($value) ? $value : json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) }}</dd>
+                            @endif
                         </div>
                     @endforeach
                 </dl>
