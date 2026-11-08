@@ -8,6 +8,7 @@ use App\Models\LookupItem;
 use App\Models\User;
 use Database\Seeders\LookupSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
@@ -101,7 +102,7 @@ class DataDictionaryTest extends TestCase
         $item->update(['is_active' => false]);
 
         $activity = Activity::query()->where('event', 'updated')->sole();
-        $this->assertSame('Updated Selangor in the data dictionary', $activity->description);
+        $this->assertSame('Deactivated Selangor in the data dictionary', $activity->description);
         $this->assertSame(['is_active' => false], $activity->attribute_changes['attributes']);
         $this->assertTrue($activity->causer->is($this->superAdmin));
     }
@@ -111,5 +112,126 @@ class DataDictionaryTest extends TestCase
         $this->actingAs($this->superAdmin)
             ->get(route('admin.dashboard'))
             ->assertSee(route('administrations.data-dictionary.index'));
+    }
+
+    public function test_add_form_suggests_the_next_display_order(): void
+    {
+        LookupItem::factory()->create(['sort_order' => 40]);
+
+        $this->actingAs($this->superAdmin)
+            ->get(route('administrations.data-dictionary.items.create', LookupCategory::MalaysianStates))
+            ->assertOk()
+            ->assertSee('value="50"', false);
+    }
+
+    public function test_super_admin_can_add_an_item(): void
+    {
+        $this->actingAs($this->superAdmin)
+            ->post(route('administrations.data-dictionary.items.store', LookupCategory::MalaysianStates), $this->payload())
+            ->assertRedirect(route('administrations.data-dictionary.show', LookupCategory::MalaysianStates))
+            ->assertSessionHas('status', 'Kuala Lumpur was added.');
+
+        $item = LookupItem::query()->sole();
+        $this->assertSame(LookupCategory::MalaysianStates, $item->category);
+        $this->assertSame(['kuala-lumpur', 'Kuala Lumpur', 'KL', 15, 'info', true], [$item->code, $item->label_en, $item->label_ms, $item->sort_order, $item->tone, $item->is_active]);
+        $this->assertTrue(Activity::query()->where('event', 'created')->where('subject_type', $item->getMorphClass())->sole()->causer->is($this->superAdmin));
+    }
+
+    public function test_other_roles_cannot_add_items(): void
+    {
+        $this->actingAs(User::factory()->create()->assignRole(RoleName::Admin))
+            ->post(route('administrations.data-dictionary.items.store', LookupCategory::MalaysianStates), $this->payload())
+            ->assertForbidden();
+
+        $this->assertSame(0, LookupItem::query()->count());
+    }
+
+    /**
+     * @return array<string, array{array<string, mixed>, string}>
+     */
+    public static function invalidItems(): array
+    {
+        return [
+            'missing English label' => [['label_en' => ''], 'label_en'],
+            'code with spaces' => [['code' => 'Kuala Lumpur'], 'code'],
+            'code with capitals' => [['code' => 'KL'], 'code'],
+            'negative order' => [['sort_order' => -1], 'sort_order'],
+            'unknown badge colour' => [['tone' => 'purple'], 'tone'],
+        ];
+    }
+
+    #[DataProvider('invalidItems')]
+    public function test_invalid_items_are_rejected(array $override, string $field): void
+    {
+        $this->actingAs($this->superAdmin)
+            ->post(route('administrations.data-dictionary.items.store', LookupCategory::MalaysianStates), [...$this->payload(), ...$override])
+            ->assertSessionHasErrors($field);
+
+        $this->assertSame(0, LookupItem::query()->count());
+    }
+
+    public function test_code_and_english_label_must_be_unique_within_the_category(): void
+    {
+        LookupItem::factory()->create(['code' => 'kuala-lumpur', 'label_en' => 'Kuala Lumpur']);
+
+        $this->actingAs($this->superAdmin)
+            ->post(route('administrations.data-dictionary.items.store', LookupCategory::MalaysianStates), $this->payload())
+            ->assertSessionHasErrors([
+                'code' => 'This category already has an item with this code.',
+                'label_en' => 'This category already has an item with this English label.',
+            ]);
+    }
+
+    public function test_editing_updates_labels_but_never_the_code(): void
+    {
+        $item = LookupItem::factory()->create(['code' => 'penang', 'label_en' => 'Penang']);
+
+        $this->actingAs($this->superAdmin)
+            ->get(route('administrations.data-dictionary.items.edit', [LookupCategory::MalaysianStates, $item]))
+            ->assertOk()
+            ->assertSee('penang')
+            ->assertDontSee('name="code"', false);
+
+        $this->actingAs($this->superAdmin)
+            ->put(route('administrations.data-dictionary.items.update', [LookupCategory::MalaysianStates, $item]), [
+                ...$this->payload(), 'code' => 'changed', 'label_en' => 'Penang Island', 'label_ms' => 'Pulau Pinang',
+            ])
+            ->assertRedirect(route('administrations.data-dictionary.show', LookupCategory::MalaysianStates));
+
+        $item->refresh();
+        $this->assertSame(['penang', 'Penang Island', 'Pulau Pinang'], [$item->code, $item->label_en, $item->label_ms]);
+    }
+
+    public function test_editing_keeps_the_items_own_label_unique_check_out_of_the_way(): void
+    {
+        $item = LookupItem::factory()->create(['label_en' => 'Johor']);
+
+        $this->actingAs($this->superAdmin)
+            ->put(route('administrations.data-dictionary.items.update', [LookupCategory::MalaysianStates, $item]), [...$this->payload(), 'label_en' => 'Johor'])
+            ->assertSessionHasNoErrors();
+    }
+
+    public function test_status_button_deactivates_and_reactivates_an_item(): void
+    {
+        $item = LookupItem::factory()->create(['label_en' => 'Labuan']);
+        $route = route('administrations.data-dictionary.items.status', [LookupCategory::MalaysianStates, $item]);
+
+        $this->actingAs($this->superAdmin)->patch($route)
+            ->assertSessionHas('status', 'Labuan was deactivated and is hidden from dropdowns.');
+        $this->assertFalse($item->fresh()->is_active);
+        $this->assertSame([], LookupItem::options(LookupCategory::MalaysianStates));
+        $this->assertSame('Deactivated Labuan in the data dictionary', Activity::query()->latest('id')->value('description'));
+
+        $this->actingAs($this->superAdmin)->patch($route);
+        $this->assertTrue($item->fresh()->is_active);
+        $this->assertSame('Activated Labuan in the data dictionary', Activity::query()->latest('id')->value('description'));
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function payload(): array
+    {
+        return ['code' => 'kuala-lumpur', 'label_en' => 'Kuala Lumpur', 'label_ms' => 'KL', 'sort_order' => 15, 'tone' => 'info', 'is_active' => '1'];
     }
 }

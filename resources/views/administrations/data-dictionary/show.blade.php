@@ -1,4 +1,5 @@
 <x-layouts.admin title="{{ __($category->label()) }}" group="{{ __('Data Dictionary') }}">
+<div class="flex flex-wrap items-end justify-between gap-4">
 <div>
     <a href="{{ route('administrations.data-dictionary.index') }}" class="mb-3 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
         <x-ui.icon name="arrow-left" class="h-4 w-4" />{{ __('Back to Data Dictionary') }}
@@ -9,6 +10,12 @@
     </div>
     <p class="mt-1 text-muted-foreground">{{ __($category->description()) }}</p>
 </div>
+<a href="{{ route('administrations.data-dictionary.items.create', $category) }}" class="btn btn-primary"><x-ui.icon name="plus" />{{ __('Add item') }}</a>
+</div>
+
+@if (session('status'))
+    <x-ui.alert variant="success" role="status">{{ session('status') }}</x-ui.alert>
+@endif
 
 <section class="card" aria-labelledby="items-heading" data-table data-page-size="25">
     <div class="flex flex-col gap-3 p-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
@@ -37,6 +44,7 @@
             <table class="table min-w-180">
                 <thead>
                     <tr>
+                        <th scope="col" class="w-24"><span class="sr-only">{{ __('Actions') }}</span></th>
                         <th scope="col" data-sort="num" class="w-20 text-right">{{ __('Order') }}</th>
                         <th scope="col" data-sort>{{ __('Code') }}</th>
                         <th scope="col" data-sort>{{ __('Label (English)') }}</th>
@@ -48,6 +56,14 @@
                 <tbody>
                     @foreach ($items as $item)
                         <tr data-status="{{ $item->is_active ? 'active' : 'inactive' }}" @class(['text-muted-foreground' => ! $item->is_active])>
+                            <td data-actions class="whitespace-nowrap">
+                                <a href="{{ route('administrations.data-dictionary.items.edit', [$category, $item]) }}" class="btn btn-ghost btn-icon btn-sm text-muted-foreground" data-tip="{{ __('Edit') }}" data-tip-pos="right" aria-label="{{ __('Edit :label', ['label' => $item->label_en]) }}"><x-ui.icon name="edit" /></a>
+                                <form method="POST" action="{{ route('administrations.data-dictionary.items.status', [$category, $item]) }}" class="inline">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="submit" @class(['btn btn-ghost btn-icon btn-sm', 'text-muted-foreground' => $item->is_active, 'text-success' => ! $item->is_active]) data-tip="{{ $item->is_active ? __('Deactivate') : __('Activate') }}" data-tip-pos="right" aria-label="{{ $item->is_active ? __('Deactivate :label', ['label' => $item->label_en]) : __('Activate :label', ['label' => $item->label_en]) }}"><x-ui.icon name="power" /></button>
+                                </form>
+                            </td>
                             <td class="text-right tabular-nums text-muted-foreground" data-value="{{ $item->sort_order }}">{{ $item->sort_order }}</td>
                             <td class="whitespace-nowrap font-mono text-xs">{{ $item->code }}</td>
                             <td class="font-medium">

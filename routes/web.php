@@ -3,8 +3,13 @@
 use App\Enums\Role;
 use App\Http\Controllers\Administration\AuditTrailController;
 use App\Http\Controllers\Administration\AuditTrailEntryController;
+use App\Http\Controllers\Administration\CreateLookupItemController;
 use App\Http\Controllers\Administration\DataDictionaryCategoryController;
 use App\Http\Controllers\Administration\DataDictionaryController;
+use App\Http\Controllers\Administration\EditLookupItemController;
+use App\Http\Controllers\Administration\StoreLookupItemController;
+use App\Http\Controllers\Administration\ToggleLookupItemController;
+use App\Http\Controllers\Administration\UpdateLookupItemController;
 use App\Http\Controllers\LocaleController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +27,13 @@ Route::middleware('auth')->group(function (): void {
         Route::get('/audit-trail/{activity}', AuditTrailEntryController::class)->whereNumber('activity')->name('audit-trail.show');
         Route::get('/data-dictionary', DataDictionaryController::class)->name('data-dictionary.index');
         Route::get('/data-dictionary/{category}', DataDictionaryCategoryController::class)->name('data-dictionary.show');
+        Route::prefix('/data-dictionary/{category}/items')->name('data-dictionary.items.')->group(function (): void {
+            Route::get('/create', CreateLookupItemController::class)->name('create');
+            Route::post('/', StoreLookupItemController::class)->name('store');
+            Route::get('/{item}/edit', EditLookupItemController::class)->whereNumber('item')->name('edit');
+            Route::put('/{item}', UpdateLookupItemController::class)->whereNumber('item')->name('update');
+            Route::patch('/{item}/status', ToggleLookupItemController::class)->whereNumber('item')->name('status');
+        });
     });
 
     if (config('cendana.showcase')) {

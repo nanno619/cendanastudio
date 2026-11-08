@@ -59,6 +59,7 @@ php artisan optimize
 | `/administrations/audit-trail/{id}` | `administrations.audit-trail.show` | One audit entry: before/after values, context, related activity |
 | `/administrations/data-dictionary` | `administrations.data-dictionary.index` | Data Dictionary categories (Super Admin only) |
 | `/administrations/data-dictionary/{category}` | `administrations.data-dictionary.show` | Items in one category (code, English/Malay labels, order, status) |
+| `/administrations/data-dictionary/{category}/items/create` | `administrations.data-dictionary.items.create` | Add an item; edit at `…/items/{id}/edit`, activate/deactivate via `…/items/{id}/status` |
 | `/components/*` | `showcase.*` | Component catalogue |
 | `/components/filters` | `showcase.filters` | Combobox, date range, filter chips and file upload |
 | `/components/table-states` | `showcase.table-states` | Ready, loading, empty, no results and error table states |

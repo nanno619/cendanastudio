@@ -21,6 +21,9 @@ class LookupItem extends Model
     /** @use HasFactory<LookupItemFactory> */
     use HasFactory, LogsActivity;
 
+    /** Badge variants an item may use; null shows plain text. */
+    public const TONES = ['primary', 'success', 'info', 'warning', 'danger', 'neutral'];
+
     /**
      * @var list<string>
      */
@@ -84,7 +87,10 @@ class LookupItem extends Model
             ->dontLogEmptyChanges()
             ->setDescriptionForEvent(fn (string $event): string => match ($event) {
                 'created' => "Added {$this->label_en} to the data dictionary",
-                default => "Updated {$this->label_en} in the data dictionary",
+                default => match (true) {
+                    $this->wasChanged('is_active') && ! $this->wasChanged(['label_en', 'label_ms', 'sort_order', 'tone']) => ($this->is_active ? 'Activated' : 'Deactivated')." {$this->label_en} in the data dictionary",
+                    default => "Updated {$this->label_en} in the data dictionary",
+                },
             });
     }
 }
