@@ -1,5 +1,8 @@
 <?php
 
+use App\Enums\Role;
+use App\Http\Controllers\Administration\AuditTrailController;
+use App\Http\Controllers\Administration\AuditTrailEntryController;
 use App\Http\Controllers\LocaleController;
 use Illuminate\Support\Facades\Route;
 
@@ -11,6 +14,11 @@ Route::middleware('auth')->group(function (): void {
     Route::view('/dashboard', 'admin.dashboard')->name('admin.dashboard');
     Route::view('/analytics', 'admin.analytics')->name('admin.analytics');
     Route::view('/settings', 'admin.settings')->name('admin.settings');
+
+    Route::middleware('role:'.Role::SuperAdmin->value)->prefix('administrations')->name('administrations.')->group(function (): void {
+        Route::get('/audit-trail', AuditTrailController::class)->name('audit-trail.index');
+        Route::get('/audit-trail/{activity}', AuditTrailEntryController::class)->whereNumber('activity')->name('audit-trail.show');
+    });
 
     if (config('cendana.showcase')) {
         Route::prefix('components')->name('showcase.')->group(function (): void {

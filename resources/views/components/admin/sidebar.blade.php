@@ -13,14 +13,19 @@
     <nav class="flex-1 space-y-5 overflow-y-auto overflow-x-hidden px-3 pb-3 pt-1">
         @foreach (config('cendana.navigation') as $group)
             @continue(($group['showcase'] ?? false) && ! config('cendana.showcase'))
+            @php
+                // Items with a 'role' key are shown only to users holding that role.
+                $visibleItems = array_filter($group['items'], fn (array $item): bool => empty($item['role']) || (auth()->user()?->hasRole($item['role']) ?? false));
+            @endphp
+            @continue(empty($visibleItems))
             <div>
                 <p class="sb-label mb-1 px-2 text-xs font-medium text-muted-foreground">{{ __($group['label']) }}</p>
                 <ul class="space-y-0.5">
-                    @foreach ($group['items'] as $item)
+                    @foreach ($visibleItems as $item)
                         @if (! empty($item['children']))
                             @php
                                 $submenuId = 'sub-'.($item['id'] ?? \Illuminate\Support\Str::slug($item['label']));
-                                $submenuActive = collect($item['children'])->contains(fn (array $child): bool => request()->routeIs($child['active'] ?? $child['route']));
+                                $submenuActive = collect($item['children'])->contains(fn (array $child): bool => filled($child['active'] ?? $child['route'] ?? null) && request()->routeIs($child['active'] ?? $child['route']));
                             @endphp
                             <li>
                                 <button type="button" class="nav-link" data-collapse="#{{ $submenuId }}" aria-expanded="{{ $submenuActive ? 'true' : 'false' }}">

@@ -55,6 +55,8 @@ php artisan optimize
 | `/dashboard` | `admin.dashboard` | Main dashboard |
 | `/analytics` | `admin.analytics` | Analytics |
 | `/settings` | `admin.settings` | Account settings |
+| `/administrations/audit-trail` | `administrations.audit-trail.index` | Audit trail of sign-ins and changes (Super Admin only) |
+| `/administrations/audit-trail/{id}` | `administrations.audit-trail.show` | One audit entry: before/after values, context, related activity |
 | `/components/*` | `showcase.*` | Component catalogue |
 | `/components/filters` | `showcase.filters` | Combobox, date range, filter chips and file upload |
 | `/components/table-states` | `showcase.table-states` | Ready, loading, empty, no results and error table states |
@@ -91,6 +93,7 @@ ADMIN_WORKSPACE="Cendana Studio"
 ADMIN_WORKSPACE_DESCRIPTION="Cendana Studio CRM"
 ADMIN_FOOTER="© Cendana Studio"
 ADMIN_SHOWCASE=true
+ADMIN_TIMEZONE=Asia/Kuala_Lumpur
 ```
 
 The sidebar menu is defined in `config/cendana.php`. Add a route and a view, then add a new item to the `navigation` array. To hide the component catalogue and sample pages in production, set `ADMIN_SHOWCASE=false`.

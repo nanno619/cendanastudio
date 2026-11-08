@@ -38,6 +38,8 @@ return [
         'footer' => env('ADMIN_FOOTER', '© Cendana Studio'),
     ],
     'showcase' => (bool) env('ADMIN_SHOWCASE', true),
+    // Timestamps are stored in UTC (app.timezone); pages show them in this zone.
+    'timezone' => env('ADMIN_TIMEZONE', 'Asia/Kuala_Lumpur'),
     // First admin login created by `php artisan db:seed`. Required in production; never commit real values.
     'seed_admin' => [
         'name' => env('ADMIN_SEED_NAME', 'Administrator'),
@@ -52,6 +54,11 @@ return [
         ['label' => 'Platform', 'items' => [
             ['label' => 'Dashboard', 'route' => 'admin.dashboard', 'active' => 'admin.dashboard', 'icon' => 'dashboard'],
             ['label' => 'Analytics', 'route' => 'admin.analytics', 'active' => 'admin.analytics', 'icon' => 'chart', 'badge' => 'New'],
+        ]],
+        ['label' => 'Modules', 'items' => [
+            ['id' => 'administrations', 'label' => 'Administrations', 'icon' => 'shield', 'role' => App\Enums\Role::SuperAdmin->value, 'children' => [
+                ['label' => 'Audit Trail', 'route' => 'administrations.audit-trail.index', 'active' => 'administrations.audit-trail.*'],
+            ]],
         ]],
         ['label' => 'Components', 'showcase' => true, 'items' => [
             ['label' => 'Cards', 'route' => 'showcase.cards', 'active' => 'showcase.cards', 'icon' => 'grid'],
