@@ -3,6 +3,8 @@
 use App\Enums\Role;
 use App\Http\Controllers\Administration\AuditTrailController;
 use App\Http\Controllers\Administration\AuditTrailEntryController;
+use App\Http\Controllers\Administration\DataDictionaryCategoryController;
+use App\Http\Controllers\Administration\DataDictionaryController;
 use App\Http\Controllers\LocaleController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,6 +20,8 @@ Route::middleware('auth')->group(function (): void {
     Route::middleware('role:'.Role::SuperAdmin->value)->prefix('administrations')->name('administrations.')->group(function (): void {
         Route::get('/audit-trail', AuditTrailController::class)->name('audit-trail.index');
         Route::get('/audit-trail/{activity}', AuditTrailEntryController::class)->whereNumber('activity')->name('audit-trail.show');
+        Route::get('/data-dictionary', DataDictionaryController::class)->name('data-dictionary.index');
+        Route::get('/data-dictionary/{category}', DataDictionaryCategoryController::class)->name('data-dictionary.show');
     });
 
     if (config('cendana.showcase')) {

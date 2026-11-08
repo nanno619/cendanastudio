@@ -1,5 +1,7 @@
 <?php
 
+use App\Enums\Role;
+
 $names = [
     'Dewi Anggraini', 'Bagas Prasetyo', 'Maya Kusuma', 'Rizky Hidayat', 'Lestari Wulandari', 'Fajar Nugroho',
     'Putri Maharani', 'Andika Saputra', 'Nadia Permata', 'Yoga Pratama', 'Siti Aisyah', 'Hendra Wijaya',
@@ -56,8 +58,9 @@ return [
             ['label' => 'Analytics', 'route' => 'admin.analytics', 'active' => 'admin.analytics', 'icon' => 'chart', 'badge' => 'New'],
         ]],
         ['label' => 'Modules', 'items' => [
-            ['id' => 'administrations', 'label' => 'Administrations', 'icon' => 'shield', 'role' => App\Enums\Role::SuperAdmin->value, 'children' => [
+            ['id' => 'administrations', 'label' => 'Administrations', 'icon' => 'shield', 'role' => Role::SuperAdmin->value, 'children' => [
                 ['label' => 'Audit Trail', 'route' => 'administrations.audit-trail.index', 'active' => 'administrations.audit-trail.*'],
+                ['label' => 'Data Dictionary', 'route' => 'administrations.data-dictionary.index', 'active' => 'administrations.data-dictionary.*'],
             ]],
         ]],
         ['label' => 'Components', 'showcase' => true, 'items' => [

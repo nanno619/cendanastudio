@@ -57,6 +57,8 @@ php artisan optimize
 | `/settings` | `admin.settings` | Account settings |
 | `/administrations/audit-trail` | `administrations.audit-trail.index` | Audit trail of sign-ins and changes (Super Admin only) |
 | `/administrations/audit-trail/{id}` | `administrations.audit-trail.show` | One audit entry: before/after values, context, related activity |
+| `/administrations/data-dictionary` | `administrations.data-dictionary.index` | Data Dictionary categories (Super Admin only) |
+| `/administrations/data-dictionary/{category}` | `administrations.data-dictionary.show` | Items in one category (code, English/Malay labels, order, status) |
 | `/components/*` | `showcase.*` | Component catalogue |
 | `/components/filters` | `showcase.filters` | Combobox, date range, filter chips and file upload |
 | `/components/table-states` | `showcase.table-states` | Ready, loading, empty, no results and error table states |
