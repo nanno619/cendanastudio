@@ -2,7 +2,7 @@
   <form method="POST" action="{{ route('password.email') }}" class="mt-6 space-y-4">
     @csrf
     <x-ui.field label="{{ __('Email') }}" name="email">
-      <x-ui.input type="email" name="email" placeholder="nama@email.com" autocomplete="email" autofocus required />
+      <x-ui.input type="email" name="email" placeholder="{{ __('name@company.com') }}" autocomplete="email" autofocus required />
     </x-ui.field>
     <x-ui.turnstile />
     <button type="submit" class="btn btn-primary w-full">{{ __('Send reset link') }}</button>

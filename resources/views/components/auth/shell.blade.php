@@ -21,8 +21,14 @@
     </div>
   </div>
 
-  <div class="hidden flex-col justify-between bg-primary p-12 text-primary-foreground lg:flex">
-    <div class="flex items-center gap-2 text-sm font-medium opacity-90"><x-ui.icon name="layers" />{{ config('cendana.brand.name') }}</div>
+  <div class="relative hidden flex-col justify-between overflow-hidden bg-primary p-12 text-primary-foreground lg:flex">
+    <x-ui.icon name="layers" class="pointer-events-none absolute -bottom-24 -right-24 h-[28rem] w-[28rem] opacity-10" />
+    <div class="relative flex items-center gap-2 text-sm font-medium opacity-90"><x-ui.icon name="layers" />{{ config('cendana.brand.name') }}</div>
+    <div class="relative max-w-md">
+      <p class="text-3xl font-semibold leading-tight tracking-tight text-balance">{{ config('cendana.brand.description') }}</p>
+      <p class="mt-3 text-base opacity-80">{{ __('The staff workspace for :name. Sign in with the account your administrator gave you.', ['name' => config('cendana.brand.workspace')]) }}</p>
+    </div>
+    <p class="relative text-sm opacity-70">{{ config('cendana.brand.footer') }}</p>
   </div>
 </div>
 </x-layouts.guest>
