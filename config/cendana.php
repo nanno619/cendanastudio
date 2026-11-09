@@ -42,6 +42,11 @@ return [
     'showcase' => (bool) env('ADMIN_SHOWCASE', true),
     // Timestamps are stored in UTC (app.timezone); pages show them in this zone.
     'timezone' => env('ADMIN_TIMEZONE', 'Asia/Kuala_Lumpur'),
+    // Display names for backup disks (English; translated where shown).
+    'backup_locations' => [
+        'backups' => 'This server',
+        'backups-s3' => 'Off-site (S3)',
+    ],
     // First admin login created by `php artisan db:seed`. Required in production; never commit real values.
     'seed_admin' => [
         'name' => env('ADMIN_SEED_NAME', 'Administrator'),

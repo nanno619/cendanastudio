@@ -1,5 +1,5 @@
 @php
-    $diskLabels = ['backups' => __('This server'), 'backups-s3' => __('Off-site (S3)')];
+    $diskLabels = array_map(fn (string $label): string => __($label), config('cendana.backup_locations'));
     $formatBytes = fn (float $bytes): string => match (true) {
         $bytes >= 1073741824 => number_format($bytes / 1073741824, 2).' GB',
         $bytes >= 1048576 => number_format($bytes / 1048576, 1).' MB',
@@ -18,6 +18,9 @@
 
 @if (session('status'))
     <x-ui.alert variant="success" role="status">{{ session('status') }}</x-ui.alert>
+@endif
+@if (session('warning'))
+    <x-ui.alert variant="warning" title="{{ __('Backup only partly saved') }}">{{ session('warning') }}</x-ui.alert>
 @endif
 @if (session('error'))
     <x-ui.alert variant="danger">{{ session('error') }}</x-ui.alert>

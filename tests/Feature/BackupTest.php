@@ -72,12 +72,32 @@ class BackupTest extends TestCase
 
     public function test_back_up_now_runs_the_backup_command(): void
     {
-        Artisan::shouldReceive('call')->once()->with('backup:run')->andReturn(0);
+        Artisan::shouldReceive('call')->once()->with('backup:run')->andReturnUsing(function (): int {
+            event(new BackupWasSuccessful('backups', 'cendana-studio'));
+            event(new BackupWasSuccessful('backups-s3', 'cendana-studio'));
+
+            return 0;
+        });
 
         $this->actingAs($this->superAdmin)
             ->post(route('administrations.backups.store'))
             ->assertRedirect(route('administrations.backups.index'))
-            ->assertSessionHas('status', 'Backup completed.');
+            ->assertSessionHas('status', 'Backup completed and saved to This server, Off-site (S3).');
+    }
+
+    public function test_back_up_now_warns_when_the_off_site_copy_fails(): void
+    {
+        Artisan::shouldReceive('call')->once()->with('backup:run')->andReturnUsing(function (): int {
+            event(new BackupWasSuccessful('backups', 'cendana-studio'));
+            event(new BackupHasFailed(new \Exception('Access Denied'), 'backups-s3', 'cendana-studio'));
+
+            return 0;
+        });
+
+        $this->actingAs($this->superAdmin)
+            ->post(route('administrations.backups.store'))
+            ->assertSessionMissing('status')
+            ->assertSessionHas('warning', 'Saved to This server, but not to Off-site (S3): Access Denied');
     }
 
     public function test_back_up_now_reports_a_failure(): void
