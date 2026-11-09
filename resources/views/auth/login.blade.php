@@ -12,6 +12,7 @@
       <x-ui.input type="password" name="password" placeholder="••••••••" autocomplete="current-password" required />
     </x-ui.field>
     <label class="flex items-center gap-2 text-sm"><input type="checkbox" name="remember" value="1" @checked(old('remember'))> {{ __('Remember me on this device') }}</label>
+    <x-ui.turnstile />
     <button type="submit" class="btn btn-primary w-full">{{ __('Sign in') }}</button>
   </form>
 </x-auth.shell>

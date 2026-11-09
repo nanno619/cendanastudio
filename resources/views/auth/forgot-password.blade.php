@@ -4,6 +4,7 @@
     <x-ui.field label="{{ __('Email') }}" name="email">
       <x-ui.input type="email" name="email" placeholder="nama@email.com" autocomplete="email" autofocus required />
     </x-ui.field>
+    <x-ui.turnstile />
     <button type="submit" class="btn btn-primary w-full">{{ __('Send reset link') }}</button>
   </form>
   <p class="mt-8 text-center text-sm text-muted-foreground"><a href="{{ route('login') }}" class="font-medium text-primary hover:underline">{{ __('Back to sign in') }}</a></p>

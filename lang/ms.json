@@ -870,5 +870,7 @@
     "Backup only partly saved": "Sandaran hanya sebahagian disimpan",
     "Saved to :saved, but not to :failed: :error": "Disimpan ke :saved, tetapi tidak ke :failed: :error",
     "another location": "lokasi lain",
-    "Backup completed and saved to :saved.": "Sandaran selesai dan disimpan ke :saved."
+    "Backup completed and saved to :saved.": "Sandaran selesai dan disimpan ke :saved.",
+    "Please complete the security check and try again.": "Sila lengkapkan semakan keselamatan dan cuba lagi.",
+    "Bot Check Failed": "Semakan bot gagal"
 }
