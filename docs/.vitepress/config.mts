@@ -5,6 +5,8 @@ export default defineConfig({
   title: 'Cendana Studio',
   description: 'Guide to the Cendana Studio admin dashboard, built from Laravel Blade components.',
   cleanUrls: true,
+  // Local-only notes (git-ignored, e.g. the production hardening plan); never built into the site.
+  srcExclude: ['private/**'],
   appearance: 'dark',
   head: [['meta', { name: 'theme-color', content: '#09090b' }]],
   themeConfig: {
