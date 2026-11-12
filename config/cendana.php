@@ -67,6 +67,7 @@ return [
                 ['label' => 'Audit Trail', 'route' => 'administrations.audit-trail.index', 'active' => 'administrations.audit-trail.*'],
                 ['label' => 'Data Dictionary', 'route' => 'administrations.data-dictionary.index', 'active' => 'administrations.data-dictionary.*'],
                 ['label' => 'Backups', 'route' => 'administrations.backups.index', 'active' => 'administrations.backups.*'],
+                ['label' => 'File Security', 'route' => 'administrations.file-security.index', 'active' => 'administrations.file-security.*'],
             ]],
         ]],
         ['label' => 'Components', 'showcase' => true, 'items' => [

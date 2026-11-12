@@ -9,9 +9,11 @@ use App\Http\Controllers\Administration\DataDictionaryCategoryController;
 use App\Http\Controllers\Administration\DataDictionaryController;
 use App\Http\Controllers\Administration\DownloadBackupController;
 use App\Http\Controllers\Administration\EditLookupItemController;
+use App\Http\Controllers\Administration\FileSecurityController;
 use App\Http\Controllers\Administration\RunBackupController;
 use App\Http\Controllers\Administration\StoreLookupItemController;
 use App\Http\Controllers\Administration\ToggleLookupItemController;
+use App\Http\Controllers\Administration\UpdateFileSecurityController;
 use App\Http\Controllers\Administration\UpdateLookupItemController;
 use App\Http\Controllers\LocaleController;
 use Illuminate\Support\Facades\Route;
@@ -31,6 +33,8 @@ Route::middleware('auth')->group(function (): void {
         Route::get('/backups', BackupController::class)->name('backups.index');
         Route::post('/backups', RunBackupController::class)->middleware('throttle:3,10')->name('backups.store');
         Route::get('/backups/{disk}/{file}', DownloadBackupController::class)->where('file', '[A-Za-z0-9._-]+\.zip')->name('backups.download');
+        Route::get('/file-security', FileSecurityController::class)->name('file-security.index');
+        Route::put('/file-security', UpdateFileSecurityController::class)->name('file-security.update');
         Route::get('/data-dictionary', DataDictionaryController::class)->name('data-dictionary.index');
         Route::get('/data-dictionary/{category}', DataDictionaryCategoryController::class)->name('data-dictionary.show');
         Route::prefix('/data-dictionary/{category}/items')->name('data-dictionary.items.')->group(function (): void {

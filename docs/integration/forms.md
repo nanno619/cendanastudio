@@ -65,14 +65,24 @@ The built-in `x-ui.file-preview` only previews and validates in the browser. Edi
 </form>
 ```
 
-In the controller, validate and store the file on the server, for example:
+In the controller, validate the file with `App\Rules\AllowedUpload` and store it on the server. The rule applies the policy Super Admin sets in **Administrations → File Security**:
+
+- Allowed file types and maximum size.
+- Always-blocked extensions anywhere in the name, from `media-library.disallowed_extensions`, so `invoice.php.pdf` is rejected.
+- Optionally, that the detected content type matches the extension.
+
+Don't hard-code `mimes`/`max` rules for uploads, or the File Security page stops being the single source of truth.
 
 ```php
+use App\Rules\AllowedUpload;
+
 $data = $request->validate([
-    'attachment' => ['required', 'file', 'mimes:png,jpg,jpeg,pdf', 'max:5120'],
+    'attachment' => ['required', 'file', new AllowedUpload],
 ]);
 
 $path = $data['attachment']->store('attachments', 'public');
 ```
 
 Make sure the public disk is set up (`php artisan storage:link` if files must be reachable from the web). Store `$path` in your app's table if you need to refer to it again. The input's `accept` prop only helps file selection; the built-in JS still limits types to PNG/JPG/PDF and size to `maxMb`. The backend rules remain authoritative.
+
+Read the policy elsewhere, for example for the input's `accept` hint, with `FileSecuritySetting::current()`. It returns the saved row, or the defaults (PDF, images, Word and Excel up to 10 MB, content check on) until the seeder or the page saves one. `allowedExtensions()` lists every extension it allows.
