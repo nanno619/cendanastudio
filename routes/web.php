@@ -33,6 +33,7 @@ Route::middleware('auth')->group(function (): void {
         Route::get('/backups', BackupController::class)->name('backups.index');
         Route::post('/backups', RunBackupController::class)->middleware('throttle:3,10')->name('backups.store');
         Route::get('/backups/{disk}/{file}', DownloadBackupController::class)->where('file', '[A-Za-z0-9._-]+\.zip')->name('backups.download');
+        Route::view('/log-viewer', 'administrations.log-viewer.index')->name('log-viewer.index');
         Route::get('/file-security', FileSecurityController::class)->name('file-security.index');
         Route::put('/file-security', UpdateFileSecurityController::class)->name('file-security.update');
         Route::get('/data-dictionary', DataDictionaryController::class)->name('data-dictionary.index');

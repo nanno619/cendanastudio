@@ -905,5 +905,8 @@
     "The :attribute has a file type that is never allowed.": ":attribute mempunyai jenis fail yang tidak pernah dibenarkan.",
     "The :attribute must be one of these file types: :types.": ":attribute mestilah salah satu jenis fail ini: :types.",
     "The :attribute must not be larger than :size MB.": ":attribute tidak boleh melebihi :size MB.",
-    "The :attribute content does not match its file extension.": "Kandungan :attribute tidak sepadan dengan sambungan failnya."
+    "The :attribute content does not match its file extension.": "Kandungan :attribute tidak sepadan dengan sambungan failnya.",
+    "Log Viewer": "Pemapar Log",
+    "Application errors and messages from the log files on this server. Times are shown in :timezone.": "Ralat dan mesej aplikasi daripada fail log di pelayan ini. Masa dipaparkan dalam :timezone.",
+    "Open in new tab": "Buka dalam tab baharu"
 }

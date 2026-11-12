@@ -68,6 +68,7 @@ return [
                 ['label' => 'Data Dictionary', 'route' => 'administrations.data-dictionary.index', 'active' => 'administrations.data-dictionary.*'],
                 ['label' => 'Backups', 'route' => 'administrations.backups.index', 'active' => 'administrations.backups.*'],
                 ['label' => 'File Security', 'route' => 'administrations.file-security.index', 'active' => 'administrations.file-security.*'],
+                ['label' => 'Log Viewer', 'route' => 'administrations.log-viewer.index', 'active' => 'administrations.log-viewer.*'],
             ]],
         ]],
         ['label' => 'Components', 'showcase' => true, 'items' => [
