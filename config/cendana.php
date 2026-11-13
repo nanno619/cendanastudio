@@ -73,7 +73,7 @@ return [
         ]],
         ['label' => 'Settings', 'items' => [
             ['id' => 'settings-company', 'label' => 'Company', 'icon' => 'home', 'role' => Role::SuperAdmin->value, 'children' => [
-                ['label' => 'Basic Details'],
+                ['label' => 'Basic Details', 'route' => 'settings.company.basic-details', 'active' => 'settings.company.basic-details*'],
                 ['label' => 'Bank Account Details'],
                 ['label' => 'Letter Templates'],
             ]],

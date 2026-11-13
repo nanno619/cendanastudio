@@ -7,11 +7,13 @@
 | Prop | Default | Purpose |
 | --- | --- | --- |
 | `id` | required | File input/label ID |
+| `name` | `null` | `name` of the file input; set it to send the file with the form |
 | `label` | “Choose a file” (translated) | Main dropzone text |
+| `hint` | “Drag here or click to choose. PNG, JPG, PDF · max N MB.” (translated) | Help text under the label; override it when `accept` differs |
 | `accept` | `image/png,image/jpeg,application/pdf` | Hint for the browser's file dialog filter |
 | `maxMb` | `5` | Local size limit in MB |
 
-`class` and other attributes apply to the wrapper, **not the file input**. The built-in input has no `name` yet, so files aren't sent to Laravel unless you change the component.
+`class` and other attributes apply to the wrapper, **not the file input**. Without `name` the file isn't sent to Laravel.
 
 ## 🖼️ Size variants and preview
 
@@ -22,9 +24,9 @@
 
 The JS currently only accepts PNG, JPG and PDF MIME types, regardless of the `accept` prop. If you change `accept` or the size limit, align the validation in `advanced-inputs.js` and in Laravel. Images are previewed through a local object URL; PDFs show as an icon and name, not their content. The remove button clears the input and revokes the object URL. Error and size messages are translated through the [JavaScript strings](/guide/theming#language).
 
-## 📤 Enabling Laravel uploads
+## 📤 Laravel uploads
 
-Add a `name` to the input in `file-preview.blade.php`; to make it configurable, add a `'name' => null` prop and output it as the `name` attribute on `<input type="file">`. After changing the component:
+Pass `name` and put the component in a `multipart/form-data` form:
 
 ```blade
 <form method="POST" action="{{ route('attachments.store') }}" enctype="multipart/form-data">
@@ -34,4 +36,4 @@ Add a `name` to the input in `file-preview.blade.php`; to make it configurable, 
 </form>
 ```
 
-The `attachments.store` route is an example route you'd create. In the controller, call `$request->validate(['attachment' => ['required', 'file', 'mimes:png,jpg,jpeg,pdf', 'max:5120']])`, then store the file on your app's disk. `accept` and `maxMb` in the browser are **not** server security validation. Full details are in the [upload guide](/integration/forms#file-uploads).
+The `attachments.store` route is an example route you'd create. Validate it with `['required', 'file', new App\Rules\AllowedUpload]` so the File Security policy applies, then store it (e.g. with Media Library). Settings → Company → Basic Details uses it this way for the logo. `accept` and `maxMb` in the browser are **not** server security validation. Full details are in the [upload guide](/integration/forms#file-uploads).

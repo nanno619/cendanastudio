@@ -16,6 +16,8 @@ use App\Http\Controllers\Administration\ToggleLookupItemController;
 use App\Http\Controllers\Administration\UpdateFileSecurityController;
 use App\Http\Controllers\Administration\UpdateLookupItemController;
 use App\Http\Controllers\LocaleController;
+use App\Http\Controllers\Settings\CompanyDetailsController;
+use App\Http\Controllers\Settings\UpdateCompanyDetailsController;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/dashboard');
@@ -26,6 +28,11 @@ Route::middleware('auth')->group(function (): void {
     Route::view('/dashboard', 'admin.dashboard')->name('admin.dashboard');
     Route::view('/analytics', 'admin.analytics')->name('admin.analytics');
     Route::view('/settings', 'admin.settings')->name('admin.settings');
+
+    Route::middleware('role:'.Role::SuperAdmin->value)->prefix('settings')->name('settings.')->group(function (): void {
+        Route::get('/company/basic-details', CompanyDetailsController::class)->name('company.basic-details');
+        Route::put('/company/basic-details', UpdateCompanyDetailsController::class)->name('company.basic-details.update');
+    });
 
     Route::middleware('role:'.Role::SuperAdmin->value)->prefix('administrations')->name('administrations.')->group(function (): void {
         Route::get('/audit-trail', AuditTrailController::class)->name('audit-trail.index');
