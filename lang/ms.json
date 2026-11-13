@@ -908,5 +908,21 @@
     "The :attribute content does not match its file extension.": "Kandungan :attribute tidak sepadan dengan sambungan failnya.",
     "Log Viewer": "Pemapar Log",
     "Application errors and messages from the log files on this server. Times are shown in :timezone.": "Ralat dan mesej aplikasi daripada fail log di pelayan ini. Masa dipaparkan dalam :timezone.",
-    "Open in new tab": "Buka dalam tab baharu"
+    "Open in new tab": "Buka dalam tab baharu",
+    "Company": "Syarikat",
+    "Leave": "Cuti",
+    "Payroll": "Penggajian",
+    "Claim": "Tuntutan",
+    "Hadir": "Hadir",
+    "Basic Details": "Butiran Asas",
+    "Bank Account Details": "Butiran Akaun Bank",
+    "Letter Templates": "Templat Surat",
+    "General": "Umum",
+    "Leave Policies": "Polisi Cuti",
+    "Leave Approval": "Kelulusan Cuti",
+    "EPF": "KWSP",
+    "Overtime": "Kerja Lebih Masa",
+    "Pro-Rata": "Pro-Rata",
+    "Payslip": "Slip Gaji",
+    "Approval Workflows": "Aliran Kerja Kelulusan"
 }

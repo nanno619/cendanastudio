@@ -250,6 +250,19 @@ class AuditTrailTest extends TestCase
             ->assertDontSee('Administrations');
     }
 
+    public function test_settings_menu_is_shown_only_to_super_admin(): void
+    {
+        $this->actingAs($this->superAdmin)->get(route('admin.dashboard'))
+            ->assertSee('id="sub-settings-company"', false)
+            ->assertSee('id="sub-settings-hadir"', false)
+            ->assertSee('Approval Workflows');
+
+        $this->actingAs(User::factory()->create()->assignRole(RoleName::Staff))->get(route('admin.dashboard'))
+            ->assertDontSee('id="sub-settings-company"', false)
+            ->assertDontSee('id="sub-settings-hadir"', false)
+            ->assertDontSee('Approval Workflows');
+    }
+
     private function log(string $description, string $event, Carbon $at, ?User $causer = null): Activity
     {
         return activity()->causedBy($causer ?? $this->superAdmin)->event($event)->createdAt($at)->log($description);

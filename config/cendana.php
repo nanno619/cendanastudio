@@ -71,6 +71,34 @@ return [
                 ['label' => 'Log Viewer', 'route' => 'administrations.log-viewer.index', 'active' => 'administrations.log-viewer.*'],
             ]],
         ]],
+        ['label' => 'Settings', 'items' => [
+            ['id' => 'settings-company', 'label' => 'Company', 'icon' => 'home', 'role' => Role::SuperAdmin->value, 'children' => [
+                ['label' => 'Basic Details'],
+                ['label' => 'Bank Account Details'],
+                ['label' => 'Letter Templates'],
+            ]],
+            ['id' => 'settings-leave', 'label' => 'Leave', 'icon' => 'calendar', 'role' => Role::SuperAdmin->value, 'children' => [
+                ['label' => 'General'],
+                ['label' => 'Leave Policies'],
+                ['label' => 'Leave Approval'],
+            ]],
+            ['id' => 'settings-payroll', 'label' => 'Payroll', 'icon' => 'dollar', 'role' => Role::SuperAdmin->value, 'children' => [
+                ['label' => 'General'],
+                ['label' => 'EPF'],
+                ['label' => 'Overtime'],
+                ['label' => 'Pro-Rata'],
+                ['label' => 'Payslip'],
+            ]],
+            ['id' => 'settings-claim', 'label' => 'Claim', 'icon' => 'file-text', 'role' => Role::SuperAdmin->value, 'children' => [
+                ['label' => 'General'],
+                ['label' => 'Approval Workflows'],
+            ]],
+            ['id' => 'settings-hadir', 'label' => 'Hadir', 'icon' => 'clock', 'role' => Role::SuperAdmin->value, 'children' => [
+                ['label' => 'General'],
+                ['label' => 'Overtime'],
+                ['label' => 'Visits'],
+            ]],
+        ]],
         ['label' => 'Components', 'showcase' => true, 'items' => [
             ['label' => 'Cards', 'route' => 'showcase.cards', 'active' => 'showcase.cards', 'icon' => 'grid'],
             ['label' => 'Tables', 'route' => 'showcase.tables', 'active' => 'showcase.tables', 'icon' => 'table'],
