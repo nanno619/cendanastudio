@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\ModuleKey;
 use App\Enums\Role;
 
 $names = [
@@ -69,6 +70,7 @@ return [
                 ['label' => 'Backups', 'route' => 'administrations.backups.index', 'active' => 'administrations.backups.*'],
                 ['label' => 'File Security', 'route' => 'administrations.file-security.index', 'active' => 'administrations.file-security.*'],
                 ['label' => 'Log Viewer', 'route' => 'administrations.log-viewer.index', 'active' => 'administrations.log-viewer.*'],
+                ['label' => 'Modules', 'route' => 'administrations.modules.index', 'active' => 'administrations.modules.*'],
             ]],
         ]],
         ['label' => 'Settings', 'items' => [
@@ -77,23 +79,23 @@ return [
                 ['label' => 'Bank Account Details', 'route' => 'settings.company.bank-account-details', 'active' => 'settings.company.bank-account-details*'],
                 ['label' => 'Letter Templates'],
             ]],
-            ['id' => 'settings-leave', 'label' => 'Leave', 'icon' => 'calendar', 'role' => Role::SuperAdmin->value, 'children' => [
+            ['id' => 'settings-leave', 'module' => ModuleKey::Leave->value, 'label' => 'Leave', 'icon' => 'calendar', 'role' => Role::SuperAdmin->value, 'children' => [
                 ['label' => 'General', 'route' => 'settings.leave.general', 'active' => 'settings.leave.general*'],
                 ['label' => 'Leave Policies', 'route' => 'settings.leave.policies.index', 'active' => 'settings.leave.policies.*'],
                 ['label' => 'Leave Approval', 'route' => 'settings.leave.approval.index', 'active' => 'settings.leave.approval.*'],
             ]],
-            ['id' => 'settings-payroll', 'label' => 'Payroll', 'icon' => 'dollar', 'role' => Role::SuperAdmin->value, 'children' => [
+            ['id' => 'settings-payroll', 'module' => ModuleKey::Payroll->value, 'label' => 'Payroll', 'icon' => 'dollar', 'role' => Role::SuperAdmin->value, 'children' => [
                 ['label' => 'General', 'route' => 'settings.payroll.general', 'active' => 'settings.payroll.general*'],
                 ['label' => 'EPF', 'route' => 'settings.payroll.epf', 'active' => 'settings.payroll.epf*'],
                 ['label' => 'Overtime', 'route' => 'settings.payroll.overtime', 'active' => 'settings.payroll.overtime*'],
                 ['label' => 'Pro-Rata', 'route' => 'settings.payroll.pro-rata', 'active' => 'settings.payroll.pro-rata*'],
                 ['label' => 'Payslip', 'route' => 'settings.payroll.payslip', 'active' => 'settings.payroll.payslip*'],
             ]],
-            ['id' => 'settings-claim', 'label' => 'Claim', 'icon' => 'file-text', 'role' => Role::SuperAdmin->value, 'children' => [
+            ['id' => 'settings-claim', 'module' => ModuleKey::Claim->value, 'label' => 'Claim', 'icon' => 'file-text', 'role' => Role::SuperAdmin->value, 'children' => [
                 ['label' => 'General', 'route' => 'settings.claim.general', 'active' => 'settings.claim.general*'],
                 ['label' => 'Approval Workflows', 'route' => 'settings.claim.approval.index', 'active' => 'settings.claim.approval.*'],
             ]],
-            ['id' => 'settings-hadir', 'label' => 'Hadir', 'icon' => 'clock', 'role' => Role::SuperAdmin->value, 'children' => [
+            ['id' => 'settings-hadir', 'module' => ModuleKey::Hadir->value, 'label' => 'Hadir', 'icon' => 'clock', 'role' => Role::SuperAdmin->value, 'children' => [
                 ['label' => 'General', 'route' => 'settings.hadir.general', 'active' => 'settings.hadir.general*'],
                 ['label' => 'Overtime', 'route' => 'settings.hadir.overtime', 'active' => 'settings.hadir.overtime*'],
                 ['label' => 'Visits', 'route' => 'settings.hadir.visits', 'active' => 'settings.hadir.visits*'],

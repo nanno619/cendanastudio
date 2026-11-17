@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\EnsureModuleIsAvailable;
 use App\Http\Middleware\SetLocale;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -18,6 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [SetLocale::class]);
 
         $middleware->alias([
+            'module' => EnsureModuleIsAvailable::class,
             'role' => RoleMiddleware::class,
             'permission' => PermissionMiddleware::class,
             'role_or_permission' => RoleOrPermissionMiddleware::class,

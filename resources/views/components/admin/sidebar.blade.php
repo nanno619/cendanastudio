@@ -11,17 +11,11 @@
     </div>
 
     <nav class="flex-1 space-y-5 overflow-y-auto overflow-x-hidden px-3 pb-3 pt-1">
-        @foreach (config('cendana.navigation') as $group)
-            @continue(($group['showcase'] ?? false) && ! config('cendana.showcase'))
-            @php
-                // Items with a 'role' key are shown only to users holding that role.
-                $visibleItems = array_filter($group['items'], fn (array $item): bool => empty($item['role']) || (auth()->user()?->hasRole($item['role']) ?? false));
-            @endphp
-            @continue(empty($visibleItems))
+        @foreach (\App\Support\Navigation::for(auth()->user()) as $group)
             <div>
-                <p class="sb-label mb-1 px-2 text-xs font-medium text-muted-foreground">{{ __($group['label']) }}</p>
+                <p class="sb-label mb-1 px-2 text-xs font-medium text-muted-foreground">{{ $group['label'] }}</p>
                 <ul class="space-y-0.5">
-                    @foreach ($visibleItems as $item)
+                    @foreach ($group['items'] as $item)
                         @if (! empty($item['children']))
                             @php
                                 $submenuId = 'sub-'.($item['id'] ?? \Illuminate\Support\Str::slug($item['label']));
@@ -30,7 +24,7 @@
                             <li>
                                 <button type="button" class="nav-link" data-collapse="#{{ $submenuId }}" aria-expanded="{{ $submenuActive ? 'true' : 'false' }}">
                                     <x-ui.icon :name="$item['icon']" class="h-4 w-4 shrink-0" />
-                                    <span class="sb-label flex-1 truncate">{{ __($item['label']) }}</span>
+                                    <span class="sb-label flex-1 truncate">{{ $item['label'] }}</span>
                                     <x-ui.icon name="chevron-right" @class(['nav-chevron sb-label h-4 w-4 transition-transform', 'rotate-90' => $submenuActive]) />
                                 </button>
                                 <ul id="{{ $submenuId }}" class="nav-sub sb-label" @if(! $submenuActive) hidden @endif>

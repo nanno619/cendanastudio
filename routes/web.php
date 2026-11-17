@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\ModuleKey;
 use App\Enums\Role;
 use App\Http\Controllers\Administration\AuditTrailController;
 use App\Http\Controllers\Administration\AuditTrailEntryController;
@@ -9,12 +10,15 @@ use App\Http\Controllers\Administration\DataDictionaryCategoryController;
 use App\Http\Controllers\Administration\DataDictionaryController;
 use App\Http\Controllers\Administration\DownloadBackupController;
 use App\Http\Controllers\Administration\EditLookupItemController;
+use App\Http\Controllers\Administration\EditModuleController;
 use App\Http\Controllers\Administration\FileSecurityController;
+use App\Http\Controllers\Administration\ModuleController;
 use App\Http\Controllers\Administration\RunBackupController;
 use App\Http\Controllers\Administration\StoreLookupItemController;
 use App\Http\Controllers\Administration\ToggleLookupItemController;
 use App\Http\Controllers\Administration\UpdateFileSecurityController;
 use App\Http\Controllers\Administration\UpdateLookupItemController;
+use App\Http\Controllers\Administration\UpdateModuleController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\Settings\AttendanceOvertimeSettingsController;
 use App\Http\Controllers\Settings\AttendanceSettingsController;
@@ -73,43 +77,51 @@ Route::middleware('auth')->group(function (): void {
         Route::put('/company/basic-details', UpdateCompanyDetailsController::class)->name('company.basic-details.update');
         Route::get('/company/bank-account-details', CompanyBankAccountDetailsController::class)->name('company.bank-account-details');
         Route::put('/company/bank-account-details', UpdateCompanyBankAccountDetailsController::class)->name('company.bank-account-details.update');
-        Route::get('/leave/general', LeaveSettingsController::class)->name('leave.general');
-        Route::put('/leave/general', UpdateLeaveSettingsController::class)->name('leave.general.update');
-        Route::get('/leave/policies', LeavePolicyController::class)->name('leave.policies.index');
-        Route::get('/leave/policies/{leaveType}/edit', EditLeavePolicyController::class)->where('leaveType', '[a-z0-9-]+')->name('leave.policies.edit');
-        Route::put('/leave/policies/{leaveType}', UpdateLeavePolicyController::class)->where('leaveType', '[a-z0-9-]+')->name('leave.policies.update');
-        Route::get('/leave/approval', LeaveApprovalController::class)->name('leave.approval.index');
-        Route::put('/leave/approval/cancellation', UpdateLeaveCancellationController::class)->name('leave.approval.cancellation');
-        Route::get('/leave/approval/routes/create', CreateLeaveApprovalRouteController::class)->name('leave.approval.routes.create');
-        Route::post('/leave/approval/routes', StoreLeaveApprovalRouteController::class)->name('leave.approval.routes.store');
-        Route::get('/leave/approval/routes/{approvalRoute}/edit', EditLeaveApprovalRouteController::class)->name('leave.approval.routes.edit');
-        Route::put('/leave/approval/routes/{approvalRoute}', UpdateLeaveApprovalRouteController::class)->name('leave.approval.routes.update');
-        Route::delete('/leave/approval/routes/{approvalRoute}', DestroyLeaveApprovalRouteController::class)->name('leave.approval.routes.destroy');
-        Route::get('/payroll/general', PayrollSettingsController::class)->name('payroll.general');
-        Route::put('/payroll/general', UpdatePayrollSettingsController::class)->name('payroll.general.update');
-        Route::get('/payroll/epf', EpfSettingsController::class)->name('payroll.epf');
-        Route::put('/payroll/epf', UpdateEpfSettingsController::class)->name('payroll.epf.update');
-        Route::get('/payroll/overtime', OvertimeSettingsController::class)->name('payroll.overtime');
-        Route::put('/payroll/overtime', UpdateOvertimeSettingsController::class)->name('payroll.overtime.update');
-        Route::get('/payroll/pro-rata', ProRataSettingsController::class)->name('payroll.pro-rata');
-        Route::put('/payroll/pro-rata', UpdateProRataSettingsController::class)->name('payroll.pro-rata.update');
-        Route::get('/payroll/payslip', PayslipSettingsController::class)->name('payroll.payslip');
-        Route::put('/payroll/payslip', UpdatePayslipSettingsController::class)->name('payroll.payslip.update');
-        Route::get('/payroll/payslip/preview', PreviewPayslipController::class)->name('payroll.payslip.preview');
-        Route::get('/claim/general', ClaimSettingsController::class)->name('claim.general');
-        Route::put('/claim/general', UpdateClaimSettingsController::class)->name('claim.general.update');
-        Route::get('/claim/approval', ClaimApprovalController::class)->name('claim.approval.index');
-        Route::get('/claim/approval/routes/create', CreateClaimApprovalRouteController::class)->name('claim.approval.routes.create');
-        Route::post('/claim/approval/routes', StoreClaimApprovalRouteController::class)->name('claim.approval.routes.store');
-        Route::get('/claim/approval/routes/{claimApprovalRoute}/edit', EditClaimApprovalRouteController::class)->name('claim.approval.routes.edit');
-        Route::put('/claim/approval/routes/{claimApprovalRoute}', UpdateClaimApprovalRouteController::class)->name('claim.approval.routes.update');
-        Route::delete('/claim/approval/routes/{claimApprovalRoute}', DestroyClaimApprovalRouteController::class)->name('claim.approval.routes.destroy');
-        Route::get('/hadir/general', AttendanceSettingsController::class)->name('hadir.general');
-        Route::put('/hadir/general', UpdateAttendanceSettingsController::class)->name('hadir.general.update');
-        Route::get('/hadir/overtime', AttendanceOvertimeSettingsController::class)->name('hadir.overtime');
-        Route::put('/hadir/overtime', UpdateAttendanceOvertimeSettingsController::class)->name('hadir.overtime.update');
-        Route::get('/hadir/visits', VisitSettingsController::class)->name('hadir.visits');
-        Route::put('/hadir/visits', UpdateVisitSettingsController::class)->name('hadir.visits.update');
+        Route::middleware('module:'.ModuleKey::Leave->value)->group(function (): void {
+            Route::get('/leave/general', LeaveSettingsController::class)->name('leave.general');
+            Route::put('/leave/general', UpdateLeaveSettingsController::class)->name('leave.general.update');
+            Route::get('/leave/policies', LeavePolicyController::class)->name('leave.policies.index');
+            Route::get('/leave/policies/{leaveType}/edit', EditLeavePolicyController::class)->where('leaveType', '[a-z0-9-]+')->name('leave.policies.edit');
+            Route::put('/leave/policies/{leaveType}', UpdateLeavePolicyController::class)->where('leaveType', '[a-z0-9-]+')->name('leave.policies.update');
+            Route::get('/leave/approval', LeaveApprovalController::class)->name('leave.approval.index');
+            Route::put('/leave/approval/cancellation', UpdateLeaveCancellationController::class)->name('leave.approval.cancellation');
+            Route::get('/leave/approval/routes/create', CreateLeaveApprovalRouteController::class)->name('leave.approval.routes.create');
+            Route::post('/leave/approval/routes', StoreLeaveApprovalRouteController::class)->name('leave.approval.routes.store');
+            Route::get('/leave/approval/routes/{approvalRoute}/edit', EditLeaveApprovalRouteController::class)->name('leave.approval.routes.edit');
+            Route::put('/leave/approval/routes/{approvalRoute}', UpdateLeaveApprovalRouteController::class)->name('leave.approval.routes.update');
+            Route::delete('/leave/approval/routes/{approvalRoute}', DestroyLeaveApprovalRouteController::class)->name('leave.approval.routes.destroy');
+        });
+        Route::middleware('module:'.ModuleKey::Payroll->value)->group(function (): void {
+            Route::get('/payroll/general', PayrollSettingsController::class)->name('payroll.general');
+            Route::put('/payroll/general', UpdatePayrollSettingsController::class)->name('payroll.general.update');
+            Route::get('/payroll/epf', EpfSettingsController::class)->name('payroll.epf');
+            Route::put('/payroll/epf', UpdateEpfSettingsController::class)->name('payroll.epf.update');
+            Route::get('/payroll/overtime', OvertimeSettingsController::class)->name('payroll.overtime');
+            Route::put('/payroll/overtime', UpdateOvertimeSettingsController::class)->name('payroll.overtime.update');
+            Route::get('/payroll/pro-rata', ProRataSettingsController::class)->name('payroll.pro-rata');
+            Route::put('/payroll/pro-rata', UpdateProRataSettingsController::class)->name('payroll.pro-rata.update');
+            Route::get('/payroll/payslip', PayslipSettingsController::class)->name('payroll.payslip');
+            Route::put('/payroll/payslip', UpdatePayslipSettingsController::class)->name('payroll.payslip.update');
+            Route::get('/payroll/payslip/preview', PreviewPayslipController::class)->name('payroll.payslip.preview');
+        });
+        Route::middleware('module:'.ModuleKey::Claim->value)->group(function (): void {
+            Route::get('/claim/general', ClaimSettingsController::class)->name('claim.general');
+            Route::put('/claim/general', UpdateClaimSettingsController::class)->name('claim.general.update');
+            Route::get('/claim/approval', ClaimApprovalController::class)->name('claim.approval.index');
+            Route::get('/claim/approval/routes/create', CreateClaimApprovalRouteController::class)->name('claim.approval.routes.create');
+            Route::post('/claim/approval/routes', StoreClaimApprovalRouteController::class)->name('claim.approval.routes.store');
+            Route::get('/claim/approval/routes/{claimApprovalRoute}/edit', EditClaimApprovalRouteController::class)->name('claim.approval.routes.edit');
+            Route::put('/claim/approval/routes/{claimApprovalRoute}', UpdateClaimApprovalRouteController::class)->name('claim.approval.routes.update');
+            Route::delete('/claim/approval/routes/{claimApprovalRoute}', DestroyClaimApprovalRouteController::class)->name('claim.approval.routes.destroy');
+        });
+        Route::middleware('module:'.ModuleKey::Hadir->value)->group(function (): void {
+            Route::get('/hadir/general', AttendanceSettingsController::class)->name('hadir.general');
+            Route::put('/hadir/general', UpdateAttendanceSettingsController::class)->name('hadir.general.update');
+            Route::get('/hadir/overtime', AttendanceOvertimeSettingsController::class)->name('hadir.overtime');
+            Route::put('/hadir/overtime', UpdateAttendanceOvertimeSettingsController::class)->name('hadir.overtime.update');
+            Route::get('/hadir/visits', VisitSettingsController::class)->name('hadir.visits');
+            Route::put('/hadir/visits', UpdateVisitSettingsController::class)->name('hadir.visits.update');
+        });
     });
 
     Route::middleware('role:'.Role::SuperAdmin->value)->prefix('administrations')->name('administrations.')->group(function (): void {
@@ -121,6 +133,9 @@ Route::middleware('auth')->group(function (): void {
         Route::view('/log-viewer', 'administrations.log-viewer.index')->name('log-viewer.index');
         Route::get('/file-security', FileSecurityController::class)->name('file-security.index');
         Route::put('/file-security', UpdateFileSecurityController::class)->name('file-security.update');
+        Route::get('/modules', ModuleController::class)->name('modules.index');
+        Route::get('/modules/{moduleKey}/edit', EditModuleController::class)->name('modules.edit');
+        Route::put('/modules/{moduleKey}', UpdateModuleController::class)->name('modules.update');
         Route::get('/data-dictionary', DataDictionaryController::class)->name('data-dictionary.index');
         Route::get('/data-dictionary/{category}', DataDictionaryCategoryController::class)->name('data-dictionary.show');
         Route::prefix('/data-dictionary/{category}/items')->name('data-dictionary.items.')->group(function (): void {
