@@ -73,6 +73,10 @@ class LookupSeeder extends Seeder
                 ['hospitalization', 'Hospitalization Leave', 'Cuti Hospital'],
                 ['paternity', 'Paternity Leave', 'Cuti Paterniti'],
                 ['compassionate', 'Compassionate Leave', 'Cuti Ihsan'],
+                ['maternity', 'Maternity Leave', 'Cuti Bersalin'],
+                ['marriage', 'Marriage Leave', 'Cuti Perkahwinan'],
+                ['replacement', 'Replacement Leave', 'Cuti Ganti'],
+                ['unpaid', 'Unpaid Leave', 'Cuti Tanpa Gaji'],
             ],
             LookupCategory::ClaimType->value => [
                 ['fuel', 'Fuel', 'Bahan Api'],

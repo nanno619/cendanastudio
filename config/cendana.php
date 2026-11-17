@@ -79,7 +79,7 @@ return [
             ]],
             ['id' => 'settings-leave', 'label' => 'Leave', 'icon' => 'calendar', 'role' => Role::SuperAdmin->value, 'children' => [
                 ['label' => 'General', 'route' => 'settings.leave.general', 'active' => 'settings.leave.general*'],
-                ['label' => 'Leave Policies'],
+                ['label' => 'Leave Policies', 'route' => 'settings.leave.policies.index', 'active' => 'settings.leave.policies.*'],
                 ['label' => 'Leave Approval'],
             ]],
             ['id' => 'settings-payroll', 'label' => 'Payroll', 'icon' => 'dollar', 'role' => Role::SuperAdmin->value, 'children' => [

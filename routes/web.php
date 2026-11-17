@@ -18,9 +18,12 @@ use App\Http\Controllers\Administration\UpdateLookupItemController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\Settings\CompanyBankAccountDetailsController;
 use App\Http\Controllers\Settings\CompanyDetailsController;
+use App\Http\Controllers\Settings\EditLeavePolicyController;
+use App\Http\Controllers\Settings\LeavePolicyController;
 use App\Http\Controllers\Settings\LeaveSettingsController;
 use App\Http\Controllers\Settings\UpdateCompanyBankAccountDetailsController;
 use App\Http\Controllers\Settings\UpdateCompanyDetailsController;
+use App\Http\Controllers\Settings\UpdateLeavePolicyController;
 use App\Http\Controllers\Settings\UpdateLeaveSettingsController;
 use Illuminate\Support\Facades\Route;
 
@@ -40,6 +43,9 @@ Route::middleware('auth')->group(function (): void {
         Route::put('/company/bank-account-details', UpdateCompanyBankAccountDetailsController::class)->name('company.bank-account-details.update');
         Route::get('/leave/general', LeaveSettingsController::class)->name('leave.general');
         Route::put('/leave/general', UpdateLeaveSettingsController::class)->name('leave.general.update');
+        Route::get('/leave/policies', LeavePolicyController::class)->name('leave.policies.index');
+        Route::get('/leave/policies/{leaveType}/edit', EditLeavePolicyController::class)->where('leaveType', '[a-z0-9-]+')->name('leave.policies.edit');
+        Route::put('/leave/policies/{leaveType}', UpdateLeavePolicyController::class)->where('leaveType', '[a-z0-9-]+')->name('leave.policies.update');
     });
 
     Route::middleware('role:'.Role::SuperAdmin->value)->prefix('administrations')->name('administrations.')->group(function (): void {
