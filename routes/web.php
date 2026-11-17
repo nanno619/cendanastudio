@@ -18,11 +18,18 @@ use App\Http\Controllers\Administration\UpdateLookupItemController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\Settings\CompanyBankAccountDetailsController;
 use App\Http\Controllers\Settings\CompanyDetailsController;
+use App\Http\Controllers\Settings\CreateLeaveApprovalRouteController;
+use App\Http\Controllers\Settings\DestroyLeaveApprovalRouteController;
+use App\Http\Controllers\Settings\EditLeaveApprovalRouteController;
 use App\Http\Controllers\Settings\EditLeavePolicyController;
+use App\Http\Controllers\Settings\LeaveApprovalController;
 use App\Http\Controllers\Settings\LeavePolicyController;
 use App\Http\Controllers\Settings\LeaveSettingsController;
+use App\Http\Controllers\Settings\StoreLeaveApprovalRouteController;
 use App\Http\Controllers\Settings\UpdateCompanyBankAccountDetailsController;
 use App\Http\Controllers\Settings\UpdateCompanyDetailsController;
+use App\Http\Controllers\Settings\UpdateLeaveApprovalRouteController;
+use App\Http\Controllers\Settings\UpdateLeaveCancellationController;
 use App\Http\Controllers\Settings\UpdateLeavePolicyController;
 use App\Http\Controllers\Settings\UpdateLeaveSettingsController;
 use Illuminate\Support\Facades\Route;
@@ -46,6 +53,13 @@ Route::middleware('auth')->group(function (): void {
         Route::get('/leave/policies', LeavePolicyController::class)->name('leave.policies.index');
         Route::get('/leave/policies/{leaveType}/edit', EditLeavePolicyController::class)->where('leaveType', '[a-z0-9-]+')->name('leave.policies.edit');
         Route::put('/leave/policies/{leaveType}', UpdateLeavePolicyController::class)->where('leaveType', '[a-z0-9-]+')->name('leave.policies.update');
+        Route::get('/leave/approval', LeaveApprovalController::class)->name('leave.approval.index');
+        Route::put('/leave/approval/cancellation', UpdateLeaveCancellationController::class)->name('leave.approval.cancellation');
+        Route::get('/leave/approval/routes/create', CreateLeaveApprovalRouteController::class)->name('leave.approval.routes.create');
+        Route::post('/leave/approval/routes', StoreLeaveApprovalRouteController::class)->name('leave.approval.routes.store');
+        Route::get('/leave/approval/routes/{approvalRoute}/edit', EditLeaveApprovalRouteController::class)->name('leave.approval.routes.edit');
+        Route::put('/leave/approval/routes/{approvalRoute}', UpdateLeaveApprovalRouteController::class)->name('leave.approval.routes.update');
+        Route::delete('/leave/approval/routes/{approvalRoute}', DestroyLeaveApprovalRouteController::class)->name('leave.approval.routes.destroy');
     });
 
     Route::middleware('role:'.Role::SuperAdmin->value)->prefix('administrations')->name('administrations.')->group(function (): void {

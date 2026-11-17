@@ -39,7 +39,7 @@ class DatabaseSeeder extends Seeder
                 ['name' => $admin['name'] ?: 'Administrator', 'password' => $admin['password'], 'email_verified_at' => now()],
             )->syncRoles(Role::SuperAdmin);
 
-            $this->call([LookupSeeder::class, LeavePolicySeeder::class, FileSecuritySettingSeeder::class, RoleUserSeeder::class]);
+            $this->call([LookupSeeder::class, LeavePolicySeeder::class, LeaveApprovalRouteSeeder::class, FileSecuritySettingSeeder::class, RoleUserSeeder::class]);
         });
 
         $this->call(AuditTrailDemoSeeder::class);

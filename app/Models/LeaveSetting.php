@@ -35,6 +35,7 @@ use Spatie\Activitylog\Support\LogOptions;
  * @property LeaveRounding $proration_rounding
  * @property UnusedLeaveTreatment $resignation_unused_leave
  * @property bool $share_leave_calendar Staff see who is on leave, never the leave type
+ * @property bool $cancellation_requires_approval Cancelling approved leave goes back to the approvers (set on Leave Approval)
  * @property string|null $hr_notification_email Copied on every application and decision
  */
 class LeaveSetting extends Model
@@ -49,7 +50,7 @@ class LeaveSetting extends Model
         'leave_year_start_month', 'working_days', 'half_working_day', 'public_holiday_state',
         'allow_half_day', 'annual_leave_notice_days', 'backdate_days', 'allow_leave_during_probation',
         'allow_negative_balance', 'max_negative_days', 'prorate_entitlement', 'proration_rounding',
-        'resignation_unused_leave', 'share_leave_calendar', 'hr_notification_email',
+        'resignation_unused_leave', 'share_leave_calendar', 'cancellation_requires_approval', 'hr_notification_email',
     ];
 
     /**
@@ -71,6 +72,7 @@ class LeaveSetting extends Model
             'proration_rounding' => LeaveRounding::class,
             'resignation_unused_leave' => UnusedLeaveTreatment::class,
             'share_leave_calendar' => 'boolean',
+            'cancellation_requires_approval' => 'boolean',
         ];
     }
 
@@ -102,6 +104,7 @@ class LeaveSetting extends Model
             'proration_rounding' => LeaveRounding::NearestDay,
             'resignation_unused_leave' => UnusedLeaveTreatment::OffsetNotice,
             'share_leave_calendar' => false,
+            'cancellation_requires_approval' => true,
             'hr_notification_email' => null,
         ];
     }
