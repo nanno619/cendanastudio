@@ -78,7 +78,7 @@ return [
                 ['label' => 'Letter Templates'],
             ]],
             ['id' => 'settings-leave', 'label' => 'Leave', 'icon' => 'calendar', 'role' => Role::SuperAdmin->value, 'children' => [
-                ['label' => 'General'],
+                ['label' => 'General', 'route' => 'settings.leave.general', 'active' => 'settings.leave.general*'],
                 ['label' => 'Leave Policies'],
                 ['label' => 'Leave Approval'],
             ]],

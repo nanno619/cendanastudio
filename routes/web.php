@@ -18,8 +18,10 @@ use App\Http\Controllers\Administration\UpdateLookupItemController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\Settings\CompanyBankAccountDetailsController;
 use App\Http\Controllers\Settings\CompanyDetailsController;
+use App\Http\Controllers\Settings\LeaveSettingsController;
 use App\Http\Controllers\Settings\UpdateCompanyBankAccountDetailsController;
 use App\Http\Controllers\Settings\UpdateCompanyDetailsController;
+use App\Http\Controllers\Settings\UpdateLeaveSettingsController;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/dashboard');
@@ -36,6 +38,8 @@ Route::middleware('auth')->group(function (): void {
         Route::put('/company/basic-details', UpdateCompanyDetailsController::class)->name('company.basic-details.update');
         Route::get('/company/bank-account-details', CompanyBankAccountDetailsController::class)->name('company.bank-account-details');
         Route::put('/company/bank-account-details', UpdateCompanyBankAccountDetailsController::class)->name('company.bank-account-details.update');
+        Route::get('/leave/general', LeaveSettingsController::class)->name('leave.general');
+        Route::put('/leave/general', UpdateLeaveSettingsController::class)->name('leave.general.update');
     });
 
     Route::middleware('role:'.Role::SuperAdmin->value)->prefix('administrations')->name('administrations.')->group(function (): void {
