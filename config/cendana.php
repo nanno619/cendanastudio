@@ -86,7 +86,7 @@ return [
                 ['label' => 'General', 'route' => 'settings.payroll.general', 'active' => 'settings.payroll.general*'],
                 ['label' => 'EPF', 'route' => 'settings.payroll.epf', 'active' => 'settings.payroll.epf*'],
                 ['label' => 'Overtime', 'route' => 'settings.payroll.overtime', 'active' => 'settings.payroll.overtime*'],
-                ['label' => 'Pro-Rata'],
+                ['label' => 'Pro-Rata', 'route' => 'settings.payroll.pro-rata', 'active' => 'settings.payroll.pro-rata*'],
                 ['label' => 'Payslip'],
             ]],
             ['id' => 'settings-claim', 'label' => 'Claim', 'icon' => 'file-text', 'role' => Role::SuperAdmin->value, 'children' => [

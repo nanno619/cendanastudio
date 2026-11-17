@@ -28,6 +28,7 @@ use App\Http\Controllers\Settings\LeavePolicyController;
 use App\Http\Controllers\Settings\LeaveSettingsController;
 use App\Http\Controllers\Settings\OvertimeSettingsController;
 use App\Http\Controllers\Settings\PayrollSettingsController;
+use App\Http\Controllers\Settings\ProRataSettingsController;
 use App\Http\Controllers\Settings\StoreLeaveApprovalRouteController;
 use App\Http\Controllers\Settings\UpdateCompanyBankAccountDetailsController;
 use App\Http\Controllers\Settings\UpdateCompanyDetailsController;
@@ -38,6 +39,7 @@ use App\Http\Controllers\Settings\UpdateLeavePolicyController;
 use App\Http\Controllers\Settings\UpdateLeaveSettingsController;
 use App\Http\Controllers\Settings\UpdateOvertimeSettingsController;
 use App\Http\Controllers\Settings\UpdatePayrollSettingsController;
+use App\Http\Controllers\Settings\UpdateProRataSettingsController;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/dashboard');
@@ -72,6 +74,8 @@ Route::middleware('auth')->group(function (): void {
         Route::put('/payroll/epf', UpdateEpfSettingsController::class)->name('payroll.epf.update');
         Route::get('/payroll/overtime', OvertimeSettingsController::class)->name('payroll.overtime');
         Route::put('/payroll/overtime', UpdateOvertimeSettingsController::class)->name('payroll.overtime.update');
+        Route::get('/payroll/pro-rata', ProRataSettingsController::class)->name('payroll.pro-rata');
+        Route::put('/payroll/pro-rata', UpdateProRataSettingsController::class)->name('payroll.pro-rata.update');
     });
 
     Route::middleware('role:'.Role::SuperAdmin->value)->prefix('administrations')->name('administrations.')->group(function (): void {
