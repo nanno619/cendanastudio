@@ -85,7 +85,7 @@ return [
             ['id' => 'settings-payroll', 'label' => 'Payroll', 'icon' => 'dollar', 'role' => Role::SuperAdmin->value, 'children' => [
                 ['label' => 'General', 'route' => 'settings.payroll.general', 'active' => 'settings.payroll.general*'],
                 ['label' => 'EPF', 'route' => 'settings.payroll.epf', 'active' => 'settings.payroll.epf*'],
-                ['label' => 'Overtime'],
+                ['label' => 'Overtime', 'route' => 'settings.payroll.overtime', 'active' => 'settings.payroll.overtime*'],
                 ['label' => 'Pro-Rata'],
                 ['label' => 'Payslip'],
             ]],

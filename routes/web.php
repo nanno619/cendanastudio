@@ -26,6 +26,7 @@ use App\Http\Controllers\Settings\EpfSettingsController;
 use App\Http\Controllers\Settings\LeaveApprovalController;
 use App\Http\Controllers\Settings\LeavePolicyController;
 use App\Http\Controllers\Settings\LeaveSettingsController;
+use App\Http\Controllers\Settings\OvertimeSettingsController;
 use App\Http\Controllers\Settings\PayrollSettingsController;
 use App\Http\Controllers\Settings\StoreLeaveApprovalRouteController;
 use App\Http\Controllers\Settings\UpdateCompanyBankAccountDetailsController;
@@ -35,6 +36,7 @@ use App\Http\Controllers\Settings\UpdateLeaveApprovalRouteController;
 use App\Http\Controllers\Settings\UpdateLeaveCancellationController;
 use App\Http\Controllers\Settings\UpdateLeavePolicyController;
 use App\Http\Controllers\Settings\UpdateLeaveSettingsController;
+use App\Http\Controllers\Settings\UpdateOvertimeSettingsController;
 use App\Http\Controllers\Settings\UpdatePayrollSettingsController;
 use Illuminate\Support\Facades\Route;
 
@@ -68,6 +70,8 @@ Route::middleware('auth')->group(function (): void {
         Route::put('/payroll/general', UpdatePayrollSettingsController::class)->name('payroll.general.update');
         Route::get('/payroll/epf', EpfSettingsController::class)->name('payroll.epf');
         Route::put('/payroll/epf', UpdateEpfSettingsController::class)->name('payroll.epf.update');
+        Route::get('/payroll/overtime', OvertimeSettingsController::class)->name('payroll.overtime');
+        Route::put('/payroll/overtime', UpdateOvertimeSettingsController::class)->name('payroll.overtime.update');
     });
 
     Route::middleware('role:'.Role::SuperAdmin->value)->prefix('administrations')->name('administrations.')->group(function (): void {
