@@ -136,6 +136,16 @@ class CompanyTest extends TestCase
             ->assertSee('Last changed by');
     }
 
+    public function test_last_changed_ignores_bank_account_changes(): void
+    {
+        $company = Company::factory()->create();
+        $basicChange = Activity::query()->whereMorphedTo('subject', $company)->latest('id')->first();
+        $company->update(['bank_account_no' => '514123456789']);
+
+        $this->actingAs($this->superAdmin)->get(route('settings.company.basic-details'))
+            ->assertSee(route('administrations.audit-trail.show', $basicChange));
+    }
+
     public function test_employer_numbers_are_not_saved_from_basic_details(): void
     {
         $company = Company::factory()->create(['epf_no' => '012345678']);

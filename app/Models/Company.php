@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Database\Factories\CompanyFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
 use Spatie\MediaLibrary\HasMedia;
@@ -99,6 +101,31 @@ class Company extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('logo')->singleFile();
+    }
+
+    /**
+     * The latest audit entry that set or cleared any of the given columns, so each settings page shows its own
+     * last change. Columns left empty when the row was created don't count.
+     *
+     * @param  list<string>  $fields
+     */
+    public function latestChangeTo(array $fields): ?Activity
+    {
+        if (! $this->exists) {
+            return null;
+        }
+
+        return Activity::query()
+            ->with('causer')
+            ->whereMorphedTo('subject', $this)
+            ->where(function (Builder $query) use ($fields): void {
+                foreach ($fields as $field) {
+                    $query->orWhereNotNull('attribute_changes->attributes->'.$field)
+                        ->orWhereNotNull('attribute_changes->old->'.$field);
+                }
+            })
+            ->latest('id')
+            ->first();
     }
 
     public function getActivitylogOptions(): LogOptions

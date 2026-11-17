@@ -8,7 +8,6 @@ use App\Models\Company;
 use App\Models\FileSecuritySetting;
 use App\Models\LookupItem;
 use Illuminate\View\View;
-use Spatie\Activitylog\Models\Activity;
 
 class CompanyDetailsController extends Controller
 {
@@ -24,9 +23,7 @@ class CompanyDetailsController extends Controller
             'states' => LookupItem::options(LookupCategory::MalaysianStates),
             'logoUrl' => $company->exists ? $company->getFirstMediaUrl('logo') : '',
             'maxUploadMb' => FileSecuritySetting::current()->max_file_size_mb,
-            'lastChange' => $company->exists
-                ? Activity::query()->with('causer')->whereMorphedTo('subject', $company)->latest('id')->first()
-                : null,
+            'lastChange' => $company->latestChangeTo(array_values(array_diff($company->getFillable(), Company::BANK_ACCOUNT_FIELDS))),
             'timezone' => config('cendana.timezone'),
         ]);
     }

@@ -101,6 +101,29 @@ class CompanyBankAccountDetailsTest extends TestCase
             ->assertSee('Last changed by');
     }
 
+    public function test_last_changed_counts_only_changes_to_this_pages_fields(): void
+    {
+        $company = Company::factory()->create(array_fill_keys(Company::BANK_ACCOUNT_FIELDS, null));
+        $company->update(['name' => 'Renamed Sdn. Bhd.']);
+
+        $this->actingAs($this->superAdmin)->get(route('settings.company.bank-account-details'))
+            ->assertDontSee('Last changed by');
+
+        $company->update(['hrdf_no' => 'HRD123456']);
+        $bankChange = Activity::query()->latest('id')->first();
+        $company->update(['city' => 'Ipoh']);
+
+        $this->actingAs($this->superAdmin)->get(route('settings.company.bank-account-details'))
+            ->assertSee(route('administrations.audit-trail.show', $bankChange));
+
+        $company->update(['hrdf_no' => null]);
+        $bankChange = Activity::query()->latest('id')->first();
+
+        $this->actingAs($this->superAdmin)->get(route('settings.company.bank-account-details'))
+            ->assertSee('Last changed by')
+            ->assertSee(route('administrations.audit-trail.show', $bankChange));
+    }
+
     /**
      * @param  array<string, mixed>  $overrides
      */

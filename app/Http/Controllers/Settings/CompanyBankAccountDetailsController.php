@@ -7,12 +7,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Company;
 use App\Models\LookupItem;
 use Illuminate\View\View;
-use Spatie\Activitylog\Models\Activity;
 
 class CompanyBankAccountDetailsController extends Controller
 {
     /**
-     * Show the company's bank account and statutory numbers form and who last changed the company.
+     * Show the company's bank account and statutory numbers form and who last changed them.
      */
     public function __invoke(): View
     {
@@ -21,9 +20,7 @@ class CompanyBankAccountDetailsController extends Controller
         return view('settings.company.bank-account-details', [
             'company' => $company,
             'banks' => LookupItem::options(LookupCategory::Banks),
-            'lastChange' => $company->exists
-                ? Activity::query()->with('causer')->whereMorphedTo('subject', $company)->latest('id')->first()
-                : null,
+            'lastChange' => $company->latestChangeTo(Company::BANK_ACCOUNT_FIELDS),
             'timezone' => config('cendana.timezone'),
         ]);
     }
