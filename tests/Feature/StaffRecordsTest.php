@@ -177,8 +177,8 @@ class StaffRecordsTest extends TestCase
     public function test_add_form_is_split_into_steps_and_edit_form_is_one_page(): void
     {
         $add = $this->actingAs($this->superAdmin)->get(route('staff.create'))->assertOk()->assertSee('data-stepper', false);
-        $this->assertSame(5, substr_count($add->getContent(), 'data-step="'));
-        $add->assertSeeInOrder(['data-step="Account"', 'data-step="Personal details"', 'data-step="Employment"', 'data-step="Pay and statutory"', 'data-step="Review"'], false);
+        $this->assertSame(6, substr_count($add->getContent(), 'data-step="'));
+        $add->assertSeeInOrder(['data-step="Account"', 'data-step="Personal details"', 'data-step="Emergency contacts"', 'data-step="Employment"', 'data-step="Pay and statutory"', 'data-step="Review"'], false);
 
         $employee = Employee::factory()->create();
         $edit = $this->actingAs($this->superAdmin)->get(route('staff.edit', $employee))->assertOk();

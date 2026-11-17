@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 class UpdateEmployeeController extends Controller
 {
     /**
-     * Save a staff record and its sign-in account's name, email and role.
+     * Save a staff record, its emergency contacts and its sign-in account's name, email and role.
      */
     public function __invoke(SaveEmployeeRequest $request, Employee $employee): RedirectResponse
     {
@@ -23,6 +23,7 @@ class UpdateEmployeeController extends Controller
             }
 
             $employee->update($request->employeeAttributes());
+            $employee->syncEmergencyContacts($request->emergencyContacts());
         });
 
         return redirect()->route('staff.show', $employee)

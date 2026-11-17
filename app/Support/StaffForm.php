@@ -19,6 +19,23 @@ use App\Models\User;
 class StaffForm
 {
     /**
+     * Active relationships plus any still used by this record's contacts.
+     *
+     * @return array<string, string>
+     */
+    private static function relationships(?Employee $employee): array
+    {
+        $options = LookupItem::options(LookupCategory::Relationship);
+        $labels = LookupItem::labels(LookupCategory::Relationship);
+
+        foreach ($employee?->emergencyContacts ?? [] as $contact) {
+            $options[$contact->relationship] ??= $labels[$contact->relationship] ?? $contact->relationship;
+        }
+
+        return $options;
+    }
+
+    /**
      * @return array<string, mixed>
      */
     public static function options(User $actor, ?Employee $employee = null): array
@@ -49,6 +66,7 @@ class StaffForm
             'departments' => $lookup(LookupCategory::Department, 'department'),
             'positions' => $lookup(LookupCategory::Position, 'position'),
             'banks' => $lookup(LookupCategory::Banks, 'bank'),
+            'relationships' => self::relationships($employee),
             'employmentTypes' => collect(EmploymentType::cases())->mapWithKeys(fn (EmploymentType $type): array => [$type->value => __($type->label())])->all(),
             'leavingReasons' => collect(LeavingReason::cases())->mapWithKeys(fn (LeavingReason $reason): array => [$reason->value => __($reason->label())])->all(),
             'managers' => Employee::query()

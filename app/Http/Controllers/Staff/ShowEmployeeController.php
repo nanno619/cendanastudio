@@ -18,13 +18,13 @@ class ShowEmployeeController extends Controller
      */
     public function __invoke(Request $request, Employee $employee): View
     {
-        $employee->load(['user.roles', 'reportingManager.user:id,name', 'directReports.user:id,name']);
+        $employee->load(['user.roles', 'reportingManager.user:id,name', 'directReports.user:id,name', 'emergencyContacts']);
 
         return view('staff.show', [
             'employee' => $employee,
             'labels' => collect(LookupCategory::cases())->mapWithKeys(fn (LookupCategory $category): array => [$category->value => LookupItem::labels($category)])->only([
                 LookupCategory::Gender->value, LookupCategory::Race->value, LookupCategory::MaritalStatus->value, LookupCategory::MalaysianStates->value,
-                LookupCategory::Department->value, LookupCategory::Position->value, LookupCategory::Banks->value,
+                LookupCategory::Department->value, LookupCategory::Position->value, LookupCategory::Banks->value, LookupCategory::Relationship->value,
             ])->all(),
             'canEdit' => ! $employee->user->hasRole(Role::SuperAdmin) || $request->user()->hasRole(Role::SuperAdmin),
             'lastChange' => Activity::query()->with('causer')->whereMorphedTo('subject', $employee)->latest('id')->first(),

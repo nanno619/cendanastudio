@@ -18,7 +18,7 @@ class EditEmployeeController extends Controller
     {
         abort_if($employee->user->hasRole(Role::SuperAdmin) && ! $request->user()->hasRole(Role::SuperAdmin), 403);
 
-        $employee->load('user.roles');
+        $employee->load(['user.roles', 'emergencyContacts']);
 
         return view('staff.form', [
             'employee' => $employee,

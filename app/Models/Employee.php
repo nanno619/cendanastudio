@@ -75,6 +75,8 @@ class Employee extends Model
      */
     public const array RECORD_MANAGER_ROLES = [Role::SuperAdmin, Role::Admin, Role::Finance];
 
+    public const int MAX_EMERGENCY_CONTACTS = 3;
+
     /**
      * @var list<string>
      */
@@ -131,6 +133,34 @@ class Employee extends Model
     public function directReports(): HasMany
     {
         return $this->hasMany(Employee::class, 'reporting_manager_id');
+    }
+
+    /**
+     * @return HasMany<EmergencyContact, $this>
+     */
+    public function emergencyContacts(): HasMany
+    {
+        return $this->hasMany(EmergencyContact::class)->orderBy('sort_order');
+    }
+
+    /**
+     * Save the emergency contacts in the given order: existing contacts are updated in place, extra rows
+     * added and leftover contacts removed, so the audit trail only shows real changes.
+     *
+     * @param  list<array{name: string, relationship: string, phone: string}>  $contacts
+     */
+    public function syncEmergencyContacts(array $contacts): void
+    {
+        $existing = $this->emergencyContacts()->get()->values();
+
+        foreach (array_values($contacts) as $position => $contact) {
+            $attributes = [...$contact, 'sort_order' => $position + 1];
+            $current = $existing->get($position);
+
+            $current ? $current->update($attributes) : $this->emergencyContacts()->create($attributes);
+        }
+
+        $existing->slice(count($contacts))->each->delete();
     }
 
     public function status(?CarbonImmutable $today = null): EmployeeStatus

@@ -119,6 +119,17 @@ class LookupSeeder extends Seeder
                 ['admin-assistant', 'Administrative Assistant', 'Pembantu Tadbir'],
                 ['intern', 'Intern', 'Pelatih'],
             ],
+            LookupCategory::Relationship->value => [
+                ['spouse', 'Spouse', 'Pasangan'],
+                ['father', 'Father', 'Bapa'],
+                ['mother', 'Mother', 'Ibu'],
+                ['sibling', 'Sibling', 'Adik-beradik'],
+                ['child', 'Child', 'Anak'],
+                ['relative', 'Relative', 'Saudara'],
+                ['guardian', 'Guardian', 'Penjaga'],
+                ['friend', 'Friend', 'Rakan'],
+                ['other', 'Other', 'Lain-lain'],
+            ],
             LookupCategory::Banks->value => [
                 ['maybank', 'Maybank', 'Maybank'],
                 ['cimb', 'CIMB Bank', 'CIMB Bank'],

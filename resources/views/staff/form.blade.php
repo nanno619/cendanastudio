@@ -4,7 +4,8 @@
     $date = fn (?\Carbon\CarbonInterface $value): ?string => $value?->toDateString();
     $isMyKad = old('identity_type', $employee->identity_type?->value ?? $employee->identity_type) === \App\Enums\IdentityType::MyKad->value;
     // Adding staff is split into steps (resources/js/admin/stepper.js); editing stays one page.
-    $steps = $editing ? [] : [__('Account'), __('Personal details'), __('Employment'), __('Pay and statutory'), __('Review')];
+    $steps = $editing ? [] : [__('Account'), __('Personal details'), __('Emergency contacts'), __('Employment'), __('Pay and statutory'), __('Review')];
+    $contacts = old('contacts', $employee->exists ? $employee->emergencyContacts->map(fn ($contact) => $contact->only(['name', 'relationship', 'phone']))->all() : []);
     $step = fn (int $index): string => $editing ? '' : 'data-step="'.e($steps[$index]).'"';
 @endphp
 <x-layouts.admin :title="$title" group="{{ __('Staff') }}">
@@ -21,18 +22,21 @@
 
     @unless ($editing)
         <nav class="card p-4 sm:px-6" aria-label="{{ __('Steps') }}" data-stepper-nav hidden>
-            <ol class="flex items-center gap-2">
+            {{-- Equal columns, so every step is the same distance apart whatever its label's length. --}}
+            <ol class="grid" style="grid-template-columns: repeat({{ count($steps) }}, minmax(0, 1fr))">
                 @foreach ($steps as $index => $label)
-                    <li @class(['flex items-center gap-2', 'flex-1' => ! $loop->last])>
-                        <button type="button" class="flex items-center gap-2 rounded-md p-1 text-left focus-ring" data-stepper-go="{{ $index }}">
-                            <span class="step step-todo">{{ $index + 1 }}</span>
-                            <span class="hidden text-sm font-medium lg:block">{{ $label }}</span>
+                    <li class="relative flex justify-center">
+                        @unless ($loop->last)
+                            <span class="absolute left-1/2 top-5 h-px w-full bg-border" aria-hidden="true"></span>
+                        @endunless
+                        <button type="button" class="relative flex min-w-0 flex-col items-center gap-1.5 rounded-md p-1 text-center focus-ring" data-stepper-go="{{ $index }}">
+                            <span class="rounded-full bg-card"><span class="step step-todo">{{ $index + 1 }}</span></span>
+                            <span class="hidden text-xs font-medium leading-tight sm:block">{{ $label }}</span>
                         </button>
-                        @unless ($loop->last)<span class="h-px flex-1 bg-border" aria-hidden="true"></span>@endunless
                     </li>
                 @endforeach
             </ol>
-            <p class="mt-3 text-sm text-muted-foreground lg:sr-only" data-stepper-status aria-live="polite"></p>
+            <p class="mt-3 text-center text-sm text-muted-foreground sm:sr-only" data-stepper-status aria-live="polite"></p>
         </nav>
     @endunless
 
@@ -114,6 +118,41 @@
 
     <section class="card" {!! $step(2) !!}>
         <div class="card-header">
+            <h2 class="card-title">{{ __('Emergency contacts') }}</h2>
+            <p class="card-desc">{{ __('Up to :count people to call, in order. Leave unused rows blank.', ['count' => \App\Models\Employee::MAX_EMERGENCY_CONTACTS]) }}</p>
+        </div>
+        <div class="card-content space-y-4">
+            @error('contacts')<x-ui.alert variant="danger">{{ $message }}</x-ui.alert>@enderror
+            <div class="hidden gap-3 text-sm font-medium sm:grid sm:grid-cols-[2rem_minmax(0,1fr)_12rem_12rem]" aria-hidden="true">
+                <span></span><span>{{ __('Name') }}</span><span>{{ __('Relationship') }}</span><span>{{ __('Phone') }}</span>
+            </div>
+            @for ($row = 0; $row < \App\Models\Employee::MAX_EMERGENCY_CONTACTS; $row++)
+                @php $contact = $contacts[$row] ?? []; @endphp
+                <fieldset class="grid items-start gap-3 sm:grid-cols-[2rem_minmax(0,1fr)_12rem_12rem]">
+                    <legend class="sr-only">{{ __('Contact :n', ['n' => $row + 1]) }}</legend>
+                    <span class="pt-2 text-sm tabular-nums text-muted-foreground" aria-hidden="true">{{ $row + 1 }}.</span>
+                    <div>
+                        <label for="f-contacts-{{ $row }}-name" class="label sm:sr-only">{{ __('Contact :n: name', ['n' => $row + 1]) }}</label>
+                        <x-ui.input id="f-contacts-{{ $row }}-name" name="contacts[{{ $row }}][name]" :value="$contact['name'] ?? null" maxlength="150" :invalid="$errors->has('contacts.'.$row.'.name')" />
+                        @error('contacts.'.$row.'.name')<p class="field-error">{{ $message }}</p>@enderror
+                    </div>
+                    <div>
+                        <label for="f-contacts-{{ $row }}-relationship" class="label sm:sr-only">{{ __('Contact :n: relationship', ['n' => $row + 1]) }}</label>
+                        <x-ui.select id="f-contacts-{{ $row }}-relationship" name="contacts[{{ $row }}][relationship]" :value="$contact['relationship'] ?? null" :options="$relationships" include-blank :invalid="$errors->has('contacts.'.$row.'.relationship')" />
+                        @error('contacts.'.$row.'.relationship')<p class="field-error">{{ $message }}</p>@enderror
+                    </div>
+                    <div>
+                        <label for="f-contacts-{{ $row }}-phone" class="label sm:sr-only">{{ __('Contact :n: phone', ['n' => $row + 1]) }}</label>
+                        <x-ui.input id="f-contacts-{{ $row }}-phone" name="contacts[{{ $row }}][phone]" type="tel" :value="$contact['phone'] ?? null" maxlength="20" placeholder="012-345 6789" :invalid="$errors->has('contacts.'.$row.'.phone')" />
+                        @error('contacts.'.$row.'.phone')<p class="field-error">{{ $message }}</p>@enderror
+                    </div>
+                </fieldset>
+            @endfor
+        </div>
+    </section>
+
+    <section class="card" {!! $step(3) !!}>
+        <div class="card-header">
             <h2 class="card-title">{{ __('Employment') }}</h2>
         </div>
         <div class="card-content grid gap-5 md:grid-cols-3">
@@ -145,7 +184,7 @@
         </div>
     </section>
 
-    <section class="card" {!! $step(3) !!}>
+    <section class="card" {!! $step(4) !!}>
         <div class="card-header">
             <h2 class="card-title">{{ __('Pay and statutory') }}</h2>
         </div>
@@ -198,7 +237,7 @@
     @endif
 
     @unless ($editing)
-        <section class="card" {!! $step(4) !!} data-stepper-review hidden>
+        <section class="card" {!! $step(5) !!} data-stepper-review hidden>
             <div class="card-header">
                 <h2 class="card-title">{{ __('Review') }}</h2>
                 <p class="card-desc">{{ __('Check the details before adding. Their password email is sent once you add them.') }}</p>

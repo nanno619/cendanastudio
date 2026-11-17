@@ -18,6 +18,7 @@ enum LookupCategory: string
     case Banks = 'banks';
     case Department = 'department';
     case Position = 'position';
+    case Relationship = 'relationship';
 
     public function label(): string
     {
@@ -32,6 +33,7 @@ enum LookupCategory: string
             self::Banks => 'Banks',
             self::Department => 'Department',
             self::Position => 'Position',
+            self::Relationship => 'Relationship',
         };
     }
 
@@ -48,6 +50,7 @@ enum LookupCategory: string
             self::Banks => 'Banks for the company account and staff salary accounts.',
             self::Department => 'Departments staff belong to.',
             self::Position => 'Job titles held by staff.',
+            self::Relationship => 'How an emergency contact is related to a staff member.',
         };
     }
 }

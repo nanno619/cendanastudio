@@ -25,7 +25,10 @@ class StoreEmployeeController extends Controller
             $user = User::create([...$request->userAttributes(), 'password' => Str::password(40)]);
             $user->assignRole($request->role());
 
-            return $user->employee()->create($request->employeeAttributes());
+            $employee = $user->employee()->create($request->employeeAttributes());
+            $employee->syncEmergencyContacts($request->emergencyContacts());
+
+            return $employee;
         });
 
         $linkSent = rescue(function () use ($employee): bool {

@@ -108,6 +108,23 @@
             </dl>
         </section>
 
+        <section class="card p-5">
+            <h2 class="card-title mb-4">{{ __('Emergency contacts') }}</h2>
+            @if ($employee->emergencyContacts->isEmpty())
+                <p class="text-sm text-muted-foreground">{{ __('None added yet.') }}</p>
+            @else
+                <ol class="space-y-4 text-sm">
+                    @foreach ($employee->emergencyContacts as $contact)
+                        <li>
+                            <p class="font-medium">{{ $contact->name }}</p>
+                            <p class="text-muted-foreground">{{ $label(LookupCategory::Relationship, $contact->relationship) }}</p>
+                            <a href="tel:{{ preg_replace('/[^0-9+]/', '', $contact->phone) }}" class="font-medium tabular-nums hover:underline">{{ $contact->phone }}</a>
+                        </li>
+                    @endforeach
+                </ol>
+            @endif
+        </section>
+
         @if ($employee->directReports->isNotEmpty())
             <section class="card p-5">
                 <h2 class="card-title mb-4">{{ __('Direct reports') }}</h2>

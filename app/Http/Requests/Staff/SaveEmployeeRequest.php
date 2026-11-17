@@ -60,7 +60,24 @@ class SaveEmployeeRequest extends FormRequest
             'socso_no' => $upper('socso_no'),
             'income_tax_no' => $upper('income_tax_no'),
             'email' => strtolower(trim((string) $this->input('email'))),
+            'contacts' => $this->filledContactRows(),
         ]);
+    }
+
+    /**
+     * Emergency contact rows with anything typed in, keyed by their row on the form so errors show
+     * against the right row; untouched rows are dropped.
+     *
+     * @return array<int, array<string, string|null>>
+     */
+    private function filledContactRows(): array
+    {
+        $rows = is_array($this->input('contacts')) ? $this->input('contacts') : [];
+
+        return array_filter(
+            array_map(fn ($row): array => is_array($row) ? array_map(fn ($value): ?string => filled($value) ? trim((string) $value) : null, $row) : [], $rows),
+            fn (array $row): bool => collect($row)->filter()->isNotEmpty(),
+        );
     }
 
     /**
@@ -126,6 +143,14 @@ class SaveEmployeeRequest extends FormRequest
                 'nullable', Rule::prohibitedIf(! $epf->allow_employee_elected_rate), 'numeric', 'decimal:0,2', 'max:30',
                 'gt:'.$epf->malaysian_employee_rate,
             ],
+
+            'contacts' => ['array', 'max:'.Employee::MAX_EMERGENCY_CONTACTS],
+            'contacts.*.name' => ['required', 'string', 'max:150'],
+            'contacts.*.relationship' => ['required', Rule::in(array_filter([
+                ...array_keys(LookupItem::options(LookupCategory::Relationship)),
+                ...($employee?->emergencyContacts()->pluck('relationship')->all() ?? []),
+            ]))],
+            'contacts.*.phone' => ['required', 'string', 'max:20', 'regex:/^\+?[0-9][0-9 -]{6,18}$/'],
         ];
     }
 
@@ -145,6 +170,23 @@ class SaveEmployeeRequest extends FormRequest
     }
 
     /**
+     * The emergency contacts in form order.
+     *
+     * @return list<array{name: string, relationship: string, phone: string}>
+     */
+    public function emergencyContacts(): array
+    {
+        $contacts = $this->validated('contacts') ?? [];
+        ksort($contacts);
+
+        return array_values(array_map(fn (array $contact): array => [
+            'name' => $contact['name'],
+            'relationship' => $contact['relationship'],
+            'phone' => $contact['phone'],
+        ], $contacts));
+    }
+
+    /**
      * The staff record's fields, with the date of birth from the MyKad, the manager resolved from its ULID,
      * the spouse answer kept only for married staff and the leaving reason only with a last working day.
      *
@@ -152,7 +194,7 @@ class SaveEmployeeRequest extends FormRequest
      */
     public function employeeAttributes(): array
     {
-        $data = collect($this->validated())->except(['name', 'email', 'role', 'reporting_manager'])->all();
+        $data = collect($this->validated())->except(['name', 'email', 'role', 'reporting_manager', 'contacts'])->all();
 
         if ($data['identity_type'] === IdentityType::MyKad->value) {
             $data['date_of_birth'] = MyKad::birthDate($data['identity_no']);
@@ -187,6 +229,8 @@ class SaveEmployeeRequest extends FormRequest
             'staff_no.regex' => __('Use capital letters, numbers and dashes only.'),
             'nationality.in' => __('MyKad holders are Malaysian. Choose Passport for other nationalities.'),
             'phone.regex' => __('Enter a phone number, e.g. 012-345 6789 or +60 12-345 6789.'),
+            'contacts.*.phone.regex' => __('Enter a phone number, e.g. 012-345 6789 or +60 12-345 6789.'),
+            'contacts.max' => __('Add up to :max emergency contacts.'),
             'bank_account_no.regex' => __('Enter 5 to 20 digits, e.g. 514123456789.'),
             'reporting_manager.not_in' => __('A staff member can’t report to themselves.'),
             'last_working_date.prohibited' => __('You can’t set a last working day on your own record.'),
@@ -237,6 +281,9 @@ class SaveEmployeeRequest extends FormRequest
             'socso_no' => __('SOCSO number'),
             'income_tax_no' => __('Income tax number'),
             'epf_elected_rate' => __('Elected EPF rate'),
+            'contacts.*.name' => __('Contact name'),
+            'contacts.*.relationship' => __('Relationship'),
+            'contacts.*.phone' => __('Contact phone'),
         ];
     }
 }

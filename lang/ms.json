@@ -1596,5 +1596,17 @@
     "Back": "Kembali",
     "Check the details before adding. Their password email is sent once you add them.": "Semak butiran sebelum menambah. E-mel kata laluan dihantar sebaik sahaja anda menambah mereka.",
     "Review": "Semakan",
-    "Steps": "Langkah"
+    "Steps": "Langkah",
+    "Add up to :max emergency contacts.": "Tambah sehingga :max orang hubungan kecemasan.",
+    "Contact :n": "Hubungan :n",
+    "Contact :n: name": "Hubungan :n: nama",
+    "Contact :n: phone": "Hubungan :n: telefon",
+    "Contact :n: relationship": "Hubungan :n: pertalian",
+    "Contact name": "Nama orang hubungan",
+    "Contact phone": "Telefon orang hubungan",
+    "Emergency contacts": "Orang hubungan kecemasan",
+    "How an emergency contact is related to a staff member.": "Pertalian orang hubungan kecemasan dengan kakitangan.",
+    "None added yet.": "Belum ada yang ditambah.",
+    "Relationship": "Pertalian",
+    "Up to :count people to call, in order. Leave unused rows blank.": "Sehingga :count orang untuk dihubungi, mengikut urutan. Biarkan baris yang tidak digunakan kosong."
 }
