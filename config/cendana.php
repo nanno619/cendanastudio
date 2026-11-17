@@ -90,8 +90,8 @@ return [
                 ['label' => 'Payslip', 'route' => 'settings.payroll.payslip', 'active' => 'settings.payroll.payslip*'],
             ]],
             ['id' => 'settings-claim', 'label' => 'Claim', 'icon' => 'file-text', 'role' => Role::SuperAdmin->value, 'children' => [
-                ['label' => 'General'],
-                ['label' => 'Approval Workflows'],
+                ['label' => 'General', 'route' => 'settings.claim.general', 'active' => 'settings.claim.general*'],
+                ['label' => 'Approval Workflows', 'route' => 'settings.claim.approval.index', 'active' => 'settings.claim.approval.*'],
             ]],
             ['id' => 'settings-hadir', 'label' => 'Hadir', 'icon' => 'clock', 'role' => Role::SuperAdmin->value, 'children' => [
                 ['label' => 'General'],
