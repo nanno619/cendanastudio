@@ -114,7 +114,6 @@ class CompanyTest extends TestCase
         $this->assertSame('1234567-A', $company->old_registration_no);
         $this->assertSame('selangor', $company->state);
         $this->assertSame('MY', $company->country);
-        $this->assertNull($company->zakat_no);
 
         $activity = Activity::query()->where('event', 'created')->whereMorphedTo('subject', $company)->sole();
         $this->assertSame('Created company details', $activity->description);
@@ -135,6 +134,18 @@ class CompanyTest extends TestCase
         $this->actingAs($this->superAdmin)->get(route('settings.company.basic-details'))
             ->assertSee('value="Renamed Sdn. Bhd."', false)
             ->assertSee('Last changed by');
+    }
+
+    public function test_employer_numbers_are_not_saved_from_basic_details(): void
+    {
+        $company = Company::factory()->create(['epf_no' => '012345678']);
+
+        $this->actingAs($this->superAdmin)
+            ->put(route('settings.company.basic-details.update'), $this->payload(['epf_no' => '999999999']))
+            ->assertRedirect(route('settings.company.basic-details'));
+
+        $this->assertSame('012345678', $company->fresh()->epf_no);
+        $this->actingAs($this->superAdmin)->get(route('settings.company.basic-details'))->assertDontSee('name="epf_no"', false);
     }
 
     /**
@@ -217,11 +228,6 @@ class CompanyTest extends TestCase
             'postcode' => '40000',
             'city' => 'Shah Alam',
             'state' => 'selangor',
-            'epf_no' => '12345678',
-            'socso_no' => 'E1234567890',
-            'eis_no' => 'E1234567890',
-            'income_tax_no' => 'E1234567890',
-            'zakat_no' => '',
         ], $overrides);
     }
 }

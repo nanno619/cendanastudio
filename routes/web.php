@@ -16,7 +16,9 @@ use App\Http\Controllers\Administration\ToggleLookupItemController;
 use App\Http\Controllers\Administration\UpdateFileSecurityController;
 use App\Http\Controllers\Administration\UpdateLookupItemController;
 use App\Http\Controllers\LocaleController;
+use App\Http\Controllers\Settings\CompanyBankAccountDetailsController;
 use App\Http\Controllers\Settings\CompanyDetailsController;
+use App\Http\Controllers\Settings\UpdateCompanyBankAccountDetailsController;
 use App\Http\Controllers\Settings\UpdateCompanyDetailsController;
 use Illuminate\Support\Facades\Route;
 
@@ -32,6 +34,8 @@ Route::middleware('auth')->group(function (): void {
     Route::middleware('role:'.Role::SuperAdmin->value)->prefix('settings')->name('settings.')->group(function (): void {
         Route::get('/company/basic-details', CompanyDetailsController::class)->name('company.basic-details');
         Route::put('/company/basic-details', UpdateCompanyDetailsController::class)->name('company.basic-details.update');
+        Route::get('/company/bank-account-details', CompanyBankAccountDetailsController::class)->name('company.bank-account-details');
+        Route::put('/company/bank-account-details', UpdateCompanyBankAccountDetailsController::class)->name('company.bank-account-details.update');
     });
 
     Route::middleware('role:'.Role::SuperAdmin->value)->prefix('administrations')->name('administrations.')->group(function (): void {

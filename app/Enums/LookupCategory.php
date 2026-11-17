@@ -15,6 +15,7 @@ enum LookupCategory: string
     case ClaimType = 'claim-type';
     case Gender = 'gender';
     case Statuses = 'statuses';
+    case Banks = 'banks';
 
     public function label(): string
     {
@@ -26,6 +27,7 @@ enum LookupCategory: string
             self::ClaimType => 'Claim Type',
             self::Gender => 'Gender',
             self::Statuses => 'Statuses',
+            self::Banks => 'Banks',
         };
     }
 
@@ -39,6 +41,7 @@ enum LookupCategory: string
             self::ClaimType => 'Kinds of expenses staff can claim.',
             self::Gender => 'Gender recorded in staff and client profiles.',
             self::Statuses => 'Approval statuses for leave and claim applications.',
+            self::Banks => 'Banks for the company account and staff salary accounts.',
         };
     }
 }

@@ -29,16 +29,32 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property string|null $city
  * @property string|null $state LookupItem code in LookupCategory::MalaysianStates
  * @property string $country ISO 3166-1 alpha-2 code
- * @property string|null $epf_no KWSP employer number
+ * @property string|null $bank LookupItem code in LookupCategory::Banks
+ * @property string|null $bank_account_holder
+ * @property string|null $bank_account_no Digits only
+ * @property string|null $epf_no KWSP employer number for Malaysian staff
+ * @property string|null $epf_foreign_no KWSP employer number for non-Malaysian staff
  * @property string|null $socso_no PERKESO employer code
  * @property string|null $eis_no SIP employer code
  * @property string|null $income_tax_no LHDN employer E-number
  * @property string|null $zakat_no
+ * @property string|null $hrdf_no HRD Corp (formerly HRDF) employer account number
+ * @property string|null $ptptn_no PTPTN employer code
  */
 class Company extends Model implements HasMedia
 {
     /** @use HasFactory<CompanyFactory> */
     use HasFactory, HasUlids, InteractsWithMedia, LogsActivity;
+
+    /**
+     * Columns edited on Settings → Company → Bank Account Details; Basic Details edits the rest.
+     *
+     * @var list<string>
+     */
+    public const array BANK_ACCOUNT_FIELDS = [
+        'bank', 'bank_account_holder', 'bank_account_no',
+        'epf_no', 'epf_foreign_no', 'socso_no', 'eis_no', 'income_tax_no', 'zakat_no', 'hrdf_no', 'ptptn_no',
+    ];
 
     /**
      * @var list<string>
@@ -47,7 +63,7 @@ class Company extends Model implements HasMedia
         'name', 'registration_no', 'old_registration_no',
         'email', 'phone', 'website',
         'address_line_1', 'address_line_2', 'postcode', 'city', 'state', 'country',
-        'epf_no', 'socso_no', 'eis_no', 'income_tax_no', 'zakat_no',
+        ...self::BANK_ACCOUNT_FIELDS,
     ];
 
     /**
@@ -94,7 +110,15 @@ class Company extends Model implements HasMedia
             ->setDescriptionForEvent(fn (string $eventName): string => match ($eventName) {
                 'created' => 'Created company details',
                 'deleted' => 'Deleted company details',
-                default => 'Updated company details',
+                default => $this->onlyBankAccountFieldsChanged() ? 'Updated company bank account details' : 'Updated company details',
             });
+    }
+
+    /**
+     * Whether the last save changed only Bank Account Details columns.
+     */
+    private function onlyBankAccountFieldsChanged(): bool
+    {
+        return array_diff(array_keys($this->getChanges()), [...self::BANK_ACCOUNT_FIELDS, 'updated_at']) === [];
     }
 }

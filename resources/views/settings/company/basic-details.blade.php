@@ -1,5 +1,5 @@
 <x-layouts.admin title="{{ __('Basic Details') }}" group="{{ __('Settings') }}">
-<x-ui.page-header title="{{ __('Basic Details') }}" description="{{ __('Your company’s registered name, contact details, address and employer numbers. They appear on letters, payslips and statutory forms.') }}" />
+<x-ui.page-header title="{{ __('Basic Details') }}" description="{{ __('Your company’s registered name, contact details and address. They appear on letters, payslips and statutory forms.') }}" />
 
 @if (session('status'))
     <x-ui.alert variant="success" role="status">{{ session('status') }}</x-ui.alert>
@@ -85,30 +85,6 @@
             </x-ui.field>
             <x-ui.field label="{{ __('State') }}" name="state">
                 <x-ui.select name="state" :value="$company->state" :options="$states" include-blank />
-            </x-ui.field>
-        </div>
-    </section>
-
-    <section class="card">
-        <div class="card-header">
-            <h2 class="card-title">{{ __('Employer numbers') }}</h2>
-            <p class="card-desc">{{ __('Used for EPF, SOCSO, EIS, income tax and zakat submissions.') }}</p>
-        </div>
-        <div class="card-content grid gap-5 md:grid-cols-2">
-            <x-ui.field label="{{ __('EPF employer number') }}" name="epf_no">
-                <x-ui.input name="epf_no" :value="$company->epf_no" maxlength="30" class="tabular-nums" />
-            </x-ui.field>
-            <x-ui.field label="{{ __('SOCSO employer code') }}" name="socso_no">
-                <x-ui.input name="socso_no" :value="$company->socso_no" maxlength="30" class="tabular-nums" />
-            </x-ui.field>
-            <x-ui.field label="{{ __('EIS employer code') }}" name="eis_no">
-                <x-ui.input name="eis_no" :value="$company->eis_no" maxlength="30" class="tabular-nums" />
-            </x-ui.field>
-            <x-ui.field label="{{ __('Income tax employer number') }}" name="income_tax_no" help="{{ __('LHDN E-number.') }}">
-                <x-ui.input name="income_tax_no" :value="$company->income_tax_no" maxlength="30" class="tabular-nums" />
-            </x-ui.field>
-            <x-ui.field label="{{ __('Zakat number') }}" name="zakat_no" help="{{ __('Optional.') }}">
-                <x-ui.input name="zakat_no" :value="$company->zakat_no" maxlength="30" class="tabular-nums" />
             </x-ui.field>
         </div>
     </section>

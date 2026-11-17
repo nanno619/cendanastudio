@@ -28,11 +28,17 @@ class CompanyFactory extends Factory
             'city' => fake()->randomElement(['Shah Alam', 'Petaling Jaya', 'Kuala Lumpur', 'Johor Bahru', 'George Town']),
             'state' => fake()->randomElement(['selangor', 'johor', 'penang', 'kuala-lumpur']),
             'country' => 'MY',
+            'bank' => fake()->randomElement(['maybank', 'cimb', 'public-bank', 'rhb']),
+            'bank_account_holder' => null,
+            'bank_account_no' => fake()->numerify('############'),
             'epf_no' => fake()->numerify('########'),
+            'epf_foreign_no' => null,
             'socso_no' => fake()->numerify('E##########'),
             'eis_no' => fake()->numerify('E##########'),
             'income_tax_no' => fake()->numerify('E##########'),
             'zakat_no' => null,
+            'hrdf_no' => null,
+            'ptptn_no' => null,
         ];
     }
 }

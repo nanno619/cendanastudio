@@ -74,7 +74,7 @@ return [
         ['label' => 'Settings', 'items' => [
             ['id' => 'settings-company', 'label' => 'Company', 'icon' => 'home', 'role' => Role::SuperAdmin->value, 'children' => [
                 ['label' => 'Basic Details', 'route' => 'settings.company.basic-details', 'active' => 'settings.company.basic-details*'],
-                ['label' => 'Bank Account Details'],
+                ['label' => 'Bank Account Details', 'route' => 'settings.company.bank-account-details', 'active' => 'settings.company.bank-account-details*'],
                 ['label' => 'Letter Templates'],
             ]],
             ['id' => 'settings-leave', 'label' => 'Leave', 'icon' => 'calendar', 'role' => Role::SuperAdmin->value, 'children' => [

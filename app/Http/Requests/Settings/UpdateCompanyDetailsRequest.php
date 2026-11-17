@@ -37,11 +37,6 @@ class UpdateCompanyDetailsRequest extends FormRequest
             'postcode' => ['nullable', 'digits:5'],
             'city' => ['nullable', 'string', 'max:100'],
             'state' => ['nullable', Rule::in(array_keys(LookupItem::options(LookupCategory::MalaysianStates)))],
-            'epf_no' => ['nullable', 'string', 'max:30'],
-            'socso_no' => ['nullable', 'string', 'max:30'],
-            'eis_no' => ['nullable', 'string', 'max:30'],
-            'income_tax_no' => ['nullable', 'string', 'max:30'],
-            'zakat_no' => ['nullable', 'string', 'max:30'],
             'logo' => ['nullable', 'bail', 'image', new AllowedUpload],
             'remove_logo' => ['sometimes', 'boolean'],
         ];
@@ -86,11 +81,6 @@ class UpdateCompanyDetailsRequest extends FormRequest
             'postcode' => __('Postcode'),
             'city' => __('City'),
             'state' => __('State'),
-            'epf_no' => __('EPF employer number'),
-            'socso_no' => __('SOCSO employer code'),
-            'eis_no' => __('EIS employer code'),
-            'income_tax_no' => __('Income tax employer number'),
-            'zakat_no' => __('Zakat number'),
             'logo' => __('Logo'),
         ];
     }
