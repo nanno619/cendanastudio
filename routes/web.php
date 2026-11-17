@@ -22,6 +22,7 @@ use App\Http\Controllers\Settings\CreateLeaveApprovalRouteController;
 use App\Http\Controllers\Settings\DestroyLeaveApprovalRouteController;
 use App\Http\Controllers\Settings\EditLeaveApprovalRouteController;
 use App\Http\Controllers\Settings\EditLeavePolicyController;
+use App\Http\Controllers\Settings\EpfSettingsController;
 use App\Http\Controllers\Settings\LeaveApprovalController;
 use App\Http\Controllers\Settings\LeavePolicyController;
 use App\Http\Controllers\Settings\LeaveSettingsController;
@@ -29,6 +30,7 @@ use App\Http\Controllers\Settings\PayrollSettingsController;
 use App\Http\Controllers\Settings\StoreLeaveApprovalRouteController;
 use App\Http\Controllers\Settings\UpdateCompanyBankAccountDetailsController;
 use App\Http\Controllers\Settings\UpdateCompanyDetailsController;
+use App\Http\Controllers\Settings\UpdateEpfSettingsController;
 use App\Http\Controllers\Settings\UpdateLeaveApprovalRouteController;
 use App\Http\Controllers\Settings\UpdateLeaveCancellationController;
 use App\Http\Controllers\Settings\UpdateLeavePolicyController;
@@ -64,6 +66,8 @@ Route::middleware('auth')->group(function (): void {
         Route::delete('/leave/approval/routes/{approvalRoute}', DestroyLeaveApprovalRouteController::class)->name('leave.approval.routes.destroy');
         Route::get('/payroll/general', PayrollSettingsController::class)->name('payroll.general');
         Route::put('/payroll/general', UpdatePayrollSettingsController::class)->name('payroll.general.update');
+        Route::get('/payroll/epf', EpfSettingsController::class)->name('payroll.epf');
+        Route::put('/payroll/epf', UpdateEpfSettingsController::class)->name('payroll.epf.update');
     });
 
     Route::middleware('role:'.Role::SuperAdmin->value)->prefix('administrations')->name('administrations.')->group(function (): void {
