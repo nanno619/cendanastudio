@@ -64,6 +64,9 @@
     return location.pathname.split('/').pop().replace(/\.html$/, '') || 'index';
   }
   function markActive() {
+    // Laravel renders the active link and open submenu from route names; matching only the
+    // last URL segment here would also highlight other pages ending in the same word.
+    if (!window.__SPA__) return;
     var k = currentKey();
     $$('#sidebar a.nav-link').forEach(function (a) {
       var href = a.getAttribute('href') || '';
