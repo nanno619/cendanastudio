@@ -11,7 +11,7 @@ return [
     'edit' => 'Sunting',
     'file_local_preview' => 'pratonton setempat',
     'file_size' => 'Saiz fail melebihi had :max MB.',
-    'file_type' => 'Gunakan fail PNG, JPG atau PDF.',
+    'file_type' => 'Jenis fail ini tidak diterima di sini.',
     'filter_active' => 'Status aktif: :list.',
     'filter_all' => 'Memaparkan semua status.',
     'next' => 'Seterusnya',

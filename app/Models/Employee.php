@@ -18,6 +18,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
 use Spatie\Activitylog\Support\LogOptions;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * A staff record (Staff pages). Every staff member signs in with their user; the user holds their name and
@@ -63,10 +66,10 @@ use Spatie\Activitylog\Support\LogOptions;
  * @property string|null $income_tax_no
  * @property string|null $epf_elected_rate Employee EPF rate above the statutory one, when EPF settings allow it
  */
-class Employee extends Model
+class Employee extends Model implements HasMedia
 {
     /** @use HasFactory<EmployeeFactory> */
-    use HasFactory, HasUlids, LogsActivity;
+    use HasFactory, HasUlids, InteractsWithMedia, LogsActivity;
 
     /**
      * Roles that can view and manage staff records, salaries and IC numbers included.
@@ -76,6 +79,14 @@ class Employee extends Model
     public const array RECORD_MANAGER_ROLES = [Role::SuperAdmin, Role::Admin, Role::Finance];
 
     public const int MAX_EMERGENCY_CONTACTS = 3;
+
+    /**
+     * Staff documents (IC copies, offer letters…) live on the private `local` disk (storage/app/private),
+     * never the public one, and are only downloaded through DownloadEmployeeDocumentController.
+     */
+    public const string DOCUMENTS_DISK = 'local';
+
+    public const int DOCUMENT_NOTE_MAX_LENGTH = 200;
 
     /**
      * @var list<string>
@@ -161,6 +172,29 @@ class Employee extends Model
         }
 
         $existing->slice(count($contacts))->each->delete();
+    }
+
+    /**
+     * Whether this person may change the record (details, contacts, documents). Only Super Admin can
+     * change a Super Admin's record; viewing it is open to every record manager.
+     */
+    public function isEditableBy(User $actor): bool
+    {
+        return $actor->hasAnyRole(self::RECORD_MANAGER_ROLES)
+            && (! $this->user->hasRole(Role::SuperAdmin) || $actor->hasRole(Role::SuperAdmin));
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('documents')->useDisk(self::DOCUMENTS_DISK);
+    }
+
+    /**
+     * One of this record's documents by its media UUID, or a 404, so URLs never expose media ids.
+     */
+    public function document(string $uuid): Media
+    {
+        return $this->getMedia('documents')->firstWhere('uuid', $uuid) ?? abort(404);
     }
 
     public function status(?CarbonImmutable $today = null): EmployeeStatus

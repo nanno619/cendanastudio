@@ -135,7 +135,14 @@
     function show(file) {
       clear(false);
       if (!file) return;
-      var validType = ['image/png', 'image/jpeg', 'application/pdf'].includes(file.type);
+      // Follow the input's accept list (MIME types, type/* wildcards or .extensions); no list accepts anything.
+      var rules = (input.getAttribute('accept') || '').split(',').map(function (rule) { return rule.trim().toLowerCase(); }).filter(Boolean);
+      var fileName = file.name.toLowerCase();
+      var validType = rules.length === 0 || rules.some(function (rule) {
+        if (rule.charAt(0) === '.') return fileName.endsWith(rule);
+        if (rule.endsWith('/*')) return file.type.startsWith(rule.slice(0, -1));
+        return file.type === rule;
+      });
       var maxBytes = Number(root.dataset.maxMb || 5) * 1024 * 1024;
       if (!validType || file.size > maxBytes) {
         error.textContent = !validType ? __t('file_type') : __t('file_size', { max: root.dataset.maxMb });

@@ -27,8 +27,10 @@ return [
                  * The list of directories and files that will be included in the backup.
                  */
                 // Uploaded files only: the code is in git, and .env (secrets) must never leave the server.
+                // app/private holds staff documents (IC copies, offer letters), so keep the backups private.
                 'include' => [
                     storage_path('app/public'),
+                    storage_path('app/private'),
                 ],
 
                 /*

@@ -91,6 +91,78 @@
                 </dl>
             </section>
         @endforeach
+
+        <section id="documents" class="card scroll-mt-20" aria-labelledby="documents-heading">
+            <div class="flex flex-wrap items-baseline justify-between gap-2 p-5 sm:px-6">
+                <h2 id="documents-heading" class="card-title">{{ __('Documents') }}</h2>
+                <p class="flex items-center gap-1.5 text-xs text-muted-foreground"><x-ui.icon name="lock" class="h-3.5 w-3.5" />{{ __('Private. Downloads are recorded in the audit trail.') }}</p>
+            </div>
+
+            @if ($documents->isEmpty())
+                <div class="border-t">
+                    <x-ui.table-state state="empty" title="{{ __('No documents yet') }}" description="{{ __('Keep copies of the IC or passport, offer letter and certificates here.') }}" />
+                </div>
+            @else
+                <div class="overflow-x-auto border-t">
+                    <table class="table min-w-160">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="w-20"><span class="sr-only">{{ __('Actions') }}</span></th>
+                                <th scope="col">{{ __('Document') }}</th>
+                                <th scope="col">{{ __('Type') }}</th>
+                                <th scope="col">{{ __('Uploaded') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($documents as $document)
+                                <tr>
+                                    <td data-actions class="whitespace-nowrap">
+                                        <a href="{{ route('staff.documents.download', [$employee, $document->uuid]) }}" class="btn btn-ghost btn-icon btn-sm text-muted-foreground" data-tip="{{ __('Download') }}" data-tip-pos="right" aria-label="{{ __('Download :file', ['file' => $document->file_name]) }}"><x-ui.icon name="download" /></a>
+                                        @if ($canEdit)
+                                            <button type="button" class="btn btn-ghost btn-icon btn-sm text-muted-foreground" data-modal-open="#delete-document-{{ $document->uuid }}" data-tip="{{ __('Delete') }}" data-tip-pos="right" aria-label="{{ __('Delete :file', ['file' => $document->file_name]) }}"><x-ui.icon name="trash" /></button>
+                                        @endif
+                                    </td>
+                                    <td class="min-w-0">
+                                        <p class="truncate font-medium">{{ $document->file_name }}</p>
+                                        <p class="text-xs text-muted-foreground">
+                                            {{ $document->human_readable_size }}
+                                            @if (filled($document->getCustomProperty('note')))
+                                                · {{ $document->getCustomProperty('note') }}
+                                            @endif
+                                        </p>
+                                    </td>
+                                    <td>{{ $documentTypes[$document->getCustomProperty('type')] ?? __('Other') }}</td>
+                                    <td class="whitespace-nowrap">
+                                        <p class="tabular-nums">{{ $document->created_at->timezone($timezone)->translatedFormat('j M Y') }}</p>
+                                        <p class="text-xs text-muted-foreground">{{ $documentUploaders[$document->getCustomProperty('uploaded_by')] ?? __('System') }}</p>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @endif
+
+            @if ($canEdit)
+                <form method="POST" action="{{ route('staff.documents.store', $employee) }}" enctype="multipart/form-data" class="space-y-4 border-t p-5 sm:px-6">
+                    @csrf
+                    <h3 class="text-sm font-semibold">{{ __('Upload a document') }}</h3>
+                    <x-ui.file-preview id="f-document" name="document" :accept="'.'.implode(',.', $uploadPolicy->allowedExtensions())" :max-mb="$uploadPolicy->max_file_size_mb"
+                        label="{{ __('Choose a document') }}"
+                        hint="{{ __('Drag here or click to choose. :types, up to :max MB.', ['types' => strtoupper(implode(', ', $uploadPolicy->allowedExtensions())), 'max' => $uploadPolicy->max_file_size_mb]) }}" />
+                    @error('document')<p class="field-error">{{ $message }}</p>@enderror
+                    <div class="grid gap-4 sm:grid-cols-[14rem_minmax(0,1fr)_auto] sm:items-end">
+                        <x-ui.field label="{{ __('Document type') }}" name="type" required>
+                            <x-ui.select name="type" :options="$documentTypes" required />
+                        </x-ui.field>
+                        <x-ui.field label="{{ __('Note') }}" name="note">
+                            <x-ui.input name="note" maxlength="{{ \App\Models\Employee::DOCUMENT_NOTE_MAX_LENGTH }}" placeholder="{{ __('Optional, e.g. SPM certificate') }}" />
+                        </x-ui.field>
+                        <button type="submit" class="btn btn-primary"><x-ui.icon name="upload" />{{ __('Upload') }}</button>
+                    </div>
+                </form>
+            @endif
+        </section>
     </div>
 
     <div class="min-w-0 space-y-4">
@@ -146,4 +218,11 @@
         @endif
     </div>
 </div>
+@if ($canEdit)
+    @foreach ($documents as $document)
+        <x-ui.confirm-action id="delete-document-{{ $document->uuid }}" title="{{ __('Delete this document?') }}"
+            description="{{ __(':file will be removed for good. This can’t be undone.', ['file' => $document->file_name]) }}"
+            :action="route('staff.documents.destroy', [$employee, $document->uuid])" />
+    @endforeach
+@endif
 </x-layouts.admin>

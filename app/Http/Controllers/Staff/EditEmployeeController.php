@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Staff;
 
-use App\Enums\Role;
 use App\Http\Controllers\Controller;
 use App\Models\Employee;
 use App\Support\StaffForm;
@@ -16,7 +15,7 @@ class EditEmployeeController extends Controller
      */
     public function __invoke(Request $request, Employee $employee): View
     {
-        abort_if($employee->user->hasRole(Role::SuperAdmin) && ! $request->user()->hasRole(Role::SuperAdmin), 403);
+        abort_unless($employee->isEditableBy($request->user()), 403);
 
         $employee->load(['user.roles', 'emergencyContacts']);
 

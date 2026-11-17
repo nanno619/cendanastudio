@@ -10,7 +10,7 @@
 | `name` | `null` | `name` of the file input; set it to send the file with the form |
 | `label` | “Choose a file” (translated) | Main dropzone text |
 | `hint` | “Drag here or click to choose. PNG, JPG, PDF · max N MB.” (translated) | Help text under the label; override it when `accept` differs |
-| `accept` | `image/png,image/jpeg,application/pdf` | Hint for the browser's file dialog filter |
+| `accept` | `image/png,image/jpeg,application/pdf` | Filters the browser's file dialog, and the JS rejects any other file. MIME types, `type/*` wildcards or `.ext` extensions, comma-separated |
 | `maxMb` | `5` | Local size limit in MB |
 
 `class` and other attributes apply to the wrapper, **not the file input**. Without `name` the file isn't sent to Laravel.
@@ -22,7 +22,7 @@
 <x-ui.file-preview id="large-attachment" label="{{ __('Choose an attachment') }}" :max-mb="10" class="mt-6" />
 ```
 
-The JS currently only accepts PNG, JPG and PDF MIME types, regardless of the `accept` prop. If you change `accept` or the size limit, align the validation in `advanced-inputs.js` and in Laravel. Images are previewed through a local object URL; PDFs show as an icon and name, not their content. The remove button clears the input and revokes the object URL. Error and size messages are translated through the [JavaScript strings](/guide/theming#language).
+The JS checks the chosen file against `accept` (an empty `accept` allows any file) and against `maxMb`. To follow the File Security policy, build `accept` from `FileSecuritySetting::current()->allowedExtensions()` (e.g. `'.'.implode(',.', $extensions)`) and pass its `max_file_size_mb`, as the staff Documents upload does. Images are previewed through a local object URL; PDFs show as an icon and name, not their content. The remove button clears the input and revokes the object URL. Error and size messages are translated through the [JavaScript strings](/guide/theming#language).
 
 ## 📤 Laravel uploads
 

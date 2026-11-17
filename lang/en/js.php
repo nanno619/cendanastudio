@@ -13,7 +13,7 @@ return [
     'edit' => 'Edit',
     'file_local_preview' => 'local preview',
     'file_size' => 'File size exceeds the :max MB limit.',
-    'file_type' => 'Use a PNG, JPG or PDF file.',
+    'file_type' => 'This file type isn’t accepted here.',
     'filter_active' => 'Active status: :list.',
     'filter_all' => 'Showing all statuses.',
     'next' => 'Next',

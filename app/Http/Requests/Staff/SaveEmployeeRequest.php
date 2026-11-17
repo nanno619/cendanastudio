@@ -33,7 +33,7 @@ class SaveEmployeeRequest extends FormRequest
             return false;
         }
 
-        return $this->employee() === null || ! $this->employee()->user->hasRole(Role::SuperAdmin) || $actor->hasRole(Role::SuperAdmin);
+        return $this->employee()?->isEditableBy($actor) ?? true;
     }
 
     public function employee(): ?Employee

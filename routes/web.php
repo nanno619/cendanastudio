@@ -62,11 +62,14 @@ use App\Http\Controllers\Settings\UpdateProRataSettingsController;
 use App\Http\Controllers\Settings\UpdateVisitSettingsController;
 use App\Http\Controllers\Settings\VisitSettingsController;
 use App\Http\Controllers\Staff\CreateEmployeeController;
+use App\Http\Controllers\Staff\DeleteEmployeeDocumentController;
+use App\Http\Controllers\Staff\DownloadEmployeeDocumentController;
 use App\Http\Controllers\Staff\EditEmployeeController;
 use App\Http\Controllers\Staff\EmployeeController;
 use App\Http\Controllers\Staff\ShowEmployeeController;
 use App\Http\Controllers\Staff\StoreEmployeeController;
 use App\Http\Controllers\Staff\UpdateEmployeeController;
+use App\Http\Controllers\Staff\UploadEmployeeDocumentController;
 use App\Models\Employee;
 use Illuminate\Support\Facades\Route;
 
@@ -86,6 +89,9 @@ Route::middleware('auth')->group(function (): void {
         Route::get('/{employee}', ShowEmployeeController::class)->name('show');
         Route::get('/{employee}/edit', EditEmployeeController::class)->name('edit');
         Route::put('/{employee}', UpdateEmployeeController::class)->name('update');
+        Route::post('/{employee}/documents', UploadEmployeeDocumentController::class)->name('documents.store');
+        Route::get('/{employee}/documents/{document}', DownloadEmployeeDocumentController::class)->whereUuid('document')->name('documents.download');
+        Route::delete('/{employee}/documents/{document}', DeleteEmployeeDocumentController::class)->whereUuid('document')->name('documents.destroy');
     });
 
     Route::middleware('role:'.Role::SuperAdmin->value)->prefix('settings')->name('settings.')->group(function (): void {
