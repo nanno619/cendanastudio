@@ -7,6 +7,8 @@
   </div>
 </div>
 
+<x-staff.profile-reminder />
+
 <!-- Statistik -->
 <section aria-label="{{ __('Key statistics') }}" class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
   <x-ui.stat-card title="{{ __('Total revenue') }}" value="RM 16.7k" icon="dollar" tile="bg-soft text-soft-foreground" tone="success" direction="up" delta="+13.2%" spark="[41,45,44,48,47,52,58]" />

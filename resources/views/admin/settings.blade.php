@@ -18,25 +18,43 @@
       <div class="mt-3 flex justify-center gap-2"><span class="badge badge-success badge-dot">{{ __('Active') }}</span><span class="badge badge-soft">Admin</span></div>
       <button type="button" class="btn btn-outline mt-5 w-full"><x-ui.icon name="upload" />{{ __('Change photo') }}</button>
     </div>
-    <form method="POST" action="{{ route('user-profile-information.update') }}" class="card lg:col-span-2">
-      @csrf
-      @method('PUT')
-      <div class="card-header"><h2 class="card-title">{{ __('Profile information') }}</h2><p class="card-desc">{{ __('Update your name and email.') }}</p></div>
-      <div class="card-content grid gap-4 sm:grid-cols-2">
-        @if (session('status') === 'profile-information-updated')
-          <x-ui.alert variant="success" class="sm:col-span-2">{{ __('Profile updated.') }}</x-ui.alert>
-        @endif
-        <x-ui.field label="{{ __('Name') }}" name="name" class="sm:col-span-2">
-          <x-ui.input name="name" :value="auth()->user()->name" autocomplete="name" required :invalid="$errors->updateProfileInformation->has('name')" />
-          @if ($errors->updateProfileInformation->has('name')) <p class="field-error">{{ $errors->updateProfileInformation->first('name') }}</p> @endif
-        </x-ui.field>
-        <x-ui.field label="{{ __('Email') }}" name="email" class="sm:col-span-2">
-          <x-ui.input type="email" name="email" :value="auth()->user()->email" autocomplete="email" required :invalid="$errors->updateProfileInformation->has('email')" />
-          @if ($errors->updateProfileInformation->has('email')) <p class="field-error">{{ $errors->updateProfileInformation->first('email') }}</p> @endif
-        </x-ui.field>
-      </div>
-      <div class="card-footer justify-end"><button type="submit" class="btn btn-primary">{{ __('Save changes') }}</button></div>
-    </form>
+    @if (auth()->user()->employee)
+      <section class="card lg:col-span-2">
+        <div class="card-header"><h2 class="card-title">{{ __('Profile information') }}</h2><p class="card-desc">{{ __('Your name and email are part of your staff record, so HR changes them for you.') }}</p></div>
+        <div class="card-content grid gap-4 sm:grid-cols-2">
+          @if ($errors->updateProfileInformation->any())
+            <x-ui.alert variant="danger" class="sm:col-span-2">{{ $errors->updateProfileInformation->first() }}</x-ui.alert>
+          @endif
+          <x-ui.field label="{{ __('Name') }}" name="name" class="sm:col-span-2">
+            <x-ui.input name="name" :value="auth()->user()->name" readonly disabled />
+          </x-ui.field>
+          <x-ui.field label="{{ __('Email') }}" name="email" class="sm:col-span-2">
+            <x-ui.input type="email" name="email" :value="auth()->user()->email" readonly disabled />
+          </x-ui.field>
+        </div>
+        <div class="card-footer justify-end"><a href="{{ route('my-profile.show') }}" class="btn btn-outline">{{ __('Go to My profile') }}</a></div>
+      </section>
+    @else
+      <form method="POST" action="{{ route('user-profile-information.update') }}" class="card lg:col-span-2">
+        @csrf
+        @method('PUT')
+        <div class="card-header"><h2 class="card-title">{{ __('Profile information') }}</h2><p class="card-desc">{{ __('Update your name and email.') }}</p></div>
+        <div class="card-content grid gap-4 sm:grid-cols-2">
+          @if (session('status') === 'profile-information-updated')
+            <x-ui.alert variant="success" class="sm:col-span-2">{{ __('Profile updated.') }}</x-ui.alert>
+          @endif
+          <x-ui.field label="{{ __('Name') }}" name="name" class="sm:col-span-2">
+            <x-ui.input name="name" :value="auth()->user()->name" autocomplete="name" required :invalid="$errors->updateProfileInformation->has('name')" />
+            @if ($errors->updateProfileInformation->has('name')) <p class="field-error">{{ $errors->updateProfileInformation->first('name') }}</p> @endif
+          </x-ui.field>
+          <x-ui.field label="{{ __('Email') }}" name="email" class="sm:col-span-2">
+            <x-ui.input type="email" name="email" :value="auth()->user()->email" autocomplete="email" required :invalid="$errors->updateProfileInformation->has('email')" />
+            @if ($errors->updateProfileInformation->has('email')) <p class="field-error">{{ $errors->updateProfileInformation->first('email') }}</p> @endif
+          </x-ui.field>
+        </div>
+        <div class="card-footer justify-end"><button type="submit" class="btn btn-primary">{{ __('Save changes') }}</button></div>
+      </form>
+    @endif
   </div>
 
   <!-- Security -->

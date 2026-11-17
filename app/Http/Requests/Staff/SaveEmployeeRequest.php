@@ -7,16 +7,15 @@ use App\Enums\IdentityType;
 use App\Enums\LeavingReason;
 use App\Enums\LookupCategory;
 use App\Enums\Role;
+use App\Http\Requests\Staff\Concerns\ValidatesPersonalDetails;
 use App\Models\Employee;
 use App\Models\EpfSetting;
-use App\Models\LookupItem;
 use App\Support\Countries;
 use App\Support\MyKad;
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\In;
 
 /**
  * Validates adding (POST) or editing (PUT) a staff record and its sign-in account. Only Super Admin can
@@ -25,6 +24,8 @@ use Illuminate\Validation\Rules\In;
  */
 class SaveEmployeeRequest extends FormRequest
 {
+    use ValidatesPersonalDetails;
+
     public function authorize(): bool
     {
         $actor = $this->user();
@@ -41,6 +42,11 @@ class SaveEmployeeRequest extends FormRequest
         $employee = $this->route('employee');
 
         return $employee instanceof Employee ? $employee : null;
+    }
+
+    protected function personalRecord(): ?Employee
+    {
+        return $this->employee();
     }
 
     /**
@@ -62,22 +68,6 @@ class SaveEmployeeRequest extends FormRequest
             'email' => strtolower(trim((string) $this->input('email'))),
             'contacts' => $this->filledContactRows(),
         ]);
-    }
-
-    /**
-     * Emergency contact rows with anything typed in, keyed by their row on the form so errors show
-     * against the right row; untouched rows are dropped.
-     *
-     * @return array<int, array<string, string|null>>
-     */
-    private function filledContactRows(): array
-    {
-        $rows = is_array($this->input('contacts')) ? $this->input('contacts') : [];
-
-        return array_filter(
-            array_map(fn ($row): array => is_array($row) ? array_map(fn ($value): ?string => filled($value) ? trim((string) $value) : null, $row) : [], $rows),
-            fn (array $row): bool => collect($row)->filter()->isNotEmpty(),
-        );
     }
 
     /**
@@ -109,19 +99,8 @@ class SaveEmployeeRequest extends FormRequest
             }],
             'nationality' => ['required', Rule::in(Countries::codes()), Rule::when($this->input('identity_type') === IdentityType::MyKad->value, Rule::in([Countries::MALAYSIA]))],
             'date_of_birth' => ['exclude_if:identity_type,'.IdentityType::MyKad->value, 'required', 'date', 'before:today'],
-            'gender' => ['nullable', $this->lookup(LookupCategory::Gender, 'gender')],
-            'race' => ['nullable', $this->lookup(LookupCategory::Race, 'race')],
-            'marital_status' => ['nullable', $this->lookup(LookupCategory::MaritalStatus, 'marital_status')],
-            // Sent only from the edit form; new records start at 0 until the staff member fills it in.
-            'children_count' => ['sometimes', 'required', 'integer', 'between:0,20'],
-            'spouse_working' => ['nullable', 'boolean'],
-            'phone' => ['nullable', 'string', 'max:20', 'regex:/^\+?[0-9][0-9 -]{6,18}$/'],
-            'personal_email' => ['nullable', 'email', 'max:255'],
-            'address_line_1' => ['nullable', 'string', 'max:255'],
-            'address_line_2' => ['nullable', 'string', 'max:255'],
-            'postcode' => ['nullable', 'digits:5'],
-            'city' => ['nullable', 'string', 'max:100'],
-            'state' => ['nullable', $this->lookup(LookupCategory::MalaysianStates, 'state')],
+            // Children is sent only from the edit form; new records start at 0 until the staff member fills it in.
+            ...$this->personalRules(childrenRequired: false),
 
             'employment_type' => ['required', Rule::enum(EmploymentType::class)],
             'department' => ['nullable', $this->lookup(LookupCategory::Department, 'department')],
@@ -145,13 +124,7 @@ class SaveEmployeeRequest extends FormRequest
                 'gt:'.$epf->malaysian_employee_rate,
             ],
 
-            'contacts' => ['array', 'max:'.Employee::MAX_EMERGENCY_CONTACTS],
-            'contacts.*.name' => ['required', 'string', 'max:150'],
-            'contacts.*.relationship' => ['required', Rule::in(array_filter([
-                ...array_keys(LookupItem::options(LookupCategory::Relationship)),
-                ...($employee?->emergencyContacts()->pluck('relationship')->all() ?? []),
-            ]))],
-            'contacts.*.phone' => ['required', 'string', 'max:20', 'regex:/^\+?[0-9][0-9 -]{6,18}$/'],
+            ...$this->contactRules(),
         ];
     }
 
@@ -171,23 +144,6 @@ class SaveEmployeeRequest extends FormRequest
     }
 
     /**
-     * The emergency contacts in form order.
-     *
-     * @return list<array{name: string, relationship: string, phone: string}>
-     */
-    public function emergencyContacts(): array
-    {
-        $contacts = $this->validated('contacts') ?? [];
-        ksort($contacts);
-
-        return array_values(array_map(fn (array $contact): array => [
-            'name' => $contact['name'],
-            'relationship' => $contact['relationship'],
-            'phone' => $contact['phone'],
-        ], $contacts));
-    }
-
-    /**
      * The staff record's fields, with the date of birth from the MyKad, the manager resolved from its ULID,
      * the spouse answer kept only for married staff and the leaving reason only with a last working day.
      *
@@ -204,7 +160,7 @@ class SaveEmployeeRequest extends FormRequest
         $data['reporting_manager_id'] = filled($this->validated('reporting_manager'))
             ? Employee::query()->where('ulid', $this->validated('reporting_manager'))->value('id')
             : null;
-        $data['spouse_working'] = ($data['marital_status'] ?? null) === 'married' ? ($data['spouse_working'] ?? null) : null;
+        $data = $this->tidyPersonalDetails($data);
         if (array_key_exists('last_working_date', $data)) {
             $data['leaving_reason'] = filled($data['last_working_date']) ? ($data['leaving_reason'] ?? null) : null;
         }
@@ -214,24 +170,14 @@ class SaveEmployeeRequest extends FormRequest
     }
 
     /**
-     * Active codes of a category, plus the code already stored on this record.
-     */
-    private function lookup(LookupCategory $category, string $field): In
-    {
-        return Rule::in(array_filter([...array_keys(LookupItem::options($category)), $this->employee()?->{$field}]));
-    }
-
-    /**
      * @return array<string, string>
      */
     public function messages(): array
     {
         return [
+            ...$this->personalMessages(),
             'staff_no.regex' => __('Use capital letters, numbers and dashes only.'),
             'nationality.in' => __('MyKad holders are Malaysian. Choose Passport for other nationalities.'),
-            'phone.regex' => __('Enter a phone number, e.g. 012-345 6789 or +60 12-345 6789.'),
-            'contacts.*.phone.regex' => __('Enter a phone number, e.g. 012-345 6789 or +60 12-345 6789.'),
-            'contacts.max' => __('Add up to :max emergency contacts.'),
             'bank_account_no.regex' => __('Enter 5 to 20 digits, e.g. 514123456789.'),
             'reporting_manager.not_in' => __('A staff member can’t report to themselves.'),
             'last_working_date.prohibited' => __('You can’t set a last working day on your own record.'),
@@ -246,6 +192,7 @@ class SaveEmployeeRequest extends FormRequest
     public function attributes(): array
     {
         return [
+            ...$this->personalAttributes(),
             'name' => __('Full name'),
             'email' => __('Work email'),
             'role' => __('Role'),
@@ -254,18 +201,6 @@ class SaveEmployeeRequest extends FormRequest
             'identity_no' => __('IC or passport number'),
             'nationality' => __('Nationality'),
             'date_of_birth' => __('Date of birth'),
-            'gender' => __('Gender'),
-            'race' => __('Race'),
-            'marital_status' => __('Marital status'),
-            'children_count' => __('Number of children'),
-            'spouse_working' => __('Spouse is working'),
-            'phone' => __('Phone'),
-            'personal_email' => __('Personal email'),
-            'address_line_1' => __('Address line 1'),
-            'address_line_2' => __('Address line 2'),
-            'postcode' => __('Postcode'),
-            'city' => __('City'),
-            'state' => __('State'),
             'employment_type' => __('Employment type'),
             'department' => __('Department'),
             'position' => __('Position'),
@@ -282,9 +217,6 @@ class SaveEmployeeRequest extends FormRequest
             'socso_no' => __('SOCSO number'),
             'income_tax_no' => __('Income tax number'),
             'epf_elected_rate' => __('Elected EPF rate'),
-            'contacts.*.name' => __('Contact name'),
-            'contacts.*.relationship' => __('Relationship'),
-            'contacts.*.phone' => __('Contact phone'),
         ];
     }
 }

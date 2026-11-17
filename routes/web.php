@@ -64,11 +64,14 @@ use App\Http\Controllers\Settings\VisitSettingsController;
 use App\Http\Controllers\Staff\CreateEmployeeController;
 use App\Http\Controllers\Staff\DeleteEmployeeDocumentController;
 use App\Http\Controllers\Staff\DownloadEmployeeDocumentController;
+use App\Http\Controllers\Staff\DownloadMyDocumentController;
 use App\Http\Controllers\Staff\EditEmployeeController;
 use App\Http\Controllers\Staff\EmployeeController;
+use App\Http\Controllers\Staff\MyProfileController;
 use App\Http\Controllers\Staff\ShowEmployeeController;
 use App\Http\Controllers\Staff\StoreEmployeeController;
 use App\Http\Controllers\Staff\UpdateEmployeeController;
+use App\Http\Controllers\Staff\UpdateMyProfileController;
 use App\Http\Controllers\Staff\UploadEmployeeDocumentController;
 use App\Models\Employee;
 use Illuminate\Support\Facades\Route;
@@ -81,6 +84,9 @@ Route::middleware('auth')->group(function (): void {
     Route::view('/dashboard', 'admin.dashboard')->name('admin.dashboard');
     Route::view('/analytics', 'admin.analytics')->name('admin.analytics');
     Route::view('/settings', 'admin.settings')->name('admin.settings');
+    Route::get('/my-profile', MyProfileController::class)->name('my-profile.show');
+    Route::put('/my-profile', UpdateMyProfileController::class)->name('my-profile.update');
+    Route::get('/my-profile/documents/{document}', DownloadMyDocumentController::class)->whereUuid('document')->name('my-profile.documents.download');
 
     Route::middleware('role:'.collect(Employee::RECORD_MANAGER_ROLES)->map->value->implode('|'))->prefix('staff')->name('staff.')->group(function (): void {
         Route::get('/', EmployeeController::class)->name('index');

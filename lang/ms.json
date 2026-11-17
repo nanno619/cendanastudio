@@ -1634,5 +1634,20 @@
     "Uploaded": "Dimuat naik",
     "Creates the staff record and a sign-in account. They’ll get an email to set their password, and fill in their personal details and emergency contacts later.": "Mencipta rekod kakitangan dan akaun log masuk. Mereka akan menerima e-mel untuk menetapkan kata laluan, dan mengisi butiran peribadi serta orang hubungan kecemasan kemudian.",
     "Identity": "Pengenalan",
-    "Needed for EPF, SOCSO and income tax, and to stop the same person being added twice.": "Diperlukan untuk KWSP, PERKESO dan cukai pendapatan, serta untuk mengelakkan orang yang sama ditambah dua kali."
+    "Needed for EPF, SOCSO and income tax, and to stop the same person being added twice.": "Diperlukan untuk KWSP, PERKESO dan cukai pendapatan, serta untuk mengelakkan orang yang sama ditambah dua kali.",
+    "Complete my profile": "Lengkapkan profil saya",
+    "Go to My profile": "Pergi ke Profil saya",
+    "Managed by HR": "Diurus oleh HR",
+    "My documents": "Dokumen saya",
+    "My profile": "Profil saya",
+    "No documents yet. HR adds them to your record.": "Belum ada dokumen. HR akan menambahkannya ke rekod anda.",
+    "No staff record": "Tiada rekod kakitangan",
+    "Please complete your profile: HR needs your phone number, home address and at least one emergency contact.": "Sila lengkapkan profil anda: HR memerlukan nombor telefon, alamat rumah dan sekurang-kurangnya seorang orang hubungan kecemasan.",
+    "Save my details": "Simpan butiran saya",
+    "This account isn’t linked to a staff record. Your sign-in details are in Account settings.": "Akaun ini tidak dipautkan kepada rekod kakitangan. Butiran log masuk anda ada dalam Tetapan akaun.",
+    "Used by HR, and for income tax (PCB) reliefs.": "Digunakan oleh HR dan untuk pelepasan cukai pendapatan (PCB).",
+    "Your details were saved.": "Butiran anda telah disimpan.",
+    "Your name and email are managed by HR. Ask them to change it.": "Nama dan e-mel anda diurus oleh HR. Minta mereka untuk mengubahnya.",
+    "Your name and email are part of your staff record, so HR changes them for you.": "Nama dan e-mel anda ialah sebahagian daripada rekod kakitangan, jadi HR yang mengubahnya untuk anda.",
+    "Your staff record. Keep your personal details and emergency contacts up to date; ask HR to change anything else.": "Rekod kakitangan anda. Pastikan butiran peribadi dan orang hubungan kecemasan anda terkini; minta HR untuk mengubah perkara lain."
 }

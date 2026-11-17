@@ -6,7 +6,6 @@
     // Adding staff is split into steps (resources/js/admin/stepper.js); editing stays one page.
     // Personal details and emergency contacts are left out when adding: the staff member fills them in later.
     $steps = $editing ? [] : [__('Account'), __('Identity'), __('Employment'), __('Pay and statutory'), __('Review')];
-    $contacts = old('contacts', $employee->exists ? $employee->emergencyContacts->map(fn ($contact) => $contact->only(['name', 'relationship', 'phone']))->all() : []);
     $step = fn (int $index): string => $editing ? '' : 'data-step="'.e($steps[$index]).'"';
 @endphp
 <x-layouts.admin :title="$title" group="{{ __('Staff') }}">
@@ -81,87 +80,8 @@
     </section>
 
     @if ($editing)
-    <section class="card">
-        <div class="card-header">
-            <h2 class="card-title">{{ __('Personal details') }}</h2>
-        </div>
-        <div class="card-content grid gap-5 md:grid-cols-3">
-            <x-ui.field label="{{ __('Gender') }}" name="gender">
-                <x-ui.select name="gender" :value="$employee->gender" :options="$genders" include-blank />
-            </x-ui.field>
-            <x-ui.field label="{{ __('Race') }}" name="race">
-                <x-ui.select name="race" :value="$employee->race" :options="$races" include-blank />
-            </x-ui.field>
-            <x-ui.field label="{{ __('Marital status') }}" name="marital_status">
-                <x-ui.select name="marital_status" :value="$employee->marital_status" :options="$maritalStatuses" include-blank />
-            </x-ui.field>
-            <x-ui.field label="{{ __('Number of children') }}" name="children_count" required help="{{ __('Used for income tax (PCB) reliefs.') }}">
-                <x-ui.input name="children_count" type="number" min="0" max="20" step="1" :value="$employee->children_count" class="tabular-nums" required />
-            </x-ui.field>
-            <x-ui.field label="{{ __('Spouse is working') }}" name="spouse_working" help="{{ __('For married staff; affects PCB reliefs.') }}">
-                <x-ui.select name="spouse_working" :value="is_null($employee->spouse_working) ? null : (int) $employee->spouse_working" :options="['1' => __('Yes'), '0' => __('No')]" include-blank />
-            </x-ui.field>
-            <x-ui.field label="{{ __('Phone') }}" name="phone">
-                <x-ui.input name="phone" type="tel" :value="$employee->phone" maxlength="20" placeholder="012-345 6789" />
-            </x-ui.field>
-            <x-ui.field label="{{ __('Personal email') }}" name="personal_email">
-                <x-ui.input name="personal_email" type="email" :value="$employee->personal_email" />
-            </x-ui.field>
-        </div>
-        <div class="card-content grid gap-5 border-t pt-5 md:grid-cols-3">
-            <x-ui.field label="{{ __('Address line 1') }}" name="address_line_1" class="md:col-span-3">
-                <x-ui.input name="address_line_1" :value="$employee->address_line_1" maxlength="255" />
-            </x-ui.field>
-            <x-ui.field label="{{ __('Address line 2') }}" name="address_line_2" class="md:col-span-3">
-                <x-ui.input name="address_line_2" :value="$employee->address_line_2" maxlength="255" />
-            </x-ui.field>
-            <x-ui.field label="{{ __('Postcode') }}" name="postcode">
-                <x-ui.input name="postcode" :value="$employee->postcode" inputmode="numeric" maxlength="5" class="tabular-nums" />
-            </x-ui.field>
-            <x-ui.field label="{{ __('City') }}" name="city">
-                <x-ui.input name="city" :value="$employee->city" maxlength="100" />
-            </x-ui.field>
-            <x-ui.field label="{{ __('State') }}" name="state">
-                <x-ui.select name="state" :value="$employee->state" :options="$states" include-blank />
-            </x-ui.field>
-        </div>
-    </section>
-
-    <section class="card">
-        <div class="card-header">
-            <h2 class="card-title">{{ __('Emergency contacts') }}</h2>
-            <p class="card-desc">{{ __('Up to :count people to call, in order. Leave unused rows blank.', ['count' => \App\Models\Employee::MAX_EMERGENCY_CONTACTS]) }}</p>
-        </div>
-        <div class="card-content space-y-4">
-            @error('contacts')<x-ui.alert variant="danger">{{ $message }}</x-ui.alert>@enderror
-            <div class="hidden gap-3 text-sm font-medium sm:grid sm:grid-cols-[2rem_minmax(0,1fr)_12rem_12rem]" aria-hidden="true">
-                <span></span><span>{{ __('Name') }}</span><span>{{ __('Relationship') }}</span><span>{{ __('Phone') }}</span>
-            </div>
-            @for ($row = 0; $row < \App\Models\Employee::MAX_EMERGENCY_CONTACTS; $row++)
-                @php $contact = $contacts[$row] ?? []; @endphp
-                <fieldset class="grid items-start gap-3 sm:grid-cols-[2rem_minmax(0,1fr)_12rem_12rem]">
-                    <legend class="sr-only">{{ __('Contact :n', ['n' => $row + 1]) }}</legend>
-                    <span class="pt-2 text-sm tabular-nums text-muted-foreground" aria-hidden="true">{{ $row + 1 }}.</span>
-                    <div>
-                        <label for="f-contacts-{{ $row }}-name" class="label sm:sr-only">{{ __('Contact :n: name', ['n' => $row + 1]) }}</label>
-                        <x-ui.input id="f-contacts-{{ $row }}-name" name="contacts[{{ $row }}][name]" :value="$contact['name'] ?? null" maxlength="150" :invalid="$errors->has('contacts.'.$row.'.name')" />
-                        @error('contacts.'.$row.'.name')<p class="field-error">{{ $message }}</p>@enderror
-                    </div>
-                    <div>
-                        <label for="f-contacts-{{ $row }}-relationship" class="label sm:sr-only">{{ __('Contact :n: relationship', ['n' => $row + 1]) }}</label>
-                        <x-ui.select id="f-contacts-{{ $row }}-relationship" name="contacts[{{ $row }}][relationship]" :value="$contact['relationship'] ?? null" :options="$relationships" include-blank :invalid="$errors->has('contacts.'.$row.'.relationship')" />
-                        @error('contacts.'.$row.'.relationship')<p class="field-error">{{ $message }}</p>@enderror
-                    </div>
-                    <div>
-                        <label for="f-contacts-{{ $row }}-phone" class="label sm:sr-only">{{ __('Contact :n: phone', ['n' => $row + 1]) }}</label>
-                        <x-ui.input id="f-contacts-{{ $row }}-phone" name="contacts[{{ $row }}][phone]" type="tel" :value="$contact['phone'] ?? null" maxlength="20" placeholder="012-345 6789" :invalid="$errors->has('contacts.'.$row.'.phone')" />
-                        @error('contacts.'.$row.'.phone')<p class="field-error">{{ $message }}</p>@enderror
-                    </div>
-                </fieldset>
-            @endfor
-        </div>
-    </section>
-
+        <x-staff.personal-details :employee="$employee" :genders="$genders" :races="$races" :marital-statuses="$maritalStatuses" :states="$states" />
+        <x-staff.emergency-contacts :employee="$employee" :relationships="$relationships" />
     @endif
 
     <section class="card" {!! $step(2) !!}>

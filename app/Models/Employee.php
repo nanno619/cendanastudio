@@ -184,6 +184,17 @@ class Employee extends Model implements HasMedia
             && (! $this->user->hasRole(Role::SuperAdmin) || $actor->hasRole(Role::SuperAdmin));
     }
 
+    /**
+     * Whether the staff member still has to fill in their own details (shown as a reminder): a phone
+     * number, an address or at least one emergency contact is missing.
+     */
+    public function needsPersonalDetails(): bool
+    {
+        return blank($this->phone)
+            || blank($this->address_line_1)
+            || ! ($this->relationLoaded('emergencyContacts') ? $this->emergencyContacts->isNotEmpty() : $this->emergencyContacts()->exists());
+    }
+
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('documents')->useDisk(self::DOCUMENTS_DISK);

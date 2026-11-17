@@ -62,6 +62,7 @@ return [
         ['label' => 'Platform', 'items' => [
             ['label' => 'Dashboard', 'route' => 'admin.dashboard', 'active' => 'admin.dashboard', 'icon' => 'dashboard'],
             ['label' => 'Analytics', 'route' => 'admin.analytics', 'active' => 'admin.analytics', 'icon' => 'chart', 'badge' => 'New'],
+            ['label' => 'My profile', 'route' => 'my-profile.show', 'active' => 'my-profile.*', 'icon' => 'user', 'staff_record' => true],
         ]],
         ['label' => 'Modules', 'items' => [
             ['label' => 'Staff', 'route' => 'staff.index', 'active' => 'staff.*', 'icon' => 'users', 'role' => [Role::SuperAdmin->value, Role::Admin->value, Role::Finance->value]],

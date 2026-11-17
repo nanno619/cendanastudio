@@ -19,6 +19,38 @@ use App\Models\User;
 class StaffForm
 {
     /**
+     * Options for the personal details and emergency contact fields, also used by My profile.
+     *
+     * @return array{genders: array<string, string>, races: array<string, string>, maritalStatuses: array<string, string>, states: array<string, string>, relationships: array<string, string>}
+     */
+    public static function personalOptions(?Employee $employee): array
+    {
+        return [
+            'genders' => self::lookup(LookupCategory::Gender, $employee?->gender),
+            'races' => self::lookup(LookupCategory::Race, $employee?->race),
+            'maritalStatuses' => self::lookup(LookupCategory::MaritalStatus, $employee?->marital_status),
+            'states' => self::lookup(LookupCategory::MalaysianStates, $employee?->state),
+            'relationships' => self::relationships($employee),
+        ];
+    }
+
+    /**
+     * Active items of a category, plus the stored code if it has since been deactivated.
+     *
+     * @return array<string, string>
+     */
+    private static function lookup(LookupCategory $category, ?string $current): array
+    {
+        $options = LookupItem::options($category);
+
+        if (filled($current) && ! isset($options[$current])) {
+            $options[$current] = LookupItem::labels($category)[$current] ?? $current;
+        }
+
+        return $options;
+    }
+
+    /**
      * Active relationships plus any still used by this record's contacts.
      *
      * @return array<string, string>
@@ -40,17 +72,6 @@ class StaffForm
      */
     public static function options(User $actor, ?Employee $employee = null): array
     {
-        $lookup = function (LookupCategory $category, string $field) use ($employee): array {
-            $options = LookupItem::options($category);
-            $current = $employee?->{$field};
-
-            if (filled($current) && ! isset($options[$current])) {
-                $options[$current] = LookupItem::labels($category)[$current] ?? $current;
-            }
-
-            return $options;
-        };
-
         $epf = EpfSetting::current();
 
         return [
@@ -59,14 +80,10 @@ class StaffForm
                 ->mapWithKeys(fn (Role $role): array => [$role->value => __($role->value)])->all(),
             'identityTypes' => collect(IdentityType::cases())->mapWithKeys(fn (IdentityType $type): array => [$type->value => __($type->label())])->all(),
             'countries' => Countries::options(),
-            'genders' => $lookup(LookupCategory::Gender, 'gender'),
-            'races' => $lookup(LookupCategory::Race, 'race'),
-            'maritalStatuses' => $lookup(LookupCategory::MaritalStatus, 'marital_status'),
-            'states' => $lookup(LookupCategory::MalaysianStates, 'state'),
-            'departments' => $lookup(LookupCategory::Department, 'department'),
-            'positions' => $lookup(LookupCategory::Position, 'position'),
-            'banks' => $lookup(LookupCategory::Banks, 'bank'),
-            'relationships' => self::relationships($employee),
+            ...self::personalOptions($employee),
+            'departments' => self::lookup(LookupCategory::Department, $employee?->department),
+            'positions' => self::lookup(LookupCategory::Position, $employee?->position),
+            'banks' => self::lookup(LookupCategory::Banks, $employee?->bank),
             'employmentTypes' => collect(EmploymentType::cases())->mapWithKeys(fn (EmploymentType $type): array => [$type->value => __($type->label())])->all(),
             'leavingReasons' => collect(LeavingReason::cases())->mapWithKeys(fn (LeavingReason $reason): array => [$reason->value => __($reason->label())])->all(),
             'managers' => Employee::query()
