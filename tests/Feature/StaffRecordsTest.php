@@ -174,16 +174,48 @@ class StaffRecordsTest extends TestCase
         $this->assertTrue($activity->causer->is($admin));
     }
 
-    public function test_add_form_is_split_into_steps_and_edit_form_is_one_page(): void
+    public function test_add_form_is_split_into_steps_without_personal_details_and_edit_form_is_one_page(): void
     {
         $add = $this->actingAs($this->superAdmin)->get(route('staff.create'))->assertOk()->assertSee('data-stepper', false);
-        $this->assertSame(6, substr_count($add->getContent(), 'data-step="'));
-        $add->assertSeeInOrder(['data-step="Account"', 'data-step="Personal details"', 'data-step="Emergency contacts"', 'data-step="Employment"', 'data-step="Pay and statutory"', 'data-step="Review"'], false);
+        $this->assertSame(5, substr_count($add->getContent(), 'data-step="'));
+        $add->assertSeeInOrder(['data-step="Account"', 'data-step="Identity"', 'data-step="Employment"', 'data-step="Pay and statutory"', 'data-step="Review"'], false)
+            ->assertSee('name="identity_no"', false)
+            ->assertDontSee('name="gender"', false)
+            ->assertDontSee('name="address_line_1"', false)
+            ->assertDontSee('name="contacts[0][name]"', false);
 
         $employee = Employee::factory()->create();
-        $edit = $this->actingAs($this->superAdmin)->get(route('staff.edit', $employee))->assertOk();
+        $edit = $this->actingAs($this->superAdmin)->get(route('staff.edit', $employee))->assertOk()
+            ->assertSee('name="gender"', false)
+            ->assertSee('name="contacts[0][name]"', false);
         $this->assertStringNotContainsString('data-step="', $edit->getContent());
         $this->assertStringNotContainsString('data-stepper-nav', $edit->getContent());
+    }
+
+    public function test_staff_can_be_added_with_only_the_essentials(): void
+    {
+        Notification::fake();
+
+        $this->actingAs($this->superAdmin)->post(route('staff.store'), [
+            'name' => 'Lean Record',
+            'email' => 'lean@example.com',
+            'role' => 'Staff',
+            'identity_type' => 'mykad',
+            'identity_no' => '950505-05-5555',
+            'nationality' => 'MY',
+            'staff_no' => 'S0500',
+            'employment_type' => 'contract',
+            'join_date' => '2026-02-02',
+            'is_manual_worker' => '0',
+            'basic_salary' => '3000',
+        ])->assertSessionHasNoErrors();
+
+        $employee = Employee::query()->where('staff_no', 'S0500')->sole();
+        $this->assertSame(0, $employee->children_count);
+        $this->assertNull($employee->gender);
+        $this->assertNull($employee->phone);
+        $this->assertTrue($employee->emergencyContacts->isEmpty());
+        $this->assertSame('1995-05-05', $employee->date_of_birth->toDateString());
     }
 
     public function test_only_super_admin_can_give_the_super_admin_role_or_edit_a_super_admins_record(): void

@@ -112,7 +112,8 @@ class SaveEmployeeRequest extends FormRequest
             'gender' => ['nullable', $this->lookup(LookupCategory::Gender, 'gender')],
             'race' => ['nullable', $this->lookup(LookupCategory::Race, 'race')],
             'marital_status' => ['nullable', $this->lookup(LookupCategory::MaritalStatus, 'marital_status')],
-            'children_count' => ['required', 'integer', 'between:0,20'],
+            // Sent only from the edit form; new records start at 0 until the staff member fills it in.
+            'children_count' => ['sometimes', 'required', 'integer', 'between:0,20'],
             'spouse_working' => ['nullable', 'boolean'],
             'phone' => ['nullable', 'string', 'max:20', 'regex:/^\+?[0-9][0-9 -]{6,18}$/'],
             'personal_email' => ['nullable', 'email', 'max:255'],

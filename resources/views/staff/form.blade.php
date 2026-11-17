@@ -4,7 +4,8 @@
     $date = fn (?\Carbon\CarbonInterface $value): ?string => $value?->toDateString();
     $isMyKad = old('identity_type', $employee->identity_type?->value ?? $employee->identity_type) === \App\Enums\IdentityType::MyKad->value;
     // Adding staff is split into steps (resources/js/admin/stepper.js); editing stays one page.
-    $steps = $editing ? [] : [__('Account'), __('Personal details'), __('Emergency contacts'), __('Employment'), __('Pay and statutory'), __('Review')];
+    // Personal details and emergency contacts are left out when adding: the staff member fills them in later.
+    $steps = $editing ? [] : [__('Account'), __('Identity'), __('Employment'), __('Pay and statutory'), __('Review')];
     $contacts = old('contacts', $employee->exists ? $employee->emergencyContacts->map(fn ($contact) => $contact->only(['name', 'relationship', 'phone']))->all() : []);
     $step = fn (int $index): string => $editing ? '' : 'data-step="'.e($steps[$index]).'"';
 @endphp
@@ -13,7 +14,7 @@
     <a href="{{ $editing ? route('staff.show', $employee) : route('staff.index') }}" class="mb-3 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
         <x-ui.icon name="arrow-left" class="h-4 w-4" />{{ $editing ? __('Back to :name', ['name' => $employee->user->name]) : __('Back to Staff') }}
     </a>
-    <x-ui.page-header :title="$title" description="{{ $editing ? __('Changes to the name and email also change how this person signs in.') : __('Creates the staff record and a sign-in account. They’ll get an email to set their password.') }}" />
+    <x-ui.page-header :title="$title" description="{{ $editing ? __('Changes to the name and email also change how this person signs in.') : __('Creates the staff record and a sign-in account. They’ll get an email to set their password, and fill in their personal details and emergency contacts later.') }}" />
 </div>
 
 <form method="POST" action="{{ $editing ? route('staff.update', $employee) : route('staff.store') }}" class="space-y-4" @unless ($editing) data-stepper @endunless>
@@ -60,7 +61,8 @@
 
     <section class="card" {!! $step(1) !!}>
         <div class="card-header">
-            <h2 class="card-title">{{ __('Personal details') }}</h2>
+            <h2 class="card-title">{{ __('Identity') }}</h2>
+            <p class="card-desc">{{ __('Needed for EPF, SOCSO and income tax, and to stop the same person being added twice.') }}</p>
         </div>
         <div class="card-content grid gap-5 md:grid-cols-3">
             <x-ui.field label="{{ __('Identity document') }}" name="identity_type" required>
@@ -75,6 +77,15 @@
             <x-ui.field label="{{ __('Date of birth') }}" name="date_of_birth" help="{{ __('Needed for passport holders only.') }}">
                 <x-ui.input name="date_of_birth" type="date" :value="$isMyKad ? null : $date($employee->date_of_birth)" />
             </x-ui.field>
+        </div>
+    </section>
+
+    @if ($editing)
+    <section class="card">
+        <div class="card-header">
+            <h2 class="card-title">{{ __('Personal details') }}</h2>
+        </div>
+        <div class="card-content grid gap-5 md:grid-cols-3">
             <x-ui.field label="{{ __('Gender') }}" name="gender">
                 <x-ui.select name="gender" :value="$employee->gender" :options="$genders" include-blank />
             </x-ui.field>
@@ -116,7 +127,7 @@
         </div>
     </section>
 
-    <section class="card" {!! $step(2) !!}>
+    <section class="card">
         <div class="card-header">
             <h2 class="card-title">{{ __('Emergency contacts') }}</h2>
             <p class="card-desc">{{ __('Up to :count people to call, in order. Leave unused rows blank.', ['count' => \App\Models\Employee::MAX_EMERGENCY_CONTACTS]) }}</p>
@@ -151,7 +162,9 @@
         </div>
     </section>
 
-    <section class="card" {!! $step(3) !!}>
+    @endif
+
+    <section class="card" {!! $step(2) !!}>
         <div class="card-header">
             <h2 class="card-title">{{ __('Employment') }}</h2>
         </div>
@@ -184,7 +197,7 @@
         </div>
     </section>
 
-    <section class="card" {!! $step(4) !!}>
+    <section class="card" {!! $step(3) !!}>
         <div class="card-header">
             <h2 class="card-title">{{ __('Pay and statutory') }}</h2>
         </div>
@@ -237,7 +250,7 @@
     @endif
 
     @unless ($editing)
-        <section class="card" {!! $step(5) !!} data-stepper-review hidden>
+        <section class="card" {!! $step(4) !!} data-stepper-review hidden>
             <div class="card-header">
                 <h2 class="card-title">{{ __('Review') }}</h2>
                 <p class="card-desc">{{ __('Check the details before adding. Their password email is sent once you add them.') }}</p>

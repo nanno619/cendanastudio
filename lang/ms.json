@@ -1499,7 +1499,6 @@
     "Contract": "Kontrak",
     "Contract ended": "Kontrak tamat",
     "Covered by the Employment Act whatever they earn.": "Dilindungi Akta Kerja tanpa mengira gaji.",
-    "Creates the staff record and a sign-in account. They’ll get an email to set their password.": "Mencipta rekod kakitangan dan akaun log masuk. Mereka akan menerima e-mel untuk menetapkan kata laluan.",
     "Current staff": "Kakitangan semasa",
     "Date of birth": "Tarikh lahir",
     "Deceased": "Meninggal dunia",
@@ -1632,5 +1631,8 @@
     "Private. Downloads are recorded in the audit trail.": "Peribadi. Muat turun direkodkan dalam jejak audit.",
     "Type": "Jenis",
     "Upload a document": "Muat naik dokumen",
-    "Uploaded": "Dimuat naik"
+    "Uploaded": "Dimuat naik",
+    "Creates the staff record and a sign-in account. They’ll get an email to set their password, and fill in their personal details and emergency contacts later.": "Mencipta rekod kakitangan dan akaun log masuk. Mereka akan menerima e-mel untuk menetapkan kata laluan, dan mengisi butiran peribadi serta orang hubungan kecemasan kemudian.",
+    "Identity": "Pengenalan",
+    "Needed for EPF, SOCSO and income tax, and to stop the same person being added twice.": "Diperlukan untuk KWSP, PERKESO dan cukai pendapatan, serta untuk mengelakkan orang yang sama ditambah dua kali."
 }
