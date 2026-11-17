@@ -94,9 +94,9 @@ return [
                 ['label' => 'Approval Workflows', 'route' => 'settings.claim.approval.index', 'active' => 'settings.claim.approval.*'],
             ]],
             ['id' => 'settings-hadir', 'label' => 'Hadir', 'icon' => 'clock', 'role' => Role::SuperAdmin->value, 'children' => [
-                ['label' => 'General'],
-                ['label' => 'Overtime'],
-                ['label' => 'Visits'],
+                ['label' => 'General', 'route' => 'settings.hadir.general', 'active' => 'settings.hadir.general*'],
+                ['label' => 'Overtime', 'route' => 'settings.hadir.overtime', 'active' => 'settings.hadir.overtime*'],
+                ['label' => 'Visits', 'route' => 'settings.hadir.visits', 'active' => 'settings.hadir.visits*'],
             ]],
         ]],
         ['label' => 'Components', 'showcase' => true, 'items' => [

@@ -16,6 +16,8 @@ use App\Http\Controllers\Administration\ToggleLookupItemController;
 use App\Http\Controllers\Administration\UpdateFileSecurityController;
 use App\Http\Controllers\Administration\UpdateLookupItemController;
 use App\Http\Controllers\LocaleController;
+use App\Http\Controllers\Settings\AttendanceOvertimeSettingsController;
+use App\Http\Controllers\Settings\AttendanceSettingsController;
 use App\Http\Controllers\Settings\ClaimApprovalController;
 use App\Http\Controllers\Settings\ClaimSettingsController;
 use App\Http\Controllers\Settings\CompanyBankAccountDetailsController;
@@ -38,6 +40,8 @@ use App\Http\Controllers\Settings\PreviewPayslipController;
 use App\Http\Controllers\Settings\ProRataSettingsController;
 use App\Http\Controllers\Settings\StoreClaimApprovalRouteController;
 use App\Http\Controllers\Settings\StoreLeaveApprovalRouteController;
+use App\Http\Controllers\Settings\UpdateAttendanceOvertimeSettingsController;
+use App\Http\Controllers\Settings\UpdateAttendanceSettingsController;
 use App\Http\Controllers\Settings\UpdateClaimApprovalRouteController;
 use App\Http\Controllers\Settings\UpdateClaimSettingsController;
 use App\Http\Controllers\Settings\UpdateCompanyBankAccountDetailsController;
@@ -51,6 +55,8 @@ use App\Http\Controllers\Settings\UpdateOvertimeSettingsController;
 use App\Http\Controllers\Settings\UpdatePayrollSettingsController;
 use App\Http\Controllers\Settings\UpdatePayslipSettingsController;
 use App\Http\Controllers\Settings\UpdateProRataSettingsController;
+use App\Http\Controllers\Settings\UpdateVisitSettingsController;
+use App\Http\Controllers\Settings\VisitSettingsController;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/dashboard');
@@ -98,6 +104,12 @@ Route::middleware('auth')->group(function (): void {
         Route::get('/claim/approval/routes/{claimApprovalRoute}/edit', EditClaimApprovalRouteController::class)->name('claim.approval.routes.edit');
         Route::put('/claim/approval/routes/{claimApprovalRoute}', UpdateClaimApprovalRouteController::class)->name('claim.approval.routes.update');
         Route::delete('/claim/approval/routes/{claimApprovalRoute}', DestroyClaimApprovalRouteController::class)->name('claim.approval.routes.destroy');
+        Route::get('/hadir/general', AttendanceSettingsController::class)->name('hadir.general');
+        Route::put('/hadir/general', UpdateAttendanceSettingsController::class)->name('hadir.general.update');
+        Route::get('/hadir/overtime', AttendanceOvertimeSettingsController::class)->name('hadir.overtime');
+        Route::put('/hadir/overtime', UpdateAttendanceOvertimeSettingsController::class)->name('hadir.overtime.update');
+        Route::get('/hadir/visits', VisitSettingsController::class)->name('hadir.visits');
+        Route::put('/hadir/visits', UpdateVisitSettingsController::class)->name('hadir.visits.update');
     });
 
     Route::middleware('role:'.Role::SuperAdmin->value)->prefix('administrations')->name('administrations.')->group(function (): void {
