@@ -16,6 +16,8 @@ enum LookupCategory: string
     case Gender = 'gender';
     case Statuses = 'statuses';
     case Banks = 'banks';
+    case Department = 'department';
+    case Position = 'position';
 
     public function label(): string
     {
@@ -28,6 +30,8 @@ enum LookupCategory: string
             self::Gender => 'Gender',
             self::Statuses => 'Statuses',
             self::Banks => 'Banks',
+            self::Department => 'Department',
+            self::Position => 'Position',
         };
     }
 
@@ -42,6 +46,8 @@ enum LookupCategory: string
             self::Gender => 'Gender recorded in staff and client profiles.',
             self::Statuses => 'Approval statuses for leave and claim applications.',
             self::Banks => 'Banks for the company account and staff salary accounts.',
+            self::Department => 'Departments staff belong to.',
+            self::Position => 'Job titles held by staff.',
         };
     }
 }

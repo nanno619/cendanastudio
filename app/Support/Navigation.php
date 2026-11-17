@@ -8,7 +8,7 @@ use App\Models\User;
 
 /**
  * Builds the sidebar from config('cendana.navigation') for one user. Groups flagged `showcase` are dropped
- * when the showcase is off; items with a `role` key are shown only to that role; items with a `module` key
+ * when the showcase is off; items with a `role` key (one role or a list) are shown only to users holding one of them; items with a `module` key
  * are shown only while the module is available to the user, take the module's name and icon, and are
  * ordered by the module's sort order (after the group's other items). Empty groups are dropped. Group and
  * top-level item labels come back translated.
@@ -31,7 +31,7 @@ class Navigation
             $items = [];
 
             foreach ($group['items'] as $position => $item) {
-                if (filled($item['role'] ?? null) && ! ($user?->hasRole($item['role']) ?? false)) {
+                if (filled($item['role'] ?? null) && ! ($user?->hasAnyRole((array) $item['role']) ?? false)) {
                     continue;
                 }
 

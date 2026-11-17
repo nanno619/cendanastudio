@@ -53,6 +53,19 @@ class LookupItem extends Model
             ->all();
     }
 
+    /**
+     * Every item of a category, active or not, as code => label in the current language, for showing a
+     * stored code whose item may since have been deactivated.
+     *
+     * @return array<string, string>
+     */
+    public static function labels(LookupCategory $category): array
+    {
+        return static::query()->inCategory($category)->ordered()->get()
+            ->mapWithKeys(fn (LookupItem $item): array => [$item->code => $item->label])
+            ->all();
+    }
+
     #[Scope]
     protected function inCategory(Builder $query, LookupCategory $category): void
     {

@@ -1,6 +1,6 @@
 # ⚡ JavaScript interactions
 
-`resources/js/app.js` imports `bootstrap.js`, `admin/charts.js`, `admin/interactions.js`, `admin/advanced-inputs.js` and `admin/enhanced-controls.js`. No frontend framework is needed. Most clicks are handled through event delegation on the document; tables and charts initialise on page load.
+`resources/js/app.js` imports `bootstrap.js`, `admin/charts.js`, `admin/interactions.js`, `admin/advanced-inputs.js`, `admin/enhanced-controls.js` and `admin/stepper.js`. No frontend framework is needed. Most clicks are handled through event delegation on the document; tables and charts initialise on page load.
 
 | Behaviour | Markup hook | Location |
 | --- | --- | --- |
@@ -13,7 +13,12 @@
 | Charts | `data-chart` and the JSON data attributes | `charts.js` |
 | Combobox, date range, file preview | `data-combobox`, `data-date-range`, `data-file-preview` | `advanced-inputs.js` |
 | Searchable select, date picker | `data-enhanced-select`, `data-date-picker` | `enhanced-controls.js` (Choices.js/Flatpickr) |
+| Step-by-step form | `data-stepper`, `data-step="Label"`, `data-stepper-nav`/`-go`/`-prev`/`-next`/`-submit`, `data-stepper-review` + `data-stepper-summary` | `stepper.js` |
 | Demo forms | `data-demo-form` | `advanced-inputs.js` |
+
+## 🪜 Step-by-step forms
+
+Wrap groups of fields in elements with `data-step="Label"` inside a `<form data-stepper>`; the Add staff form (`resources/views/staff/form.blade.php`) is the reference. Without JavaScript every step shows and the form posts as one page. With it, one step shows at a time: **Next** checks that step's fields with the browser's own validation (`required`, `type`, `min`/`max`), the step bar (`data-stepper-go="0"`, using the `.step` styles) jumps back or forward once the earlier steps are valid, and Enter moves to the next step instead of submitting early. A last step marked `data-stepper-review` fills its `data-stepper-summary` with every answer before submitting. After a failed server-side save the form opens on the first step containing an error. The form is still sent once, so the controller and Form Request don't change.
 
 ## 🌐 Translated text in scripts
 

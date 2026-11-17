@@ -61,6 +61,13 @@ use App\Http\Controllers\Settings\UpdatePayslipSettingsController;
 use App\Http\Controllers\Settings\UpdateProRataSettingsController;
 use App\Http\Controllers\Settings\UpdateVisitSettingsController;
 use App\Http\Controllers\Settings\VisitSettingsController;
+use App\Http\Controllers\Staff\CreateEmployeeController;
+use App\Http\Controllers\Staff\EditEmployeeController;
+use App\Http\Controllers\Staff\EmployeeController;
+use App\Http\Controllers\Staff\ShowEmployeeController;
+use App\Http\Controllers\Staff\StoreEmployeeController;
+use App\Http\Controllers\Staff\UpdateEmployeeController;
+use App\Models\Employee;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/dashboard');
@@ -71,6 +78,15 @@ Route::middleware('auth')->group(function (): void {
     Route::view('/dashboard', 'admin.dashboard')->name('admin.dashboard');
     Route::view('/analytics', 'admin.analytics')->name('admin.analytics');
     Route::view('/settings', 'admin.settings')->name('admin.settings');
+
+    Route::middleware('role:'.collect(Employee::RECORD_MANAGER_ROLES)->map->value->implode('|'))->prefix('staff')->name('staff.')->group(function (): void {
+        Route::get('/', EmployeeController::class)->name('index');
+        Route::get('/create', CreateEmployeeController::class)->name('create');
+        Route::post('/', StoreEmployeeController::class)->name('store');
+        Route::get('/{employee}', ShowEmployeeController::class)->name('show');
+        Route::get('/{employee}/edit', EditEmployeeController::class)->name('edit');
+        Route::put('/{employee}', UpdateEmployeeController::class)->name('update');
+    });
 
     Route::middleware('role:'.Role::SuperAdmin->value)->prefix('settings')->name('settings.')->group(function (): void {
         Route::get('/company/basic-details', CompanyDetailsController::class)->name('company.basic-details');
