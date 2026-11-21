@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\EnsureModuleIsAvailable;
+use App\Http\Middleware\EnsureProfileIsComplete;
 use App\Http\Middleware\SetLocale;
 use App\Http\Middleware\SignOutStaffWhoHaveLeft;
 use Illuminate\Foundation\Application;
@@ -17,7 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->web(append: [SetLocale::class, SignOutStaffWhoHaveLeft::class]);
+        $middleware->web(append: [SetLocale::class, SignOutStaffWhoHaveLeft::class, EnsureProfileIsComplete::class]);
 
         $middleware->alias([
             'module' => EnsureModuleIsAvailable::class,

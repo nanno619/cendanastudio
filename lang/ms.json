@@ -1633,7 +1633,6 @@
     "My profile": "Profil saya",
     "No documents yet. HR adds them to your record.": "Belum ada dokumen. HR akan menambahkannya ke rekod anda.",
     "No staff record": "Tiada rekod kakitangan",
-    "Please complete your profile: HR needs your phone number, home address and at least one emergency contact.": "Sila lengkapkan profil anda: HR memerlukan nombor telefon, alamat rumah dan sekurang-kurangnya seorang orang hubungan kecemasan.",
     "Save my details": "Simpan butiran saya",
     "This account isn’t linked to a staff record. Your sign-in details are in Account settings.": "Akaun ini tidak dipautkan kepada rekod kakitangan. Butiran log masuk anda ada dalam Tetapan akaun.",
     "Used by HR, and for income tax (PCB) reliefs.": "Digunakan oleh HR dan untuk pelepasan cukai pendapatan (PCB).",
@@ -1671,5 +1670,13 @@
     "12 digits without dashes, e.g. 960109045295.": "12 digit tanpa sengkang, cth. 960109045295.",
     "Filled in from the NRIC number.": "Diisi daripada nombor NRIC.",
     "Enter the 12-digit NRIC number without dashes or spaces, starting with a real date of birth, e.g. 960109045295.": "Masukkan nombor NRIC 12 digit tanpa sengkang atau ruang, bermula dengan tarikh lahir yang sah, cth. 960109045295.",
-    "Affects PCB reliefs.": "Mempengaruhi pelepasan PCB."
+    "Affects PCB reliefs.": "Mempengaruhi pelepasan PCB.",
+    "Phone number": "Nombor telefon",
+    "Home address (address, postcode, city and state)": "Alamat rumah (alamat, poskod, bandar dan negeri)",
+    "At least one emergency contact": "Sekurang-kurangnya satu orang hubungan kecemasan",
+    "Complete your profile to continue": "Lengkapkan profil anda untuk meneruskan",
+    "HR needs these details. Other pages open once your profile is complete.": "HR memerlukan butiran ini. Halaman lain akan dibuka setelah profil anda lengkap.",
+    "Profile completion": "Kelengkapan profil",
+    "Done": "Selesai",
+    "Complete your profile to continue.": "Lengkapkan profil anda untuk meneruskan."
 }

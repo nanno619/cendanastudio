@@ -154,18 +154,59 @@ class MyProfileTest extends TestCase
             ->assertSessionHasErrors(['children_count', 'phone', 'contacts.1.relationship', 'contacts.1.phone']);
     }
 
-    public function test_reminder_shows_until_phone_address_and_a_contact_are_filled_in(): void
+    public function test_incomplete_profiles_show_the_percentage_and_what_is_missing(): void
     {
-        $this->actingAs($this->employee->user->fresh())->get(route('admin.dashboard'))
-            ->assertSee('Please complete your profile')
-            ->assertSee('Complete my profile');
+        $this->actingAs($this->employee->user->fresh())->get(route('my-profile.show'))
+            ->assertSee('Complete your profile to continue')
+            ->assertSee('0%')
+            ->assertSee('href="#f-phone"', false);
 
         $this->employee->update(['phone' => '012-345 6789', 'address_line_1' => '12 Jalan Cendana']);
-        $this->actingAs($this->employee->user->fresh())->get(route('admin.dashboard'))->assertSee('Please complete your profile');
+        $this->actingAs($this->employee->user->fresh())->get(route('my-profile.show'))
+            ->assertSee('33%')
+            ->assertSee('href="#f-address_line_1"', false)
+            ->assertDontSee('href="#f-phone"', false);
+        $this->assertSame(['phone' => true, 'address' => false, 'emergency_contact' => false], $this->employee->fresh()->profileChecklist());
+
+        $this->employee->update(['postcode' => '50450', 'city' => 'Kuala Lumpur', 'state' => 'kuala-lumpur']);
+        $this->assertSame(67, $this->employee->fresh()->profileCompletion());
 
         EmergencyContact::factory()->for($this->employee)->create();
-        $this->actingAs($this->employee->user->fresh())->get(route('admin.dashboard'))->assertDontSee('Please complete your profile');
-        $this->actingAs($this->employee->user->fresh())->get(route('my-profile.show'))->assertDontSee('Please complete your profile');
+        $this->assertSame(100, $this->employee->fresh()->profileCompletion());
+        $this->actingAs($this->employee->user->fresh())->get(route('admin.dashboard'))->assertOk()->assertDontSee('Complete your profile to continue');
+        $this->actingAs($this->employee->user->fresh())->get(route('my-profile.show'))->assertDontSee('Complete your profile to continue');
+    }
+
+    public function test_staff_are_kept_on_my_profile_until_it_is_complete(): void
+    {
+        $user = $this->employee->user;
+
+        $this->actingAs($user)->get(route('admin.dashboard'))->assertRedirect(route('my-profile.show'));
+        $this->actingAs($user)->get(route('staff.index'))->assertRedirect(route('my-profile.show'));
+        $this->actingAs($user)->getJson(route('admin.dashboard'))->assertForbidden();
+
+        $this->actingAs($user)->get(route('my-profile.show'))->assertOk();
+        $this->actingAs($user)->get(route('admin.settings'))->assertOk();
+        $this->actingAs($user)->post(route('locale.update'), ['locale' => 'ms'])->assertRedirect();
+
+        $this->actingAs($user)->put(route('my-profile.update'), [
+            'children_count' => '0',
+            'phone' => '012-345 6789',
+            'address_line_1' => '12 Jalan Cendana',
+            'postcode' => '50450',
+            'city' => 'Kuala Lumpur',
+            'state' => 'kuala-lumpur',
+            'contacts' => [['name' => 'Ahmad bin Ali', 'relationship' => 'father', 'phone' => '013-111 2222']],
+        ])->assertRedirect(route('my-profile.show'));
+
+        $this->actingAs($user->fresh())->get(route('admin.dashboard'))->assertOk();
+
+        $this->actingAs($user)->post(route('logout'))->assertRedirect();
+    }
+
+    public function test_accounts_without_a_staff_record_are_never_held_on_my_profile(): void
+    {
+        $this->actingAs(User::factory()->create())->get(route('admin.dashboard'))->assertOk();
     }
 
     public function test_staff_download_their_own_documents_only(): void
@@ -185,7 +226,9 @@ class MyProfileTest extends TestCase
         $this->assertTrue(Activity::query()->where('event', 'document-downloaded')->sole()->causer->is($this->employee->user));
 
         $this->actingAs($this->employee->user)->get(route('my-profile.documents.download', $theirs->uuid))->assertNotFound();
-        $this->actingAs($this->employee->user)->get(route('staff.documents.download', [$this->employee, $mine->uuid]))->assertForbidden();
+        EmergencyContact::factory()->for($this->employee)->create();
+        $this->employee->update(['phone' => '012-345 6789', 'address_line_1' => '12 Jalan Cendana', 'postcode' => '50450', 'city' => 'Kuala Lumpur', 'state' => 'kuala-lumpur']);
+        $this->actingAs($this->employee->user->fresh())->get(route('staff.documents.download', [$this->employee, $mine->uuid]))->assertForbidden();
     }
 
     public function test_staff_cannot_change_their_own_name_or_email_in_account_settings(): void

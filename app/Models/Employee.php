@@ -194,14 +194,37 @@ class Employee extends Model implements HasMedia
     }
 
     /**
-     * Whether the staff member still has to fill in their own details (shown as a reminder): a phone
-     * number, an address or at least one emergency contact is missing.
+     * What a staff member must fill in themselves before they can use the rest of the system: a phone
+     * number, their full home address and at least one emergency contact.
+     *
+     * @return array{phone: bool, address: bool, emergency_contact: bool}
+     */
+    public function profileChecklist(): array
+    {
+        return [
+            'phone' => filled($this->phone),
+            'address' => filled($this->address_line_1) && filled($this->postcode) && filled($this->city) && filled($this->state),
+            'emergency_contact' => $this->relationLoaded('emergencyContacts') ? $this->emergencyContacts->isNotEmpty() : $this->emergencyContacts()->exists(),
+        ];
+    }
+
+    /**
+     * How much of the profile checklist is done, from 0 to 100.
+     */
+    public function profileCompletion(): int
+    {
+        $checklist = $this->profileChecklist();
+
+        return (int) round(count(array_filter($checklist)) / count($checklist) * 100);
+    }
+
+    /**
+     * Whether the staff member still has to complete their profile (EnsureProfileIsComplete keeps them on
+     * My profile until they do).
      */
     public function needsPersonalDetails(): bool
     {
-        return blank($this->phone)
-            || blank($this->address_line_1)
-            || ! ($this->relationLoaded('emergencyContacts') ? $this->emergencyContacts->isNotEmpty() : $this->emergencyContacts()->exists());
+        return $this->profileCompletion() < 100;
     }
 
     public function registerMediaCollections(): void
