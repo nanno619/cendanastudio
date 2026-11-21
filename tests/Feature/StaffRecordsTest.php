@@ -284,7 +284,7 @@ class StaffRecordsTest extends TestCase
             ->assertSee('name="preferred_name"', false)
             ->assertSee('name="subsidiary"', false)
             ->assertSee('name="probation_end_date"', false)
-            ->assertSee('name="is_manual_worker"', false)
+            ->assertDontSee('name="is_manual_worker"', false)
             ->assertSee('name="contacts[0][name]"', false)
             ->assertDontSee('name="send_invitation"', false);
         $this->assertSame(1, substr_count($edit->getContent(), 'name="gender_from_nric"'));
@@ -546,7 +546,6 @@ class StaffRecordsTest extends TestCase
             'reporting_manager' => '',
             'join_date' => '2026-01-05',
             'probation_end_date' => '',
-            'is_manual_worker' => '0',
             'basic_salary' => '4500',
             'bank' => 'maybank',
             'bank_account_no' => '',

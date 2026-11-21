@@ -57,7 +57,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property int|null $reporting_manager_id
  * @property CarbonImmutable $join_date
  * @property CarbonImmutable|null $probation_end_date
- * @property bool $is_manual_worker
+ * @property bool $is_manual_worker Not asked for now; stays false (the column defaults to it)
  * @property CarbonImmutable|null $last_working_date
  * @property LeavingReason|null $leaving_reason Set together with last_working_date
  * @property string $basic_salary Monthly, in RM

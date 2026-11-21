@@ -155,7 +155,6 @@ class EmergencyContactsTest extends TestCase
             'children_count' => '0',
             'employment_type' => 'permanent',
             'join_date' => '2026-01-05',
-            'is_manual_worker' => '0',
             'basic_salary' => '4500',
         ], $overrides);
     }

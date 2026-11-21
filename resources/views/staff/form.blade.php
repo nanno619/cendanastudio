@@ -127,10 +127,6 @@
                 <x-ui.field label="{{ __('Probation ends') }}" name="probation_end_date" help="{{ __('Leave blank if there’s no probation.') }}">
                     <x-ui.input name="probation_end_date" type="date" :value="$date($employee->probation_end_date)" />
                 </x-ui.field>
-                <div>
-                    <x-ui.switch name="is_manual_worker" :checked="$employee->is_manual_worker" label="{{ __('Manual worker') }}" hint="{{ __('Covered by the Employment Act whatever they earn.') }}" />
-                    @error('is_manual_worker')<p class="field-error">{{ $message }}</p>@enderror
-                </div>
             @endif
         </div>
     </section>

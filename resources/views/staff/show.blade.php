@@ -32,7 +32,6 @@
             __('Reports to') => $value($employee->reportingManager?->user->name),
             __('Start date') => $employee->join_date->translatedFormat('j F Y'),
             __('Probation ends') => $value($employee->probation_end_date?->translatedFormat('j F Y')),
-            __('Manual worker') => $employee->is_manual_worker ? __('Yes') : __('No'),
         ],
         __('Pay and statutory') => [
             __('Basic salary') => 'RM '.number_format((float) $employee->basic_salary, 2),

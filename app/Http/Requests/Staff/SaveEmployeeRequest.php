@@ -127,8 +127,6 @@ class SaveEmployeeRequest extends FormRequest
             'reporting_manager' => ['nullable', 'string', Rule::exists('employees', 'ulid'), Rule::notIn(array_filter([$employee?->ulid]))],
             'join_date' => ['required', 'date'],
             'probation_end_date' => ['nullable', 'date', 'after:join_date'],
-            // Asked on the edit form only; new records start as not a manual worker.
-            'is_manual_worker' => ['sometimes', 'boolean'],
             'last_working_date' => ['nullable', 'date', 'after_or_equal:join_date', Rule::prohibitedIf($employee !== null && $employee->user_id === $this->user()?->id)],
             'leaving_reason' => ['nullable', 'required_with:last_working_date', Rule::enum(LeavingReason::class)],
 
@@ -200,9 +198,6 @@ class SaveEmployeeRequest extends FormRequest
             $data['leaving_reason'] = filled($data['last_working_date']) ? ($data['leaving_reason'] ?? null) : null;
         }
         $data['epf_elected_rate'] ??= null;
-        if ($this->employee() === null) {
-            $data['is_manual_worker'] ??= false;
-        }
 
         return $data;
     }
@@ -244,7 +239,6 @@ class SaveEmployeeRequest extends FormRequest
             'reporting_manager' => __('Reports to'),
             'join_date' => __('Start date'),
             'probation_end_date' => __('Probation ends'),
-            'is_manual_worker' => __('Manual worker'),
             'last_working_date' => __('Last working day'),
             'leaving_reason' => __('Reason for leaving'),
             'basic_salary' => __('Basic salary'),
