@@ -66,6 +66,10 @@ return [
         ]],
         ['label' => 'Modules', 'items' => [
             ['label' => 'Staff', 'route' => 'staff.index', 'active' => 'staff.*', 'icon' => 'users', 'role' => [Role::SuperAdmin->value, Role::Admin->value, Role::Finance->value]],
+            ['id' => 'modules-projects', 'module' => ModuleKey::Projects->value, 'label' => 'Projects', 'icon' => 'layers', 'children' => [
+                ['label' => 'Projects', 'route' => 'projects.index', 'active' => 'projects.*'],
+                ['label' => 'Clients', 'route' => 'clients.index', 'active' => 'clients.*', 'role' => [Role::SuperAdmin->value, Role::Director->value, Role::ProjectManager->value, Role::Admin->value, Role::Finance->value]],
+            ]],
             ['id' => 'administrations', 'label' => 'Administrations', 'icon' => 'shield', 'role' => Role::SuperAdmin->value, 'children' => [
                 ['label' => 'Audit Trail', 'route' => 'administrations.audit-trail.index', 'active' => 'administrations.audit-trail.*'],
                 ['label' => 'Data Dictionary', 'route' => 'administrations.data-dictionary.index', 'active' => 'administrations.data-dictionary.*'],

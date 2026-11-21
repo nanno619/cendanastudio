@@ -13,6 +13,7 @@ enum ModuleKey: string
     case Payroll = 'payroll';
     case Claim = 'claim';
     case Hadir = 'hadir';
+    case Projects = 'projects';
 
     public function defaultName(): string
     {
@@ -21,6 +22,7 @@ enum ModuleKey: string
             self::Payroll => 'Payroll',
             self::Claim => 'Claim',
             self::Hadir => 'Hadir',
+            self::Projects => 'Projects',
         };
     }
 
@@ -31,6 +33,7 @@ enum ModuleKey: string
             self::Payroll => 'dollar',
             self::Claim => 'file-text',
             self::Hadir => 'clock',
+            self::Projects => 'layers',
         };
     }
 
@@ -41,6 +44,7 @@ enum ModuleKey: string
             self::Payroll => 'Monthly payroll, statutory contributions and payslips.',
             self::Claim => 'Expense claims and their approval.',
             self::Hadir => 'Attendance, overtime hours and visits.',
+            self::Projects => 'Client projects, their teams, tasks and billing.',
         };
     }
 

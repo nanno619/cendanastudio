@@ -19,6 +19,7 @@ class ModuleSeeder extends Seeder
             ModuleKey::Payroll->value => 'Gaji',
             ModuleKey::Claim->value => 'Tuntutan',
             ModuleKey::Hadir->value => 'Hadir',
+            ModuleKey::Projects->value => 'Projek',
         ];
 
         activity()->withoutLogging(function () use ($malayNames): void {

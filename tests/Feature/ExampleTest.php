@@ -37,6 +37,7 @@ class ExampleTest extends TestCase
             '/dashboard',
             '/analytics',
             '/settings',
+            '/projects',
             '/components/cards',
             '/components/tables',
             '/components/forms',

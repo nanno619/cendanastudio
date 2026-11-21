@@ -72,7 +72,7 @@ class ModuleTest extends TestCase
 
         Module::factory()->forKey(ModuleKey::Hadir)->create(['sort_order' => 0]);
 
-        $this->assertSame(['hadir', 'leave', 'payroll', 'claim'], Module::registry()->keys()->all());
+        $this->assertSame(['hadir', 'leave', 'payroll', 'claim', 'projects'], Module::registry()->keys()->all());
     }
 
     public function test_label_uses_malay_when_set_and_falls_back_to_english(): void

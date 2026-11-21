@@ -20,6 +20,18 @@ use App\Http\Controllers\Administration\UpdateFileSecurityController;
 use App\Http\Controllers\Administration\UpdateLookupItemController;
 use App\Http\Controllers\Administration\UpdateModuleController;
 use App\Http\Controllers\LocaleController;
+use App\Http\Controllers\Projects\ClientController;
+use App\Http\Controllers\Projects\CreateClientController;
+use App\Http\Controllers\Projects\CreateProjectController;
+use App\Http\Controllers\Projects\EditClientController;
+use App\Http\Controllers\Projects\EditProjectController;
+use App\Http\Controllers\Projects\ProjectController;
+use App\Http\Controllers\Projects\ShowClientController;
+use App\Http\Controllers\Projects\ShowProjectController;
+use App\Http\Controllers\Projects\StoreClientController;
+use App\Http\Controllers\Projects\StoreProjectController;
+use App\Http\Controllers\Projects\UpdateClientController;
+use App\Http\Controllers\Projects\UpdateProjectController;
 use App\Http\Controllers\Settings\AttendanceOvertimeSettingsController;
 use App\Http\Controllers\Settings\AttendanceSettingsController;
 use App\Http\Controllers\Settings\ClaimApprovalController;
@@ -74,6 +86,7 @@ use App\Http\Controllers\Staff\StoreEmployeeController;
 use App\Http\Controllers\Staff\UpdateEmployeeController;
 use App\Http\Controllers\Staff\UpdateMyProfileController;
 use App\Http\Controllers\Staff\UploadEmployeeDocumentController;
+use App\Models\Client;
 use App\Models\Employee;
 use Illuminate\Support\Facades\Route;
 
@@ -100,6 +113,27 @@ Route::middleware('auth')->group(function (): void {
         Route::post('/{employee}/documents', UploadEmployeeDocumentController::class)->name('documents.store');
         Route::get('/{employee}/documents/{document}', DownloadEmployeeDocumentController::class)->whereUuid('document')->name('documents.download');
         Route::delete('/{employee}/documents/{document}', DeleteEmployeeDocumentController::class)->whereUuid('document')->name('documents.destroy');
+    });
+
+    Route::middleware('module:'.ModuleKey::Projects->value)->group(function (): void {
+        // Clients first, so /projects/clients isn't read as a project.
+        Route::middleware('role:'.collect(Client::VIEWER_ROLES)->map->value->implode('|'))->prefix('projects/clients')->name('clients.')->group(function (): void {
+            Route::get('/', ClientController::class)->name('index');
+            Route::get('/create', CreateClientController::class)->name('create');
+            Route::post('/', StoreClientController::class)->name('store');
+            Route::get('/{client}', ShowClientController::class)->name('show');
+            Route::get('/{client}/edit', EditClientController::class)->name('edit');
+            Route::put('/{client}', UpdateClientController::class)->name('update');
+        });
+
+        Route::prefix('projects')->name('projects.')->group(function (): void {
+            Route::get('/', ProjectController::class)->name('index');
+            Route::get('/create', CreateProjectController::class)->name('create');
+            Route::post('/', StoreProjectController::class)->name('store');
+            Route::get('/{project}', ShowProjectController::class)->name('show');
+            Route::get('/{project}/edit', EditProjectController::class)->name('edit');
+            Route::put('/{project}', UpdateProjectController::class)->name('update');
+        });
     });
 
     Route::middleware('role:'.Role::SuperAdmin->value)->prefix('settings')->name('settings.')->group(function (): void {
