@@ -9,8 +9,10 @@
     $address = collect([$employee->address_line_1, $employee->address_line_2, trim($employee->postcode.' '.$employee->city), $employee->state ? $label(LookupCategory::MalaysianStates, $employee->state) : null])->filter()->implode(', ');
     $sections = [
         __('Personal details') => [
-            __('IC or passport number') => $employee->identity_type === IdentityType::MyKad ? MyKad::format($employee->identity_no) : $employee->identity_no.' ('.__('Passport').')',
-            __('Nationality') => Countries::name($employee->nationality),
+            __('Preferred name') => $value($employee->preferred_name),
+            ...($employee->identity_type === IdentityType::MyKad
+                ? [__('NRIC number') => MyKad::format($employee->identity_no)]
+                : [__('Passport number') => $employee->identity_no, __('Nationality') => Countries::name($employee->nationality)]),
             __('Date of birth') => $employee->date_of_birth->translatedFormat('j F Y').' · '.trans_choice(':count year old|:count years old', $employee->age()),
             __('Gender') => $label(LookupCategory::Gender, $employee->gender),
             __('Race') => $label(LookupCategory::Race, $employee->race),
@@ -22,12 +24,13 @@
             __('Address') => $value($address),
         ],
         __('Employment') => [
-            __('Staff number') => $employee->staff_no,
+            __('Employee number') => $employee->staff_no,
             __('Employment type') => __($employee->employment_type->label()),
             __('Department') => $label(LookupCategory::Department, $employee->department),
             __('Position') => $label(LookupCategory::Position, $employee->position),
+            __('Subsidiary') => $label(LookupCategory::Subsidiary, $employee->subsidiary),
             __('Reports to') => $value($employee->reportingManager?->user->name),
-            __('Join date') => $employee->join_date->translatedFormat('j F Y'),
+            __('Start date') => $employee->join_date->translatedFormat('j F Y'),
             __('Probation ends') => $value($employee->probation_end_date?->translatedFormat('j F Y')),
             __('Manual worker') => $employee->is_manual_worker ? __('Yes') : __('No'),
         ],
@@ -52,6 +55,9 @@
             <span class="avatar h-14 w-14 text-lg" aria-hidden="true">{{ $employee->user->initials }}</span>
             <div class="min-w-0">
                 <h1 class="truncate text-2xl font-semibold tracking-tight">{{ $employee->user->name }}</h1>
+                @if (filled($employee->preferred_name))
+                    <p class="truncate text-sm text-muted-foreground">{{ __('Goes by :name', ['name' => $employee->preferred_name]) }}</p>
+                @endif
                 <p class="flex flex-wrap items-center gap-2 text-muted-foreground">
                     <span>{{ $label(LookupCategory::Position, $employee->position) }}</span>
                     <x-ui.badge :variant="$status->tone()">{{ __($status->label()) }}</x-ui.badge>
@@ -59,7 +65,15 @@
             </div>
         </div>
         @if ($canEdit)
-            <a href="{{ route('staff.edit', $employee) }}" class="btn btn-outline"><x-ui.icon name="edit" />{{ __('Edit') }}</a>
+            <div class="flex flex-wrap gap-2">
+                @unless ($employee->hasLeft())
+                    <form method="POST" action="{{ route('staff.invitation', $employee) }}">
+                        @csrf
+                        <button type="submit" class="btn btn-outline" data-tip="{{ __('Emails a link to set their password. Any earlier link stops working.') }}"><x-ui.icon name="mail" />{{ __('Send invitation') }}</button>
+                    </form>
+                @endunless
+                <a href="{{ route('staff.edit', $employee) }}" class="btn btn-outline"><x-ui.icon name="edit" />{{ __('Edit') }}</a>
+            </div>
         @endif
     </div>
 </div>

@@ -26,7 +26,7 @@ class ShowEmployeeController extends Controller
             'employee' => $employee,
             'labels' => collect(LookupCategory::cases())->mapWithKeys(fn (LookupCategory $category): array => [$category->value => LookupItem::labels($category)])->only([
                 LookupCategory::Gender->value, LookupCategory::Race->value, LookupCategory::MaritalStatus->value, LookupCategory::MalaysianStates->value,
-                LookupCategory::Department->value, LookupCategory::Position->value, LookupCategory::Banks->value, LookupCategory::Relationship->value,
+                LookupCategory::Department->value, LookupCategory::Position->value, LookupCategory::Subsidiary->value, LookupCategory::Banks->value, LookupCategory::Relationship->value,
             ])->all(),
             'canEdit' => $employee->isEditableBy($request->user()),
             'lastChange' => Activity::query()->with('causer')->whereMorphedTo('subject', $employee)

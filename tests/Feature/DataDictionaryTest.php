@@ -99,6 +99,12 @@ class DataDictionaryTest extends TestCase
         $this->seed(LookupSeeder::class);
 
         foreach (LookupCategory::cases() as $category) {
+            if ($category === LookupCategory::Subsidiary) {
+                // Each company adds its own subsidiaries, so there are no starter values.
+                $this->assertEmpty(LookupItem::options($category));
+
+                continue;
+            }
             $this->assertNotEmpty(LookupItem::options($category), $category->value);
         }
         $this->assertSame(['fuel', 'stationery', 'stamping', 'meal', 'toll', 'accommodation', 'medical'], array_keys(LookupItem::options(LookupCategory::ClaimType)));

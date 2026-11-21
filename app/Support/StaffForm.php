@@ -3,7 +3,6 @@
 namespace App\Support;
 
 use App\Enums\EmploymentType;
-use App\Enums\IdentityType;
 use App\Enums\LeavingReason;
 use App\Enums\LookupCategory;
 use App\Enums\Role;
@@ -78,11 +77,10 @@ class StaffForm
             'roles' => collect(Role::cases())
                 ->reject(fn (Role $role): bool => $role === Role::SuperAdmin && ! $actor->hasRole(Role::SuperAdmin))
                 ->mapWithKeys(fn (Role $role): array => [$role->value => __($role->value)])->all(),
-            'identityTypes' => collect(IdentityType::cases())->mapWithKeys(fn (IdentityType $type): array => [$type->value => __($type->label())])->all(),
-            'countries' => Countries::options(),
             ...self::personalOptions($employee),
             'departments' => self::lookup(LookupCategory::Department, $employee?->department),
             'positions' => self::lookup(LookupCategory::Position, $employee?->position),
+            'subsidiaries' => self::lookup(LookupCategory::Subsidiary, $employee?->subsidiary),
             'banks' => self::lookup(LookupCategory::Banks, $employee?->bank),
             'employmentTypes' => collect(EmploymentType::cases())->mapWithKeys(fn (EmploymentType $type): array => [$type->value => __($type->label())])->all(),
             'leavingReasons' => collect(LeavingReason::cases())->mapWithKeys(fn (LeavingReason $reason): array => [$reason->value => __($reason->label())])->all(),

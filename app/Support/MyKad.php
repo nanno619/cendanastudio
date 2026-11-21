@@ -5,8 +5,9 @@ namespace App\Support;
 use Carbon\CarbonImmutable;
 
 /**
- * Malaysian identity card (MyKad) numbers: 12 digits, YYMMDD-PB-###G, where the first six digits are the
- * date of birth.
+ * Malaysian identity card (MyKad/NRIC) numbers: 12 digits, YYMMDD-PB-###G, where the first six digits are
+ * the date of birth and the last digit G is odd for men and even for women. Mirrored for the staff form in
+ * resources/js/admin/nric.js.
  */
 class MyKad
 {
@@ -39,6 +40,19 @@ class MyKad
         }
 
         return CarbonImmutable::create($year, (int) $parts[2], (int) $parts[3]);
+    }
+
+    /**
+     * The Data Dictionary gender code the number gives (an odd last digit is male, even is female), or null
+     * when it isn't a valid number.
+     */
+    public static function gender(string $number): ?string
+    {
+        if (self::birthDate($number) === null) {
+            return null;
+        }
+
+        return ((int) substr(self::normalize($number), -1)) % 2 === 1 ? 'male' : 'female';
     }
 
     /**

@@ -5,9 +5,11 @@ namespace Tests\Feature;
 use App\Enums\EmployeeStatus;
 use App\Enums\IdentityType;
 use App\Enums\LeavingReason;
+use App\Enums\LookupCategory;
 use App\Enums\Role as RoleName;
 use App\Models\Employee;
 use App\Models\EpfSetting;
+use App\Models\LookupItem;
 use App\Models\User;
 use App\Notifications\StaffAccountCreated;
 use App\Support\MyKad;
@@ -51,7 +53,11 @@ class StaffRecordsTest extends TestCase
         $this->assertSame('1930-06-15', MyKad::birthDate('300615101234', $today)?->toDateString());
         $this->assertNull(MyKad::birthDate('901301145678', $today));
         $this->assertNull(MyKad::birthDate('12345', $today));
+        $this->assertSame('2000-01-09', MyKad::birthDate('000109045295', $today)?->toDateString());
         $this->assertSame('900101-14-5678', MyKad::format('900101145678'));
+        $this->assertSame('male', MyKad::gender('960109045295'));
+        $this->assertSame('female', MyKad::gender('000109045294'));
+        $this->assertNull(MyKad::gender('901301145678'));
     }
 
     public function test_status_follows_the_dates(): void
@@ -139,6 +145,7 @@ class StaffRecordsTest extends TestCase
         Notification::fake();
         $manager = Employee::factory()->create();
         $admin = User::factory()->create()->assignRole(RoleName::Admin);
+        LookupItem::factory()->create(['category' => LookupCategory::Subsidiary, 'code' => 'cendana-digital', 'label_en' => 'Cendana Digital Sdn Bhd']);
 
         $this->actingAs($admin)->get(route('staff.create'))
             ->assertOk()
@@ -147,18 +154,21 @@ class StaffRecordsTest extends TestCase
 
         $response = $this->actingAs($admin)->post(route('staff.store'), $this->payload([
             'email' => '  Nur.Aisyah@Example.com ',
-            'identity_no' => '900101-14-5678',
+            'identity_no' => '900101145678',
             'staff_no' => 's-0042',
             'reporting_manager' => $manager->ulid,
             'marital_status' => 'married',
             'spouse_working' => '1',
             'bank_account_no' => '5123 4567-8901',
+            'preferred_name' => 'Aisyah',
+            'subsidiary' => 'cendana-digital',
         ]));
 
         $employee = Employee::query()->where('staff_no', 'S-0042')->sole();
         $response->assertRedirect(route('staff.show', $employee))->assertSessionHas('status');
 
         $user = $employee->user;
+        $this->assertSame('NUR AISYAH BINTI AHMAD', $user->name);
         $this->assertSame('nur.aisyah@example.com', $user->email);
         $this->assertTrue($user->hasRole(RoleName::Staff));
         $this->assertSame('900101145678', $employee->identity_no);
@@ -166,28 +176,97 @@ class StaffRecordsTest extends TestCase
         $this->assertTrue($employee->reportingManager->is($manager));
         $this->assertTrue($employee->spouse_working);
         $this->assertSame('512345678901', $employee->bank_account_no);
+        $this->assertSame('Aisyah', $employee->preferred_name);
+        $this->assertSame('cendana-digital', $employee->subsidiary);
         Notification::assertSentTo($user, StaffAccountCreated::class, fn (StaffAccountCreated $notification): bool => Password::broker()->tokenExists($user, $notification->token));
         Notification::assertNotSentTo($user, ResetPassword::class);
 
-        $activity = Activity::query()->whereMorphedTo('subject', $employee)->sole();
+        $activity = Activity::query()->whereMorphedTo('subject', $employee)->where('event', 'created')->sole();
         $this->assertSame('Created staff record', $activity->description);
         $this->assertTrue($activity->causer->is($admin));
+        $invitation = Activity::query()->whereMorphedTo('subject', $employee)->where('event', 'invitation-sent')->sole();
+        $this->assertTrue($invitation->causer->is($admin));
     }
 
-    public function test_add_form_is_split_into_steps_without_personal_details_and_edit_form_is_one_page(): void
+    public function test_staff_can_be_added_without_an_invitation_and_invited_later_from_their_profile(): void
+    {
+        Notification::fake();
+
+        $this->actingAs($this->superAdmin)->post(route('staff.store'), $this->payload(['send_invitation' => '0']))
+            ->assertSessionHas('status', fn (string $status): bool => str_contains($status, 'No invitation was sent'));
+
+        $employee = Employee::query()->where('staff_no', 'S0042')->sole();
+        Notification::assertNothingSent();
+        $this->assertFalse(Activity::query()->where('event', 'invitation-sent')->exists());
+
+        $this->actingAs($this->superAdmin)->get(route('staff.show', $employee))
+            ->assertSee(route('staff.invitation', $employee), false);
+
+        $this->actingAs($this->superAdmin)->post(route('staff.invitation', $employee))
+            ->assertRedirect(route('staff.show', $employee))
+            ->assertSessionHas('status');
+
+        Notification::assertSentTo($employee->user, StaffAccountCreated::class, fn (StaffAccountCreated $notification): bool => Password::broker()->tokenExists($employee->user, $notification->token));
+        $activity = Activity::query()->whereMorphedTo('subject', $employee)->where('event', 'invitation-sent')->sole();
+        $this->assertTrue($activity->causer->is($this->superAdmin));
+    }
+
+    public function test_invitations_are_only_sent_by_people_who_can_change_the_record_and_never_to_staff_who_left(): void
+    {
+        Notification::fake();
+        $admin = User::factory()->create()->assignRole(RoleName::Admin);
+        $superAdminRecord = Employee::factory()->create();
+        $superAdminRecord->user->assignRole(RoleName::SuperAdmin);
+        $left = Employee::factory()->create(['last_working_date' => '2020-01-31', 'leaving_reason' => LeavingReason::Resigned]);
+
+        $this->post(route('staff.invitation', $left))->assertRedirect(route('login'));
+        $this->actingAs($admin)->post(route('staff.invitation', $superAdminRecord))->assertForbidden();
+        $this->actingAs($admin)->get(route('staff.show', $superAdminRecord))->assertDontSee(route('staff.invitation', $superAdminRecord), false);
+        $this->actingAs($this->superAdmin)->post(route('staff.invitation', $left))->assertForbidden();
+        $this->actingAs($this->superAdmin)->get(route('staff.show', $left))->assertDontSee(route('staff.invitation', $left), false);
+
+        Notification::assertNothingSent();
+    }
+
+    public function test_gender_and_date_of_birth_of_new_staff_come_from_the_nric(): void
+    {
+        $this->actingAs($this->superAdmin)->post(route('staff.store'), $this->payload([
+            'identity_no' => '000109045295',
+            'gender' => 'female',
+            'date_of_birth' => '1985-05-05',
+        ]))->assertSessionHasNoErrors();
+
+        $employee = Employee::query()->sole();
+        $this->assertSame('000109045295', $employee->identity_no);
+        $this->assertSame('2000-01-09', $employee->date_of_birth->toDateString());
+        $this->assertSame('male', $employee->gender);
+    }
+
+    public function test_add_form_is_split_into_four_steps_with_some_personal_details_and_edit_form_is_one_page(): void
     {
         $add = $this->actingAs($this->superAdmin)->get(route('staff.create'))->assertOk()->assertSee('data-stepper', false);
-        $this->assertSame(5, substr_count($add->getContent(), 'data-step="'));
-        $add->assertSeeInOrder(['data-step="Account"', 'data-step="Identity"', 'data-step="Employment"', 'data-step="Pay and statutory"', 'data-step="Review"'], false)
-            ->assertSee('name="identity_no"', false)
-            ->assertDontSee('name="gender"', false)
+        $this->assertSame(4, substr_count($add->getContent(), 'data-step="'));
+        $add->assertSeeInOrder([
+            'data-step="Personal details"', 'name="name"', 'name="preferred_name"', 'name="identity_no"', 'name="gender_from_nric"', 'name="email"', 'name="phone"', 'name="date_of_birth"',
+            'data-step="Employment"', 'name="staff_no"', 'name="join_date"', 'name="reporting_manager"', 'name="position"', 'name="department"', 'name="subsidiary"', 'name="employment_type"', 'name="role"',
+            'data-step="Pay and statutory"', 'name="basic_salary"',
+            'data-step="Review"', 'name="send_invitation" value="1"',
+        ], false)
+            ->assertDontSee('name="probation_end_date"', false)
+            ->assertDontSee('name="is_manual_worker"', false)
             ->assertDontSee('name="address_line_1"', false)
             ->assertDontSee('name="contacts[0][name]"', false);
 
         $employee = Employee::factory()->create();
         $edit = $this->actingAs($this->superAdmin)->get(route('staff.edit', $employee))->assertOk()
-            ->assertSee('name="gender"', false)
-            ->assertSee('name="contacts[0][name]"', false);
+            ->assertSee('name="preferred_name"', false)
+            ->assertSee('name="subsidiary"', false)
+            ->assertSee('name="probation_end_date"', false)
+            ->assertSee('name="is_manual_worker"', false)
+            ->assertSee('name="contacts[0][name]"', false)
+            ->assertDontSee('name="send_invitation"', false);
+        $this->assertSame(1, substr_count($edit->getContent(), 'name="gender"'));
+        $this->assertSame(1, substr_count($edit->getContent(), 'name="phone"'));
         $this->assertStringNotContainsString('data-step="', $edit->getContent());
         $this->assertStringNotContainsString('data-stepper-nav', $edit->getContent());
     }
@@ -200,19 +279,20 @@ class StaffRecordsTest extends TestCase
             'name' => 'Lean Record',
             'email' => 'lean@example.com',
             'role' => 'Staff',
-            'identity_type' => 'mykad',
-            'identity_no' => '950505-05-5555',
-            'nationality' => 'MY',
+            'identity_no' => '950505055555',
             'staff_no' => 'S0500',
             'employment_type' => 'contract',
             'join_date' => '2026-02-02',
-            'is_manual_worker' => '0',
             'basic_salary' => '3000',
+            'send_invitation' => '0',
         ])->assertSessionHasNoErrors();
 
         $employee = Employee::query()->where('staff_no', 'S0500')->sole();
+        $this->assertFalse($employee->is_manual_worker);
+        $this->assertNull($employee->preferred_name);
+        $this->assertNull($employee->subsidiary);
         $this->assertSame(0, $employee->children_count);
-        $this->assertNull($employee->gender);
+        $this->assertSame('male', $employee->gender);
         $this->assertNull($employee->phone);
         $this->assertTrue($employee->emergencyContacts->isEmpty());
         $this->assertSame('1995-05-05', $employee->date_of_birth->toDateString());
@@ -242,11 +322,11 @@ class StaffRecordsTest extends TestCase
 
         $this->actingAs($this->superAdmin)->get(route('staff.edit', $employee))
             ->assertOk()
-            ->assertSee('value="'.MyKad::format($employee->identity_no).'"', false);
+            ->assertSee('value="'.$employee->identity_no.'"', false);
 
         $this->actingAs($this->superAdmin)
             ->put(route('staff.update', $employee), $this->payload([
-                'name' => 'Renamed Person',
+                'name' => 'Renamed  person',
                 'email' => $employee->user->email,
                 'role' => 'Finance',
                 'staff_no' => 'S0100',
@@ -257,7 +337,7 @@ class StaffRecordsTest extends TestCase
             ->assertRedirect(route('staff.show', $employee));
 
         $employee->refresh();
-        $this->assertSame('Renamed Person', $employee->user->name);
+        $this->assertSame('RENAMED PERSON', $employee->user->name);
         $this->assertSame(['Finance'], $employee->user->getRoleNames()->all());
         $this->assertSame('4500.00', $employee->basic_salary);
 
@@ -320,18 +400,42 @@ class StaffRecordsTest extends TestCase
             ->assertSessionHasErrors('last_working_date');
     }
 
-    public function test_passport_holders_need_a_date_of_birth(): void
+    public function test_new_staff_are_malaysian_nric_holders_whatever_is_posted(): void
     {
+        $this->actingAs($this->superAdmin)->get(route('staff.create'))
+            ->assertSee('NRIC number')
+            ->assertDontSee('name="identity_type"', false)
+            ->assertDontSee('name="nationality"', false);
+
         $this->actingAs($this->superAdmin)->post(route('staff.store'), $this->payload([
             'identity_type' => 'passport',
-            'identity_no' => 'a1234567',
             'nationality' => 'BD',
-            'date_of_birth' => '1995-04-20',
         ]))->assertSessionHasNoErrors();
 
-        $employee = Employee::query()->where('identity_no', 'A1234567')->sole();
+        $employee = Employee::query()->sole();
+        $this->assertSame(IdentityType::MyKad, $employee->identity_type);
+        $this->assertSame('MY', $employee->nationality);
+        $this->assertSame('920202101234', $employee->identity_no);
+    }
+
+    public function test_records_saved_with_a_passport_keep_it_and_need_a_date_of_birth(): void
+    {
+        $employee = Employee::factory()->create(['identity_type' => IdentityType::Passport, 'identity_no' => 'A1234567', 'nationality' => 'BD', 'date_of_birth' => '1995-04-20']);
+
+        $this->actingAs($this->superAdmin)->get(route('staff.edit', $employee))
+            ->assertSee('Passport number')
+            ->assertSee('value="A1234567"', false);
+
+        $this->actingAs($this->superAdmin)->put(route('staff.update', $employee), $this->payloadFor($employee, ['date_of_birth' => '']))
+            ->assertSessionHasErrors('date_of_birth');
+        $this->actingAs($this->superAdmin)->put(route('staff.update', $employee), $this->payloadFor($employee, ['identity_no' => 'a7654321', 'date_of_birth' => '1995-04-21']))
+            ->assertSessionHasNoErrors();
+
+        $employee->refresh();
         $this->assertSame(IdentityType::Passport, $employee->identity_type);
-        $this->assertSame('1995-04-20', $employee->date_of_birth->toDateString());
+        $this->assertSame('BD', $employee->nationality);
+        $this->assertSame('A7654321', $employee->identity_no);
+        $this->assertSame('1995-04-21', $employee->date_of_birth->toDateString());
     }
 
     public function test_elected_epf_rate_needs_epf_settings_to_allow_it(): void
@@ -374,12 +478,15 @@ class StaffRecordsTest extends TestCase
             'email in use' => [['email' => 'taken@example.com'], 'email'],
             'staff number in use' => [['staff_no' => 's9999'], 'staff_no'],
             'staff number with spaces inside' => [['staff_no' => 'S#1'], 'staff_no'],
-            'mykad in use' => [['identity_no' => '880808-08-8888'], 'identity_no'],
+            'mykad in use' => [['identity_no' => '880808088888'], 'identity_no'],
+            'nric with dashes' => [['identity_no' => '920202-10-1234'], 'identity_no'],
+            'nric with spaces' => [['identity_no' => '920202 10 1234'], 'identity_no'],
             'mykad with an impossible date' => [['identity_no' => '901301145678'], 'identity_no'],
             'mykad too short' => [['identity_no' => '90010114'], 'identity_no'],
-            'mykad holder not malaysian' => [['nationality' => 'SG'], 'nationality'],
-            'passport without date of birth' => [['identity_type' => 'passport', 'identity_no' => 'A1234567', 'nationality' => 'ID', 'date_of_birth' => ''], 'date_of_birth'],
+            'passport number instead of an nric' => [['identity_no' => 'A1234567'], 'identity_no'],
             'unknown department' => [['department' => 'astronauts'], 'department'],
+            'unknown subsidiary' => [['subsidiary' => 'acme-holdings'], 'subsidiary'],
+            'preferred name too long' => [['preferred_name' => str_repeat('a', 101)], 'preferred_name'],
             'unknown reporting manager' => [['reporting_manager' => '01JUNKNOWNULID0000000000000'], 'reporting_manager'],
             'probation before joining' => [['probation_end_date' => '2025-12-31'], 'probation_end_date'],
             'leaving without a reason' => [['last_working_date' => '2026-12-31'], 'leaving_reason'],
@@ -400,9 +507,7 @@ class StaffRecordsTest extends TestCase
             'email' => 'nur.aisyah@example.com',
             'role' => 'Staff',
             'staff_no' => 'S0042',
-            'identity_type' => 'mykad',
-            'identity_no' => '920202-10-1234',
-            'nationality' => 'MY',
+            'identity_no' => '920202101234',
             'gender' => 'female',
             'race' => 'malay',
             'marital_status' => 'single',

@@ -25,13 +25,14 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 /**
  * A staff record (Staff pages). Every staff member signs in with their user; the user holds their name and
  * work email. Lookup columns hold Data Dictionary codes (gender, race, marital status, state, department,
- * position, bank). Status is worked out from the dates in cendana.timezone: left after the last working
+ * position, subsidiary, bank). Status is worked out from the dates in cendana.timezone: left after the last working
  * day, leaving until then, on probation until the probation end date, otherwise active. Staff who have
  * left can't sign in.
  *
  * @property int $id
  * @property string $ulid
  * @property int $user_id
+ * @property string|null $preferred_name What they like to be called; the user's name stays the official full name
  * @property string $staff_no
  * @property IdentityType $identity_type
  * @property string $identity_no MyKad digits only, or the passport number in capitals
@@ -52,6 +53,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property EmploymentType $employment_type
  * @property string|null $department
  * @property string|null $position
+ * @property string|null $subsidiary Data Dictionary Subsidiary code
  * @property int|null $reporting_manager_id
  * @property CarbonImmutable $join_date
  * @property CarbonImmutable|null $probation_end_date
@@ -92,10 +94,10 @@ class Employee extends Model implements HasMedia
      * @var list<string>
      */
     protected $fillable = [
-        'staff_no', 'identity_type', 'identity_no', 'nationality', 'date_of_birth',
+        'preferred_name', 'staff_no', 'identity_type', 'identity_no', 'nationality', 'date_of_birth',
         'gender', 'race', 'marital_status', 'children_count', 'spouse_working',
         'phone', 'personal_email', 'address_line_1', 'address_line_2', 'postcode', 'city', 'state',
-        'employment_type', 'department', 'position', 'reporting_manager_id', 'join_date', 'probation_end_date',
+        'employment_type', 'department', 'position', 'subsidiary', 'reporting_manager_id', 'join_date', 'probation_end_date',
         'is_manual_worker', 'last_working_date', 'leaving_reason',
         'basic_salary', 'bank', 'bank_account_no',
         'epf_no', 'socso_no', 'income_tax_no', 'epf_elected_rate',

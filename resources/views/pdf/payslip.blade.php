@@ -70,7 +70,7 @@
         <table class="details">
             <tr>
                 <td class="muted">{{ __('Name') }}</td><td>{{ $payslip['name'] }}</td>
-                <td class="muted">{{ __('Staff number') }}</td><td>{{ $payslip['staff_no'] }}</td>
+                <td class="muted">{{ __('Employee number') }}</td><td>{{ $payslip['staff_no'] }}</td>
             </tr>
             <tr>
                 <td class="muted">{{ __('Position') }}</td><td>{{ $payslip['position'] }}</td>

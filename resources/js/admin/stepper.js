@@ -43,7 +43,9 @@ function initStepper(form) {
       const option = field.options[field.selectedIndex];
       return option && option.value !== '' ? option.textContent.trim() : '';
     }
-    return field.value.trim();
+    // Fields styled `uppercase` (official name, employee number) are saved in capitals, so show them that way.
+    const value = field.value.trim();
+    return getComputedStyle(field).textTransform === 'uppercase' ? value.toLocaleUpperCase() : value;
   };
 
   function renderSummary() {

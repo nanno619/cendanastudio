@@ -68,6 +68,7 @@ use App\Http\Controllers\Staff\DownloadMyDocumentController;
 use App\Http\Controllers\Staff\EditEmployeeController;
 use App\Http\Controllers\Staff\EmployeeController;
 use App\Http\Controllers\Staff\MyProfileController;
+use App\Http\Controllers\Staff\SendStaffInvitationController;
 use App\Http\Controllers\Staff\ShowEmployeeController;
 use App\Http\Controllers\Staff\StoreEmployeeController;
 use App\Http\Controllers\Staff\UpdateEmployeeController;
@@ -95,6 +96,7 @@ Route::middleware('auth')->group(function (): void {
         Route::get('/{employee}', ShowEmployeeController::class)->name('show');
         Route::get('/{employee}/edit', EditEmployeeController::class)->name('edit');
         Route::put('/{employee}', UpdateEmployeeController::class)->name('update');
+        Route::post('/{employee}/invitation', SendStaffInvitationController::class)->middleware('throttle:3,10')->name('invitation');
         Route::post('/{employee}/documents', UploadEmployeeDocumentController::class)->name('documents.store');
         Route::get('/{employee}/documents/{document}', DownloadEmployeeDocumentController::class)->whereUuid('document')->name('documents.download');
         Route::delete('/{employee}/documents/{document}', DeleteEmployeeDocumentController::class)->whereUuid('document')->name('documents.destroy');

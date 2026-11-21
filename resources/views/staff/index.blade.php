@@ -63,9 +63,9 @@
                     <tr>
                         <th scope="col" class="w-20"><span class="sr-only">{{ __('Actions') }}</span></th>
                         <th scope="col">{{ __('Name') }}</th>
-                        <th scope="col">{{ __('Staff number') }}</th>
+                        <th scope="col">{{ __('Employee number') }}</th>
                         <th scope="col">{{ __('Department') }}</th>
-                        <th scope="col">{{ __('Join date') }}</th>
+                        <th scope="col">{{ __('Start date') }}</th>
                         <th scope="col">{{ __('Status') }}</th>
                     </tr>
                 </thead>
@@ -81,7 +81,7 @@
                                 <div class="flex min-w-0 items-center gap-2.5">
                                     <span class="avatar avatar-sm" aria-hidden="true">{{ $employee->user->initials }}</span>
                                     <div class="min-w-0">
-                                        <p class="truncate font-medium">{{ $employee->user->name }}</p>
+                                        <p class="truncate font-medium">{{ $employee->user->name }}@if (filled($employee->preferred_name)) <span class="font-normal text-muted-foreground">({{ $employee->preferred_name }})</span>@endif</p>
                                         <p class="truncate text-xs text-muted-foreground">{{ $employee->user->email }}</p>
                                     </div>
                                 </div>

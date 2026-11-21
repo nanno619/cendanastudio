@@ -17,13 +17,14 @@
         $maskedAccount = filled($employee->bank_account_no) ? str_repeat('•', max(0, strlen($employee->bank_account_no) - 4)).substr($employee->bank_account_no, -4) : '—';
         $managed = [
             __('Employment') => [
-                __('Staff number') => $employee->staff_no,
-                __('IC or passport number') => $employee->identity_type === IdentityType::MyKad ? MyKad::format($employee->identity_no) : $employee->identity_no,
+                __('Employee number') => $employee->staff_no,
+                ...($employee->identity_type === IdentityType::MyKad ? [__('NRIC number') => MyKad::format($employee->identity_no)] : [__('Passport number') => $employee->identity_no]),
                 __('Position') => $label('position', $employee->position),
                 __('Department') => $label('department', $employee->department),
+                __('Subsidiary') => $label('subsidiary', $employee->subsidiary),
                 __('Reports to') => $value($employee->reportingManager?->user->name),
                 __('Employment type') => __($employee->employment_type->label()),
-                __('Join date') => $employee->join_date->translatedFormat('j F Y'),
+                __('Start date') => $employee->join_date->translatedFormat('j F Y'),
                 __('Probation ends') => $value($employee->probation_end_date?->translatedFormat('j F Y')),
             ],
             __('Pay and statutory') => [

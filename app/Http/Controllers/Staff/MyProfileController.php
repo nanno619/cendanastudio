@@ -29,7 +29,7 @@ class MyProfileController extends Controller
         return view('staff.my-profile', [
             'employee' => $employee,
             ...StaffForm::personalOptions($employee),
-            'labels' => collect([LookupCategory::Department, LookupCategory::Position, LookupCategory::Banks])
+            'labels' => collect([LookupCategory::Department, LookupCategory::Position, LookupCategory::Subsidiary, LookupCategory::Banks])
                 ->mapWithKeys(fn (LookupCategory $category): array => [$category->value => LookupItem::labels($category)])->all(),
             'documents' => $employee->getMedia('documents')->sortByDesc('created_at')->values(),
             'documentTypes' => collect(DocumentType::cases())->mapWithKeys(fn (DocumentType $type): array => [$type->value => __($type->label())])->all(),
