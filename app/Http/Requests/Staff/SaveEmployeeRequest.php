@@ -62,8 +62,8 @@ class SaveEmployeeRequest extends FormRequest
     /**
      * Tidy identifiers before validating: the official full name is saved in capitals, as on the NRIC
      * (extra spaces collapsed), account numbers lose spaces and dashes, codes and passport numbers
-     * are uppercased, blank optional numbers become null. NRIC numbers must be typed as 12 digits. A new
-     * staff member's gender comes from their NRIC, like the date of birth, so HR doesn't key it in.
+     * are uppercased, blank optional numbers become null. NRIC numbers must be typed as 12 digits. An NRIC
+     * holder's gender comes from the number, like the date of birth, so HR doesn't key it in.
      */
     protected function prepareForValidation(): void
     {
@@ -82,8 +82,8 @@ class SaveEmployeeRequest extends FormRequest
             'contacts' => $this->filledContactRows(),
         ]);
 
-        if ($this->employee() === null) {
-            $this->merge(['gender' => MyKad::gender(trim($identity))]);
+        if ($this->identityType() === IdentityType::MyKad) {
+            $this->merge(['gender' => $this->genderFromNric(trim($identity))]);
         }
     }
 

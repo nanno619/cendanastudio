@@ -228,6 +228,28 @@ class StaffRecordsTest extends TestCase
         Notification::assertNothingSent();
     }
 
+    public function test_hr_cannot_change_an_nric_holders_gender_and_children_count_only_for_some_statuses(): void
+    {
+        $employee = Employee::factory()->create(['identity_no' => '960109045295', 'gender' => 'male']);
+
+        $this->actingAs($this->superAdmin)->get(route('staff.edit', $employee))
+            ->assertSee('name="gender_from_nric"', false)
+            ->assertSee('data-show-when="marital_status" data-show-values="married,divorced,widowed"', false)
+            ->assertSee('data-show-when="marital_status" data-show-values="married"', false);
+
+        $this->actingAs($this->superAdmin)->put(route('staff.update', $employee), $this->payloadFor($employee, [
+            'gender' => 'female', 'marital_status' => 'divorced', 'children_count' => '2',
+        ]))->assertSessionHasNoErrors();
+        $employee->refresh();
+        $this->assertSame('male', $employee->gender);
+        $this->assertSame(2, $employee->children_count);
+
+        $this->actingAs($this->superAdmin)->put(route('staff.update', $employee), $this->payloadFor($employee, [
+            'marital_status' => 'single', 'children_count' => '',
+        ]))->assertSessionHasNoErrors();
+        $this->assertSame(0, $employee->refresh()->children_count);
+    }
+
     public function test_gender_and_date_of_birth_of_new_staff_come_from_the_nric(): void
     {
         $this->actingAs($this->superAdmin)->post(route('staff.store'), $this->payload([
@@ -265,7 +287,7 @@ class StaffRecordsTest extends TestCase
             ->assertSee('name="is_manual_worker"', false)
             ->assertSee('name="contacts[0][name]"', false)
             ->assertDontSee('name="send_invitation"', false);
-        $this->assertSame(1, substr_count($edit->getContent(), 'name="gender"'));
+        $this->assertSame(1, substr_count($edit->getContent(), 'name="gender_from_nric"'));
         $this->assertSame(1, substr_count($edit->getContent(), 'name="phone"'));
         $this->assertStringNotContainsString('data-step="', $edit->getContent());
         $this->assertStringNotContainsString('data-stepper-nav', $edit->getContent());

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Staff;
 
+use App\Enums\IdentityType;
 use App\Http\Requests\Staff\Concerns\ValidatesPersonalDetails;
 use App\Models\Employee;
 use Illuminate\Contracts\Validation\ValidationRule;
@@ -35,9 +36,17 @@ class UpdateMyProfileRequest extends FormRequest
         return $this->user()?->employee;
     }
 
+    /**
+     * NRIC holders' gender follows their NRIC number, so it can't be changed here.
+     */
     protected function prepareForValidation(): void
     {
         $this->merge(['contacts' => $this->filledContactRows()]);
+
+        $record = $this->personalRecord();
+        if ($record?->identity_type === IdentityType::MyKad) {
+            $this->merge(['gender' => $this->genderFromNric($record->identity_no)]);
+        }
     }
 
     /**

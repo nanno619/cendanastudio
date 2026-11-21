@@ -5,6 +5,7 @@ namespace App\Http\Requests\Staff\Concerns;
 use App\Enums\LookupCategory;
 use App\Models\Employee;
 use App\Models\LookupItem;
+use App\Support\MyKad;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\In;
 
@@ -29,7 +30,10 @@ trait ValidatesPersonalDetails
             'gender' => ['nullable', $this->lookup(LookupCategory::Gender, 'gender')],
             'race' => ['nullable', $this->lookup(LookupCategory::Race, 'race')],
             'marital_status' => ['nullable', $this->lookup(LookupCategory::MaritalStatus, 'marital_status')],
-            'children_count' => [$childrenRequired ? 'required' : 'sometimes', 'required', 'integer', 'between:0,20'],
+            'children_count' => [
+                Rule::excludeIf(! in_array($this->input('marital_status'), Employee::MARITAL_STATUSES_WITH_CHILDREN, true)),
+                $childrenRequired ? 'required' : 'sometimes', 'required', 'integer', 'between:0,20',
+            ],
             'spouse_working' => ['nullable', 'boolean'],
             'phone' => ['nullable', 'string', 'max:20', 'regex:/^\+?[0-9][0-9 -]{6,18}$/'],
             'personal_email' => ['nullable', 'email', 'max:255'],
@@ -91,7 +95,8 @@ trait ValidatesPersonalDetails
     }
 
     /**
-     * Keep the spouse answer only for married staff.
+     * Keep the spouse answer only for married staff, and children only for married, divorced or widowed
+     * staff (others are saved with 0).
      *
      * @param  array<string, mixed>  $data
      * @return array<string, mixed>
@@ -101,8 +106,19 @@ trait ValidatesPersonalDetails
         if (array_key_exists('marital_status', $data) || array_key_exists('spouse_working', $data)) {
             $data['spouse_working'] = ($data['marital_status'] ?? null) === 'married' ? ($data['spouse_working'] ?? null) : null;
         }
+        if (array_key_exists('marital_status', $data) && ! in_array($data['marital_status'], Employee::MARITAL_STATUSES_WITH_CHILDREN, true)) {
+            $data['children_count'] = 0;
+        }
 
         return $data;
+    }
+
+    /**
+     * The gender an NRIC number gives, for NRIC holders, whose gender always follows it.
+     */
+    protected function genderFromNric(string $identityNo): ?string
+    {
+        return MyKad::gender($identityNo);
     }
 
     /**

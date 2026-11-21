@@ -99,6 +99,29 @@ class MyProfileTest extends TestCase
         $this->assertTrue($activity->causer->is($this->employee->user));
     }
 
+    public function test_nric_holders_gender_follows_their_nric_and_only_some_statuses_record_children(): void
+    {
+        $this->employee->update(['identity_no' => '960109045295', 'gender' => null]);
+
+        $this->actingAs($this->employee->user)->get(route('my-profile.show'))
+            ->assertSee('name="gender_from_nric"', false)
+            ->assertDontSee('<select name="gender"', false);
+
+        $this->actingAs($this->employee->user)->put(route('my-profile.update'), [
+            'gender' => 'female',
+            'marital_status' => 'single',
+            'children_count' => '3',
+        ])->assertSessionHasNoErrors();
+
+        $this->employee->refresh();
+        $this->assertSame('male', $this->employee->gender);
+        $this->assertSame(0, $this->employee->children_count);
+
+        $this->actingAs($this->employee->user)->put(route('my-profile.update'), ['marital_status' => 'widowed', 'children_count' => '2'])
+            ->assertSessionHasNoErrors();
+        $this->assertSame(2, $this->employee->refresh()->children_count);
+    }
+
     public function test_protected_fields_in_the_request_are_ignored(): void
     {
         $this->actingAs($this->employee->user)->put(route('my-profile.update'), [
@@ -122,6 +145,7 @@ class MyProfileTest extends TestCase
         $this->actingAs($this->employee->user)
             ->from(route('my-profile.show'))
             ->put(route('my-profile.update'), [
+                'marital_status' => 'married',
                 'children_count' => '',
                 'phone' => 'call me',
                 'contacts' => [1 => ['name' => 'Half filled', 'relationship' => '', 'phone' => '']],

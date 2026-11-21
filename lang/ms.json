@@ -1511,7 +1511,6 @@
     "Enter 6 to 20 letters and numbers.": "Masukkan 6 hingga 20 huruf dan nombor.",
     "Enter a phone number, e.g. 012-345 6789 or +60 12-345 6789.": "Masukkan nombor telefon, cth. 012-345 6789 atau +60 12-345 6789.",
     "EPF settings don’t allow employees to elect a higher rate.": "Tetapan KWSP tidak membenarkan pekerja memilih kadar lebih tinggi.",
-    "For married staff; affects PCB reliefs.": "Untuk kakitangan berkahwin; mempengaruhi pelepasan PCB.",
     "France": "Perancis",
     "Germany": "Jerman",
     "Hong Kong": "Hong Kong",
@@ -1673,5 +1672,6 @@
     "The work email is used to sign in. The NRIC number is needed for EPF, SOCSO and income tax, and stops the same person being added twice. Fields marked * are required.": "E-mel kerja digunakan untuk log masuk. Nombor NRIC diperlukan untuk KWSP, PERKESO dan cukai pendapatan, serta menghalang orang yang sama ditambah dua kali. Medan bertanda * wajib diisi.",
     "12 digits without dashes, e.g. 960109045295.": "12 digit tanpa sengkang, cth. 960109045295.",
     "Filled in from the NRIC number.": "Diisi daripada nombor NRIC.",
-    "Enter the 12-digit NRIC number without dashes or spaces, starting with a real date of birth, e.g. 960109045295.": "Masukkan nombor NRIC 12 digit tanpa sengkang atau ruang, bermula dengan tarikh lahir yang sah, cth. 960109045295."
+    "Enter the 12-digit NRIC number without dashes or spaces, starting with a real date of birth, e.g. 960109045295.": "Masukkan nombor NRIC 12 digit tanpa sengkang atau ruang, bermula dengan tarikh lahir yang sah, cth. 960109045295.",
+    "Affects PCB reliefs.": "Mempengaruhi pelepasan PCB."
 }

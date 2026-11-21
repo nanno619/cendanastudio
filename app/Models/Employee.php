@@ -83,6 +83,13 @@ class Employee extends Model implements HasMedia
     public const int MAX_EMERGENCY_CONTACTS = 3;
 
     /**
+     * Marital statuses whose children count for PCB reliefs (LHDN categories 2 and 3); other staff have 0.
+     *
+     * @var list<string>
+     */
+    public const array MARITAL_STATUSES_WITH_CHILDREN = ['married', 'divorced', 'widowed'];
+
+    /**
      * Staff documents (IC copies, offer letters…) live on the private `local` disk (storage/app/private),
      * never the public one, and are only downloaded through DownloadEmployeeDocumentController.
      */
