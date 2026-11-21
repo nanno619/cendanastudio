@@ -19,6 +19,12 @@ use App\Http\Controllers\Administration\ToggleLookupItemController;
 use App\Http\Controllers\Administration\UpdateFileSecurityController;
 use App\Http\Controllers\Administration\UpdateLookupItemController;
 use App\Http\Controllers\Administration\UpdateModuleController;
+use App\Http\Controllers\Crm\ClientController;
+use App\Http\Controllers\Crm\CreateClientController;
+use App\Http\Controllers\Crm\EditClientController;
+use App\Http\Controllers\Crm\ShowClientController;
+use App\Http\Controllers\Crm\StoreClientController;
+use App\Http\Controllers\Crm\UpdateClientController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\Settings\AttendanceOvertimeSettingsController;
 use App\Http\Controllers\Settings\AttendanceSettingsController;
@@ -74,6 +80,7 @@ use App\Http\Controllers\Staff\StoreEmployeeController;
 use App\Http\Controllers\Staff\UpdateEmployeeController;
 use App\Http\Controllers\Staff\UpdateMyProfileController;
 use App\Http\Controllers\Staff\UploadEmployeeDocumentController;
+use App\Models\Client;
 use App\Models\Employee;
 use Illuminate\Support\Facades\Route;
 
@@ -100,6 +107,15 @@ Route::middleware('auth')->group(function (): void {
         Route::post('/{employee}/documents', UploadEmployeeDocumentController::class)->name('documents.store');
         Route::get('/{employee}/documents/{document}', DownloadEmployeeDocumentController::class)->whereUuid('document')->name('documents.download');
         Route::delete('/{employee}/documents/{document}', DeleteEmployeeDocumentController::class)->whereUuid('document')->name('documents.destroy');
+    });
+
+    Route::middleware('role:'.collect(Client::VIEWER_ROLES)->map->value->implode('|'))->prefix('crm')->name('crm.')->group(function (): void {
+        Route::get('/', ClientController::class)->name('index');
+        Route::get('/clients/create', CreateClientController::class)->name('clients.create');
+        Route::post('/clients', StoreClientController::class)->name('clients.store');
+        Route::get('/clients/{client}', ShowClientController::class)->name('clients.show');
+        Route::get('/clients/{client}/edit', EditClientController::class)->name('clients.edit');
+        Route::put('/clients/{client}', UpdateClientController::class)->name('clients.update');
     });
 
     Route::middleware('role:'.Role::SuperAdmin->value)->prefix('settings')->name('settings.')->group(function (): void {
