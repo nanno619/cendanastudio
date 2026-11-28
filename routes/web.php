@@ -19,6 +19,7 @@ use App\Http\Controllers\Administration\ToggleLookupItemController;
 use App\Http\Controllers\Administration\UpdateFileSecurityController;
 use App\Http\Controllers\Administration\UpdateLookupItemController;
 use App\Http\Controllers\Administration\UpdateModuleController;
+use App\Http\Controllers\ContentSecurityPolicyReportController;
 use App\Http\Controllers\Crm\ClientController;
 use App\Http\Controllers\Crm\CreateClientController;
 use App\Http\Controllers\Crm\EditClientController;
@@ -80,13 +81,21 @@ use App\Http\Controllers\Staff\StoreEmployeeController;
 use App\Http\Controllers\Staff\UpdateEmployeeController;
 use App\Http\Controllers\Staff\UpdateMyProfileController;
 use App\Http\Controllers\Staff\UploadEmployeeDocumentController;
+use App\Http\Middleware\EnsureProfileIsComplete;
 use App\Models\Client;
 use App\Models\Employee;
+use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/dashboard');
 
 Route::post('/locale', LocaleController::class)->name('locale.update');
+
+// Browsers post CSP violation reports without a CSRF token or session.
+Route::post('/csp-report', ContentSecurityPolicyReportController::class)
+    ->withoutMiddleware([PreventRequestForgery::class, EnsureProfileIsComplete::class])
+    ->middleware('throttle:30,1')
+    ->name('csp.report');
 
 Route::middleware('auth')->group(function (): void {
     Route::view('/dashboard', 'admin.dashboard')->name('admin.dashboard');

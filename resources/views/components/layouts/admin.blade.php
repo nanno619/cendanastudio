@@ -5,7 +5,7 @@
     <x-layouts.head :title="$title" />
 </head>
 <body data-sidebar="closed" class="font-sans text-sm antialiased">
-<script>document.body.dataset.sidebar = window.innerWidth >= 1024 ? 'open' : 'closed';</script>
+<script nonce="{{ Vite::cspNonce() }}">document.body.dataset.sidebar = window.innerWidth >= 1024 ? 'open' : 'closed';</script>
 <div id="overlay" class="fixed inset-0 z-40 bg-black/50" aria-hidden="true"></div>
 <x-admin.sidebar />
 

@@ -77,6 +77,16 @@ return [
             'permission' => 0664,
         ],
 
+        // Browser Content-Security-Policy violation reports (ContentSecurityPolicyReportController).
+        'csp' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/csp.log'),
+            'level' => 'warning',
+            'days' => 14,
+            'replace_placeholders' => true,
+            'permission' => 0664,
+        ],
+
         'slack' => [
             'driver' => 'slack',
             'url' => env('LOG_SLACK_WEBHOOK_URL'),

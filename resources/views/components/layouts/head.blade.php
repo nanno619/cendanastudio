@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <title>{{ $title }} · {{ config('cendana.name') }}</title>
-<script>
+<script nonce="{{ Vite::cspNonce() }}">
     (function () {
         try {
             var root = document.documentElement;
@@ -18,7 +18,7 @@
         } catch (error) {}
     })();
 </script>
-<script>
+<script nonce="{{ Vite::cspNonce() }}">
     window.__i18n = @json(__('js'));
     window.__t = function (key, replace) {
         var text = window.__i18n[key] || key;

@@ -41,6 +41,12 @@ return [
         'footer' => env('ADMIN_FOOTER', '© Cendana Studio'),
     ],
     'showcase' => (bool) env('ADMIN_SHOWCASE', true),
+    // Content-Security-Policy (SetContentSecurityPolicy). Report-only logs violations to storage/logs/csp.log
+    // without blocking; set CSP_REPORT_ONLY=false to enforce once the log stays quiet.
+    'csp' => [
+        'enabled' => (bool) env('CSP_ENABLED', true),
+        'report_only' => (bool) env('CSP_REPORT_ONLY', true),
+    ],
     // Timestamps are stored in UTC (app.timezone); pages show them in this zone.
     'timezone' => env('ADMIN_TIMEZONE', 'Asia/Kuala_Lumpur'),
     // Display names for backup disks (English; translated where shown).
